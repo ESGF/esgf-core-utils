@@ -8,8 +8,7 @@ from typing import Literal, Optional, Union
 
 from pydantic import BaseModel
 from stac_fastapi.extensions.core.transaction.request import PartialItem, PatchOperation
-
-from .item import CMIP6Item as Item
+from stac_pydantic.item import Item
 
 
 class _Payload(BaseModel):
