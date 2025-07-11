@@ -18,27 +18,27 @@ dependencies = [
 
 [tool.poetry.group.black.dependencies]
 black = "^24.4.2"
-pre-commit = "^3.7.1"
+pre-commit = "^4.2.0"
 
 [tool.poetry.group.mypy.dependencies]
 mypy = "^1.10.1"
-pre-commit = "^3.7.1"
+pre-commit = "^4.2.0"
 
 [tool.poetry.group.bandit.dependencies]
 bandit = "^1.7.9"
-pre-commit = "^3.7.1"
+pre-commit = "^4.2.0"
 
 [tool.poetry.group.ruff.dependencies]
 ruff = "^0.5.2"
-pre-commit = "^3.7.1"
+pre-commit = "^4.2.0"
 
 [tool.poetry.group.isort.dependencies]
 isort = "^5.13.2"
-pre-commit = "^3.7.1"
+pre-commit = "^4.2.0"
 
 [tool.poetry.group.xenon.dependencies]
 xenon = "^0.9.1"
-pre-commit = "^3.7.1"
+pre-commit = "^4.2.0"
 
 [tool.poetry.group.test.dependencies]
 coverage = { extras = ["toml"], version = "^7.6.0" }
