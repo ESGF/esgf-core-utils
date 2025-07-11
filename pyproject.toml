@@ -33,7 +33,7 @@ ruff = "^0.5.2"
 pre-commit = "^3.7.1"
 
 [tool.poetry.group.isort.dependencies]
-isort = "^5.13.2"
+isort = "^6.0.1"
 pre-commit = "^3.7.1"
 
 [tool.poetry.group.xenon.dependencies]
