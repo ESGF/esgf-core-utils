@@ -21,6 +21,22 @@ Removed
 Fixed
 ^^^^^
 
+`1.0.5 <https://github.com/ESGF/esgf-playground-utils/releases/tag/1.0.5>`_  - 2025-07-11
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+Changed
+^^^^^^^
+
+Removed
+^^^^^^^
+- Removed custom Item model.
+
+Fixed
+^^^^^
+
 `1.0.4 <https://github.com/ESGF/esgf-playground-utils/releases/tag/1.0.4>`_  - 2025-06-24
 -----------------------------------------------------------------------------------------
 
