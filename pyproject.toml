@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [tool.poetry.group.black.dependencies]
-black = "^24.4.2"
+black = "^25.1.0"
 pre-commit = "^3.7.1"
 
 [tool.poetry.group.mypy.dependencies]
