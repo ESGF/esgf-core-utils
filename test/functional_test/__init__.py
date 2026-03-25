@@ -6,12 +6,7 @@ import unittest
 
 from pydantic import ValidationError
 
-from esgf_core_utils.models.kafka import (
-    CreatePayload,
-    KafkaEvent,
-    PatchPayload,
-    RevokePayload,
-)
+from esgf_core_utils.models.kafka import CreatePayload, KafkaEvent, PatchPayload
 
 
 class TestKafkaEvent(unittest.TestCase):
@@ -396,7 +391,7 @@ class TestKafkaEvent(unittest.TestCase):
 
         kafka_event = KafkaEvent.model_validate_json(payload)
 
-        self.assertIsInstance(kafka_event.data.payload, RevokePayload)
+        self.assertIsInstance(kafka_event.data.payload, PatchPayload)
 
     def test_patch_payload(self) -> None:
         """Test that a patch payload can be interpreted from a valid payload"""
