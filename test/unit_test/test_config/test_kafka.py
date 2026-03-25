@@ -13,7 +13,11 @@ class TestSettings(unittest.TestCase):
     def test_init(self) -> None:
         """Settings should be creatable with no additional import or env files"""
 
-        settings = KafkaConfig()
+        settings = KafkaConfig(
+            bootstrap_servers="boots",
+            sasl_username="hello",
+            sasl_password="world",  # nosec CWE-259
+        )
 
         # This appears to be meaningless, but it is actually to prevent automatic code
         # formatters from removing the line (the tsts doesn't strictly need to assert anything, it just needs
