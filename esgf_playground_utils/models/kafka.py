@@ -3,7 +3,6 @@ Models relating to Kakfa payloads for the ESGF-Playground.
 """
 
 from datetime import datetime
-from enum import Enum
 from typing import Literal, Optional, Union
 
 from pydantic import BaseModel
@@ -59,7 +58,7 @@ class PatchPayload(_Payload):
     """
 
     method: Literal["PATCH"]
-    patch: PartialItem | list[PatchOperation]
+    patch: PartialItem | PatchOperation
     item_id: str
 
 
@@ -134,33 +133,32 @@ class Metadata(BaseModel):
     schema_version: str
 
 
+class Error(BaseModel):
+    """
+    Error following `RFC9457: Problem Details for HTTP APIs`.
+    """
+
+    detail: str
+    instance: str
+    status: int
+    title: str
+    type: str
+
+
 class KafkaEvent(BaseModel):
     """
-    The full content of a Kafka message, containing both the STAC payload, the request description and the ESGF
-    mandated metadata.
+    The full content of a Kafka message, containing both the STAC payload, the request description
+    and the ESGF mandated metadata.
     """
 
     data: Data
     metadata: Metadata
 
 
-class ErrorType(str, Enum):
+class KafkaErrorEvent(KafkaEvent):
     """
-    Enum describing the source of the error that occurred.
-    """
-
-    payload = "payload"
-    stac_server = "stac_server"
-    kafka = "kafka"
-    unknown = "unknown"
-
-
-class Error(BaseModel):
-    """
-    Error event published to the Kafka error queue.
+    The full content of a Kafka error message, containing the STAC payload, the request description,
+    ESGF mandated metadata, and error.
     """
 
-    original_payload: str
-    node: str
-    traceback: str
-    error_type: ErrorType
+    error: Error

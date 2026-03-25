@@ -1,31 +1,30 @@
-"""
-Configuration module for the ESGF-Playground.
-"""
-
-from __future__ import annotations
-
-from re import compile
-from typing import List, Optional, Pattern
-
-from pydantic import HttpUrl
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import BaseModel, Field
 
 
-class Settings(BaseSettings):
+class KafkaConfig(BaseModel):
     """
-    Container for configuration of the ESGF-Playground.
-
-    By default, this configuration is valid for running the consumer on localhost, with a Kafka broker on localhost,
-    provided it is given a `consumer_group` value. It will subscribe the consumer to all topics.
+    Kafka Config
     """
 
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+    class Config:
+        validate_by_name = True
+        validate_by_alias = True
+        extra = "ignore"
 
-    bootstrap_servers: List[str] = ["localhost"]
-    consumer_group: Optional[str] = None
-    kafka_topics: Pattern[str] = compile(r".*\..*\..*")
-    sasl_mechanism: str = "PLAIN"
-    security_protocol: str = "PLAINTEXT"
-    sasl_plain_username: Optional[str] = None
-    sasl_plain_password: Optional[str] = None
-    stac_server: HttpUrl = HttpUrl("http://localhost:9010")
+    bootstrap_servers: str = Field(alias="bootstrap.servers")
+    enable_auto_commit: bool = Field(default=False, alias="enable.auto.commit")
+    sasl_mechanism: str = Field(default="PLAIN", alias="sasl.mechanism")
+    sasl_username: str = Field(alias="sasl.username")
+    sasl_password: str = Field(alias="sasl.password")
+    security_protocol: str = Field(default="SASL_SSL", alias="security.protocol")
+
+
+class KafkaConsumerConfig(KafkaConfig):
+    """
+    Kafka Consumer Config
+    """
+
+    auto_offset_reset: str = Field(default="earliest", alias="auto.offset.reset")
+    group_id: str = Field(alias="group.id")
+    debug: str | None = None
+    log_level: int | None = None
