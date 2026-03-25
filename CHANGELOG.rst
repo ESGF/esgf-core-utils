@@ -21,7 +21,22 @@ Removed
 Fixed
 ^^^^^
 
-`1.0.5 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.5>`_  - 2025-07-11
+`1.0.5 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.6>`_  - 2026-03-25
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+Changed
+^^^^^^^
+
+- Rename project.
+
+Removed
+^^^^^^^
+
+
+`1.0.5 <https://github.com/ESGF/esgf-playground-utils/releases/tag/1.0.5>`_  - 2025-07-11
 -----------------------------------------------------------------------------------------
 
 Added
@@ -37,7 +52,7 @@ Removed
 Fixed
 ^^^^^
 
-`1.0.4 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.4>`_  - 2025-06-24
+`1.0.4 <https://github.com/ESGF/esgf-playground-utils/releases/tag/1.0.4>`_  - 2025-06-24
 -----------------------------------------------------------------------------------------
 
 Added
@@ -53,7 +68,7 @@ Fixed
 ^^^^^
 - Fixed stac-pydantic requirement.
 
-`1.0.3 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.3>`_  - 2025-06-20
+`1.0.3 <https://github.com/ESGF/esgf-playground-utils/releases/tag/1.0.3>`_  - 2025-06-20
 -----------------------------------------------------------------------------------------
 
 Added
@@ -69,7 +84,7 @@ Removed
 Fixed
 ^^^^^
 
-`1.0.2 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.2>`_  - 2025-06-18
+`1.0.2 <https://github.com/ESGF/esgf-playground-utils/releases/tag/1.0.2>`_  - 2025-06-18
 -----------------------------------------------------------------------------------------
 
 Added
@@ -85,7 +100,7 @@ Removed
 Fixed
 ^^^^^
 
-`1.0.1 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.1>`_  - 2025-03-05
+`1.0.1 <https://github.com/ESGF/esgf-playground-utils/releases/tag/1.0.1>`_  - 2025-03-05
 -----------------------------------------------------------------------------------------
 
 Added
@@ -101,7 +116,7 @@ Removed
 Fixed
 ^^^^^
 
-`1.0.0 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.0>`_  - 2025-02-14
+`1.0.0 <https://github.com/ESGF/esgf-playground-utils/releases/tag/1.0.0>`_  - 2025-02-14
 -----------------------------------------------------------------------------------------
 
 Added
@@ -118,7 +133,7 @@ Removed
 Fixed
 ^^^^^
 
-`0.3.8 <https://github.com/ESGF/esgf-core-utils/releases/tag/0.3.8>`_  - 2024-11-19
+`0.3.8 <https://github.com/ESGF/esgf-playground-utils/releases/tag/0.3.8>`_  - 2024-11-19
 -----------------------------------------------------------------------------------------
 
 Added
@@ -134,7 +149,7 @@ Removed
 Fixed
 ^^^^^
 
-`0.3.7 <https://github.com/ESGF/esgf-core-utils/releases/tag/0.3.7>`_  - 2024-11-19
+`0.3.7 <https://github.com/ESGF/esgf-playground-utils/releases/tag/0.3.7>`_  - 2024-11-19
 -----------------------------------------------------------------------------------------
 
 Added
@@ -150,7 +165,7 @@ Removed
 Fixed
 ^^^^^
 
-`0.3.6 <https://github.com/ESGF/esgf-core-utils/releases/tag/0.3.6>`_  - 2024-11-18
+`0.3.6 <https://github.com/ESGF/esgf-playground-utils/releases/tag/0.3.6>`_  - 2024-11-18
 -----------------------------------------------------------------------------------------
 
 Added
@@ -167,7 +182,7 @@ Removed
 Fixed
 ^^^^^
 
-`0.3.4 <https://github.com/ESGF/esgf-core-utils/releases/tag/0.3.4>`_  - 2024-11-06
+`0.3.4 <https://github.com/ESGF/esgf-playground-utils/releases/tag/0.3.4>`_  - 2024-11-06
 -----------------------------------------------------------------------------------------
 
 Added
@@ -187,7 +202,7 @@ Fixed
 ^^^^^
 
 
-`0.3.3 <https://github.com/ESGF/esgf-core-utils/releases/tag/0.3.3>`_  - 2024-09-04
+`0.3.3 <https://github.com/ESGF/esgf-playground-utils/releases/tag/0.3.3>`_  - 2024-09-04
 -----------------------------------------------------------------------------------------
 
 Added
@@ -206,7 +221,7 @@ Fixed
 ^^^^^
 
 
-`0.3.2 <https://github.com/ESGF/esgf-core-utils/releases/tag/0.3.2>`_  - 2024-09-04
+`0.3.2 <https://github.com/ESGF/esgf-playground-utils/releases/tag/0.3.2>`_  - 2024-09-04
 -----------------------------------------------------------------------------------------
 
 Added
@@ -234,7 +249,7 @@ Removed
 Fixed
 ^^^^^
 
-`0.3.1 <https://github.com/ESGF/esgf-core-utils/releases/tag/0.3.1>`_ - 2024-08-13
+`0.3.1 <https://github.com/ESGF/esgf-playground-utils/releases/tag/0.3.1>`_ - 2024-08-13
 ----------------------------------------------------------------------------------------
 
 Added
@@ -256,7 +271,7 @@ Removed
 Fixed
 ^^^^^
 
-`0.3.0 <https://github.com/ESGF/esgf-core-utils/releases/tag/0.3.0>`_ - 2024-07-22
+`0.3.0 <https://github.com/ESGF/esgf-playground-utils/releases/tag/0.3.0>`_ - 2024-07-22
 ------------------------------------------------------------------------------------------
 
 Initial working release.
