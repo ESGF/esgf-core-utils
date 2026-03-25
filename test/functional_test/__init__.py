@@ -4,13 +4,14 @@ Test the polymorphic interpretation of a KafkaEvent
 
 import unittest
 
+from pydantic import ValidationError
+
 from esgf_core_utils.models.kafka import (
     CreatePayload,
     KafkaEvent,
     PatchPayload,
     RevokePayload,
 )
-from pydantic import ValidationError
 
 
 class TestKafkaEvent(unittest.TestCase):
