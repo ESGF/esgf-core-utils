@@ -32,26 +32,6 @@ class CreatePayload(_Payload):
     item: Item
 
 
-class RevokePayload(_Payload):
-    """
-    Model describing a ``REVOKE`` payload. This must be sent as a ``PATCH`` or ``DELETE`` request.
-
-    .. note::
-
-      It is intended that the ``PATCH`` request is interpreted as a "soft" delete, simply updating the item to
-      signify that it is revoked.
-
-      The ``DELETE`` request will operate as a "hard" delete strictly removing the item from the STAC index.
-
-    .. danger::
-
-      The behaviour of either of these actions is not yet fully defined.
-    """
-
-    method: Literal["PATCH", "DELETE"]
-    item_id: str
-
-
 class PatchPayload(_Payload):
     """
     Model describing a ``PARTIAL_UPDATE`` payload. This must be sent as a ``PATCH`` request.
@@ -83,7 +63,7 @@ class Data(BaseModel):
     """
 
     type: Literal["STAC"]
-    payload: Union[CreatePayload, RevokePayload, UpdatePayload, PatchPayload]
+    payload: Union[CreatePayload, UpdatePayload, PatchPayload]
 
 
 class RequesterData(BaseModel):
