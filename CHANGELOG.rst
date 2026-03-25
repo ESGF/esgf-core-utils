@@ -21,7 +21,7 @@ Removed
 Fixed
 ^^^^^
 
-`1.0.5 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.6>`_  - 2026-03-25
+`1.0.6 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.6>`_  - 2026-03-25
 -----------------------------------------------------------------------------------------
 
 Added
