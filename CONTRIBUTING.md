@@ -9,7 +9,7 @@ feel free to create one.
 
 ## Development environment
 
-Begin by collecting the repo from [GitHub](https://github.com/ESGF/esgf-playground-utils).
+Begin by collecting the repo from [GitHub](https://github.com/ESGF/esgf-core-utils).
 
 To contribute, you should be using `poetry` as your python package
 manager, see <https://python-poetry.org> for installation instructions.

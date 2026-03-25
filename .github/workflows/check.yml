@@ -1,4 +1,4 @@
-name: esgf-playground-utils-check
+name: esgf-core-utils-check
 
 on:
   - push

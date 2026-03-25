@@ -1,7 +1,7 @@
 [project]
-name = "esgf-playground-utils"
+name = "esgf-core-utils"
 version = "1.0.5"
-description = "Common library and models for the ESGF-Playground"
+description = "Common library and models for the ESGF core architecture"
 readme = "README.rst"
 authors = [
     {"name" = "David Poulter", "email" = "david.poulter@stfc.ac.uk"},

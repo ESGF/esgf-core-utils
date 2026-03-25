@@ -4,7 +4,7 @@ Test the functions in kafka.config module
 
 import unittest
 
-from esgf_playground_utils.config.kafka import Settings
+from esgf_core_utils.config.kafka import KafkaConfig
 
 
 class TestSettings(unittest.TestCase):
@@ -13,9 +13,9 @@ class TestSettings(unittest.TestCase):
     def test_init(self) -> None:
         """Settings should be creatable with no additional import or env files"""
 
-        settings = Settings()
+        settings = KafkaConfig()
 
         # This appears to be meaningless, but it is actually to prevent automatic code
         # formatters from removing the line (the tsts doesn't strictly need to assert anything, it just needs
         # not to raise an Exception
-        self.assertIsInstance(settings, Settings)
+        self.assertIsInstance(settings, KafkaConfig)

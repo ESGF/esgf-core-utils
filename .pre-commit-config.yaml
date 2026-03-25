@@ -34,7 +34,7 @@ repos:
         types: [ file, python ]
       - id: mypy
         name: mypy
-        entry: poetry run mypy --no-namespace-packages --exclude esgf_playground_utils/models/__init__.py
+        entry: poetry run mypy --no-namespace-packages --exclude esgf_core_utils/models/__init__.py
         language: system
         types: [ file, python ]
       - id: docs

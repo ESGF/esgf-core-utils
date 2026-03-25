@@ -1,5 +1,5 @@
 """
-Models relating to Kakfa payloads for the ESGF-Playground.
+Models relating to Kakfa payloads for the ESGF Core architecture.
 """
 
 from datetime import datetime
