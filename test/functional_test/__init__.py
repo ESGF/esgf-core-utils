@@ -474,12 +474,7 @@ class TestKafkaEvent(unittest.TestCase):
     "schema_version": "1.0.0"
   }
 }
-        """
-
-        kafka_event = KafkaEvent.model_validate_json(payload)
-
-        self.assertIsInstance(kafka_event.data.payload, PatchPayload)
-        """
+"""
 
         kafka_event = KafkaEvent.model_validate_json(payload)
 
