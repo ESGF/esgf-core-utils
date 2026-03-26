@@ -44,10 +44,10 @@ class PatchPayload(_Payload):
 
 class UpdatePayload(_Payload):
     """
-    Model describing a ``UPDATE`` payload. This must be sent as a ``PATCH`` or ``PUT`` request.
+    Model describing a ``UPDATE`` payload. This must be sent as a ``PUT`` request.
     """
 
-    method: Literal["PUT", "PATCH"]
+    method: Literal["PUT"]
     item: Item
     item_id: str
 
