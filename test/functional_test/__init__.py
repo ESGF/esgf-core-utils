@@ -364,49 +364,10 @@ class TestKafkaEvent(unittest.TestCase):
       "collection_id": "cmip6",
       "method": "PUT",
       "item_id": "an_item",
-      "patch": {
+      "item": {
         "type": "Feature",
-        "stac_version": "1.1.0",
-        "stac_extensions": [
-          "https://stac-extensions.github.io/cmip6/v3.0.1/schema.json",
-          "https://stac-extensions.github.io/alternate-assets/v1.2.0/schema.json",
-          "https://stac-extensions.github.io/file/v2.1.0/schema.json"
-        ],
         "id": "CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp119.r4i1p1f1.CFmon.clcalipso.gr.v20191122",
         "collection": "CMIP6",
-        "geometry": {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [
-                0,
-                -90
-              ],
-              [
-                357.5,
-                -90
-              ],
-              [
-                357.5,
-                90
-              ],
-              [
-                0,
-                90
-              ],
-              [
-                0,
-                -90
-              ]
-            ]
-          ]
-        },
-        "bbox": [
-          0,
-          -90,
-          357.5,
-          90
-        ],
         "properties": {
           "size": 1691149215,
           "created": "2026-03-06T01:15:44Z",
@@ -430,84 +391,15 @@ class TestKafkaEvent(unittest.TestCase):
             "ScenarioMIP"
           ],
           "cmip6:data_specs_version": "01.00.28",
-          "cmip6:experiment_id": "ssp119",
-          "cmip6:frequency": "mon",
-          "cmip6:grid_label": "gr",
-          "cmip6:institution_id": "IPSL",
-          "cmip6:member_id": "r4i1p1f1",
-          "cmip6:nominal_resolution": "250 km",
-          "cmip6:product": "model-output",
           "cmip6:realm": [
             "atmos"
           ],
           "cmip6:pid": "hdl:21.14100/eecd8a20-295d-4a51-a806-feefea8fba66",
           "cmip6:source_id": "IPSL-CM6A-LR",
-          "cmip6:source_type": [
-            "AOGCM",
-            "BGC"
-          ],
-          "cmip6:sub_experiment_id": "none",
-          "cmip6:table_id": "CFmon",
-          "cmip6:variable_id": "clcalipso",
           "cmip6:variable_cf_standard_name": "cloud_area_fraction_in_atmosphere_layer",
           "cmip6:variable_long_name": "CALIPSO Percentage Cloud Cover",
           "cmip6:variable_units": "%",
           "cmip6:variant_label": "r4i1p1f1"
-        },
-        "links": [
-          {
-            "rel": "self",
-            "type": "application/geo+json",
-            "href": "https://integration-testing.api.stac.esgf-west.org/collections/CMIP6/items/CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp119.r4i1p1f1.CFmon.clcalipso.gr.v20191122"
-          },
-          {
-            "rel": "parent",
-            "type": "application/json",
-            "href": "https://integration-testing.api.stac.esgf-west.org/collections/CMIP6"
-          },
-          {
-            "rel": "collection",
-            "type": "application/json",
-            "href": "https://integration-testing.api.stac.esgf-west.org/collections/CMIP6"
-          },
-          {
-            "rel": "root",
-            "type": "application/json",
-            "href": "https://integration-testing.api.stac.esgf-west.org/"
-          }
-        ],
-        "assets": {
-          "globus": {
-            "href": "https://app.globus.org/file-manager?origin_id=904ff241-867c-404e-b355-64b701ba6ac1&origin_path=/css03_data/CMIP6/ScenarioMIP/IPSL/IPSL-CM6A-LR/ssp119/r4i1p1f1/CFmon/clcalipso/gr/v20191122/",
-            "description": "Globus Web App Link",
-            "type": "text/html",
-            "roles": [
-              "data"
-            ],
-            "alternate:name": "esgf-data.nersc.gov",
-            "created": "2019-11-22T10:15:56Z",
-            "updated": "2019-11-22T10:15:56Z",
-            "protocol": "globus",
-            "node": "esgf-data.nersc.gov",
-            "file:local_path": "CMIP6/ScenarioMIP/IPSL/IPSL-CM6A-LR/ssp119/r4i1p1f1/CFmon/clcalipso/gr/v20191122"
-          },
-          "clcalipso_CFmon_IPSL-CM6A-LR_ssp119_r4i1p1f1_gr_201501-210012.nc": {
-            "href": "https://g-eba899.6b7bd8.0ec8.data.globus.org//css03_data/CMIP6/ScenarioMIP/IPSL/IPSL-CM6A-LR/ssp119/r4i1p1f1/CFmon/clcalipso/gr/v20191122/clcalipso_CFmon_IPSL-CM6A-LR_ssp119_r4i1p1f1_gr_201501-210012.nc",
-            "description": "HTTPServer Link",
-            "type": "application/netcdf",
-            "roles": [
-              "data"
-            ],
-            "alternate:name": "esgf-data.nersc.gov",
-            "file:size": 1691149215,
-            "file:checksum": "1220fc151c37b78dd4534478975bffaf58b70acdd49ee4541de84ebb221be3ce756a",
-            "cmip6:tracking_id": "hdl:21.14100/eecd8a20-295d-4a51-a806-feefea8fba66",
-            "created": "2019-11-22T10:15:56Z",
-            "updated": "2019-11-22T10:15:56Z",
-            "protocol": "https",
-            "node": "esgf-data.nersc.gov",
-            "file:local_path": "CMIP6/ScenarioMIP/IPSL/IPSL-CM6A-LR/ssp119/r4i1p1f1/CFmon/clcalipso/gr/v20191122/clcalipso_CFmon_IPSL-CM6A-LR_ssp119_r4i1p1f1_gr_201501-210012.nc"
-          }
         }
       }
     }
@@ -550,7 +442,11 @@ class TestKafkaEvent(unittest.TestCase):
       "method": "PATCH",
       "item_id": "an_item",
       "patch": [
-        {"op": "add", "path": "/properties/license", "value": "GqmvOMeWcuNhryVbwniL2"}
+        {
+          "op": "add",
+          "path": "/properties/license",
+          "value": "GqmvOMeWcuNhryVbwniL2"
+        }
       ]
     }
   },

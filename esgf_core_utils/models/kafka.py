@@ -38,7 +38,7 @@ class PatchPayload(_Payload):
     """
 
     method: Literal["PATCH"]
-    patch: PartialItem | PatchOperation
+    patch: PartialItem | list[PatchOperation]
     item_id: str
 
 
@@ -48,7 +48,7 @@ class UpdatePayload(_Payload):
     """
 
     method: Literal["PUT"]
-    item: Item
+    item: PartialItem
     item_id: str
 
 
