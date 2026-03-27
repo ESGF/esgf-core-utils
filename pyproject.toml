@@ -10,10 +10,11 @@ authors = [
 ]
 requires-python = ">=3.10,<4.0"
 dependencies = [
-    "pydantic-settings (>=2.6.1,<3.0.0)",
-    "stac-pydantic (>=3.1.1,<4.0.0)",
-    "jinja2 (>=3.1.6,<4.0.0)",
-    "stac-fastapi.extensions==6.0.0"
+    "pydantic-settings>=2.6.1",
+    "stac-pydantic>=3.1.1",
+    "jinja2>=3.1.6",
+    "stac-fastapi.extensions>=6.0.0",
+    "fastapi>=0.114.0",
 ]
 
 [tool.poetry.group.black.dependencies]

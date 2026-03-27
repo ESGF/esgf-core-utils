@@ -6,7 +6,7 @@ import unittest
 
 from pydantic import ValidationError
 
-from esgf_core_utils.models.kafka import (
+from esgf_core_utils.models.kafka.events import (
     CreatePayload,
     KafkaEvent,
     PatchPayload,
