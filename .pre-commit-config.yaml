@@ -6,8 +6,38 @@ repos:
       - id: uv-lock
   - repo: local
     hooks:
+      - id: black
+        name: black
+        entry: uv run black
+        language: system
+        types: [ file, python ]
+      - id: isort
+        name: isort
+        entry: uv run isort
+        language: system
+        types: [ file, python ]
+      - id: ruff linter
+        name: ruff lint
+        entry: uv run ruff check --fix
+        language: system
+        types: [ file, python ]
+      - id: bandit
+        name: bandit
+        entry: uv run bandit -c pyproject.toml --exclude './.venv' -r .
+        language: system
+        types: [ file, python ]
       - id: xenon
         name: xenon
         entry: bash -c "uv run xenon -a $(uv run python -c \"import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['average'])\") -b $(uv run python -c \"import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['block'])\") -m $(uv run python -c \"import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['module'])\") . "
         language: system
         types: [ file, python ]
+      - id: mypy
+        name: mypy
+        entry: uv run mypy --no-namespace-packages --exclude esgf_core_utils/models/__init__.py
+        language: system
+        types: [ file, python ]
+      - id: docs
+        name: docs
+        entry: bash -c "uv run sphinx-build -M dummy ./docs ./docs/_build -W -q -a"
+        language: system
+        types_or: [ file, python, rst, toml, markdown ]

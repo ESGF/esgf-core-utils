@@ -48,7 +48,7 @@ jobs:
       - name: Run bandit
         run: |
           uv sync --only-group bandit
-          uv run bandit -c pyproject.toml -r .
+          uv run bandit -c pyproject.toml --exclude './.venv' -r .
       - name: Run isort
         run: |
           uv sync --only-group isort
