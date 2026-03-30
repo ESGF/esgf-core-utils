@@ -16,14 +16,20 @@ class TestKafkaConsumerUnit(unittest.TestCase):
 
     @patch("kafka_consumer.consumer_settings")
     @patch("kafka_consumer.Consumer")
-    def test_constructor_initialises_consumer(self, mock_consumer, mock_settings):
+    def test_constructor_initialises_consumer(
+        self,
+        mock_consumer: MagicMock,
+        mock_settings: MagicMock,
+    ) -> None:
         """Ensure KafkaConsumer initialises the confluent_kafka.Consumer correctly."""
-        mock_settings.config.model_dump.return_value = {"bootstrap.servers": "localhost"}
+        mock_settings.config.model_dump.return_value = {
+            "bootstrap.servers": "localhost"
+        }
         mock_settings.topics = ["topicA"]
         mock_settings.timeout = 5.0
 
-        mock_processor_class = MagicMock()
-        consumer = KafkaConsumer(mock_processor_class)
+        mock_processor_class: MagicMock = MagicMock()
+        consumer: KafkaConsumer = KafkaConsumer(mock_processor_class)
 
         mock_processor_class.assert_called_once()
         mock_consumer.assert_called_once_with({"bootstrap.servers": "localhost"})
@@ -32,25 +38,28 @@ class TestKafkaConsumerUnit(unittest.TestCase):
         self.assertIsNotNone(consumer.message_processor)
 
     @patch("kafka_consumer.Consumer")
-    def test_commit_calls_underlying_consumer(self, mock_consumer):
+    def test_commit_calls_underlying_consumer(self, mock_consumer: MagicMock) -> None:
         """Verify that commit() passes messages to the underlying consumer when message exists."""
-        consumer_instance = mock_consumer.return_value
-        mock_processor_class = MagicMock()
-        consumer = KafkaConsumer(mock_processor_class)
+        consumer_instance: MagicMock = mock_consumer.return_value
+        mock_processor_class: MagicMock = MagicMock()
 
-        msg = MagicMock()
+        consumer: KafkaConsumer = KafkaConsumer(mock_processor_class)
+
+        msg: MagicMock = MagicMock()
         consumer.commit(msg)
 
         consumer_instance.commit.assert_called_once_with(
-            message=msg, asynchronous=False
+            message=msg,
+            asynchronous=False,
         )
 
     @patch("kafka_consumer.Consumer")
-    def test_commit_ignores_none_message(self, mock_consumer):
+    def test_commit_ignores_none_message(self, mock_consumer: MagicMock) -> None:
         """Verify commit() does nothing when message=None."""
-        consumer_instance = mock_consumer.return_value
-        mock_processor_class = MagicMock()
-        consumer = KafkaConsumer(mock_processor_class)
+        consumer_instance: MagicMock = mock_consumer.return_value
+        mock_processor_class: MagicMock = MagicMock()
+
+        consumer: KafkaConsumer = KafkaConsumer(mock_processor_class)
 
         consumer.commit(None)
 

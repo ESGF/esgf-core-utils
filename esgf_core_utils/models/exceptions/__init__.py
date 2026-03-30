@@ -45,7 +45,7 @@ class ExpectedExtensionsMissingException(Exception):
     Expected extension missing Exception
     """
 
-    def __init__(self, extensions: str) -> None:
+    def __init__(self, extensions: list[str]) -> None:
         self.status_code = 400
         self.type = "https://esgf.io/publication/errors/expected-extension-missing"
         self.title = "A required extension is missing from your request"

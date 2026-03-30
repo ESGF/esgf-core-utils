@@ -23,7 +23,7 @@ from esgf_core_utils.models.exceptions import (
 class TestExceptionUnit(unittest.TestCase):
     """Unit test suite for validating exception initialisation."""
 
-    def test_missing_permission_exception(self):
+    def test_missing_permission_exception(self) -> None:
         """Ensure MissingPermissionException stores type, target, and role."""
         exc = MissingPermissionException("project", "target", "roleX")
 
@@ -31,7 +31,7 @@ class TestExceptionUnit(unittest.TestCase):
         self.assertEqual(exc.target, "target")
         self.assertEqual(exc.role, "roleX")
 
-    def test_operation_not_permitted_exception(self):
+    def test_operation_not_permitted_exception(self) -> None:
         """Validate OperationNotPermittedException fields and dynamic detail text."""
         exc = OperationNotPermittedException("PATCH")
 
@@ -46,7 +46,7 @@ class TestExceptionUnit(unittest.TestCase):
         )
         self.assertIn("PATCH", exc.detail)
 
-    def test_unexpected_extension_exception(self):
+    def test_unexpected_extension_exception(self) -> None:
         """Validate UnexpectedExtensionException fields and detail message."""
         exc = UnexpectedExtensionException("weird-ext")
 
@@ -61,7 +61,7 @@ class TestExceptionUnit(unittest.TestCase):
         )
         self.assertIn("weird-ext", exc.detail)
 
-    def test_expected_extensions_missing_exception(self):
+    def test_expected_extensions_missing_exception(self) -> None:
         """Verify ExpectedExtensionsMissingException joins extension names correctly."""
         exc = ExpectedExtensionsMissingException(["extA", "extB"])
 
@@ -76,7 +76,7 @@ class TestExceptionUnit(unittest.TestCase):
         )
         self.assertIn("[extA,extB]", exc.detail.replace(" ", ""))
 
-    def test_stac_validation_exception(self):
+    def test_stac_validation_exception(self) -> None:
         """Verify STACValidationException default metadata."""
         exc = STACValidationException()
 
@@ -88,7 +88,7 @@ class TestExceptionUnit(unittest.TestCase):
         self.assertEqual(exc.title, "Your request in invalid")
         self.assertIn("invalid", exc.detail)
 
-    def test_authorization_exception(self):
+    def test_authorization_exception(self) -> None:
         """Ensure AuthorizationException includes instance and permission metadata."""
         exc = AuthorizationException("instance-123")
 
@@ -100,7 +100,7 @@ class TestExceptionUnit(unittest.TestCase):
         self.assertEqual(exc.title, "You do not have permission")
         self.assertEqual(exc.instance, "instance-123")
 
-    def test_item_already_exists_exception(self):
+    def test_item_already_exists_exception(self) -> None:
         """Validate ItemAlreadyExistsException stores item, collection, and instance."""
         exc = ItemAlreadyExistsException("colA", "itemX", "inst99")
 
@@ -118,7 +118,7 @@ class TestExceptionUnit(unittest.TestCase):
         self.assertIn("itemX", exc.detail)
         self.assertIn("colA", exc.detail)
 
-    def test_item_does_not_exist_exception(self):
+    def test_item_does_not_exist_exception(self) -> None:
         """Validate ItemDoesNotExistException fields and instance metadata."""
         exc = ItemDoesNotExistException("colA", "itemX", "inst55")
 
@@ -134,7 +134,7 @@ class TestExceptionUnit(unittest.TestCase):
         self.assertEqual(exc.item, "itemX")
         self.assertEqual(exc.instance, "inst55")
 
-    def test_unknown_exception(self):
+    def test_unknown_exception(self) -> None:
         """Verify UnknownException includes correct status, title, and instance."""
         exc = UnknownException("instXYZ")
 
