@@ -37,10 +37,10 @@ jobs:
           python-version: "3.12"
       - name: Install Dependencies
         run: |
-          uv env use 3.12
+          uv venv use --python 3.12
       - name: Check UV
         run: |
-          uv locl --check
+          uv lock --check
       - name: Run black
         run: |
           uv install --only black
