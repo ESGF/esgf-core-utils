@@ -1,5 +1,6 @@
 import logging
 from abc import ABC, abstractmethod
+from typing import Any
 
 import attr
 from confluent_kafka import KafkaError, Message, Producer
@@ -13,7 +14,7 @@ logger = logging.getLogger(__name__)
 @attr.s
 class BaseProducer(ABC):
     @abstractmethod
-    def produce(self, topic: str, key: str | bytes, value: str | bytes):
+    def produce(self, topic: str, key: str | bytes, value: str | bytes) -> Any:
         """Publish message
 
         Args:
@@ -24,12 +25,12 @@ class BaseProducer(ABC):
 
 
 class StdoutProducer(BaseProducer):
-    def produce(self, topic: str, key: str | bytes, value: str | bytes):
-        logger.info(f"message: {value}")
+    def produce(self, topic: str, key: str | bytes, value: str | bytes) -> None:
+        logger.info(f"message: {value!r}")
 
 
 class KafkaProducer(BaseProducer):
-    def __init__(self):
+    def __init__(self) -> None:
         self.producer = Producer(
             producer_settings.config.model_dump(by_alias=True, exclude_none=True)
         )
@@ -37,15 +38,15 @@ class KafkaProducer(BaseProducer):
 
     def produce(
         self, topic: str, key: str | bytes, value: str | bytes
-    ) -> list[tuple[KafkaError, Message]]:
+    ) -> list[tuple[KafkaError | None, Message]]:
         delivery_reports = []
 
-        def delivery_report(err: KafkaError, msg: Message) -> None:
+        def delivery_report(err: KafkaError | None, msg: Message) -> None:
             if err is not None:
-                logger.error(f"Delivery failed for message {msg.key()}: {err}")
+                logger.error(f"Delivery failed for message {msg.key()!r}: {err}")
             else:
                 logger.info(
-                    f"Message {msg.key()} successfully delivered to {msg.topic()} [{msg.partition()}] at offset {msg.offset()}"
+                    f"Message {msg.key()!r} successfully delivered to {msg.topic()} [{msg.partition()}] at offset {msg.offset()}"
                 )
             delivery_reports.append((err, msg))
 
@@ -57,7 +58,7 @@ class KafkaProducer(BaseProducer):
 
     def error(
         self, key: str | bytes, value: str | bytes
-    ) -> list[tuple[KafkaError, Message]]:
+    ) -> list[tuple[KafkaError | None, Message]]:
         """Post an message to the error event stream
 
         Args:
@@ -67,11 +68,11 @@ class KafkaProducer(BaseProducer):
         Returns:
             list[tuple[KafkaError, Message]]: delivery reports
         """
-        self.produce(topic=producer_settings.error_topic, key=key, value=value)
+        return self.produce(topic=producer_settings.error_topic, key=key, value=value)
 
     def success(
         self, key: str | bytes, value: str | bytes
-    ) -> list[tuple[KafkaError, Message]]:
+    ) -> list[tuple[KafkaError | None, Message]]:
         """Post an message to the success event stream
 
         Args:
@@ -81,4 +82,4 @@ class KafkaProducer(BaseProducer):
         Returns:
             list[tuple[KafkaError, Message]]: delivery reports
         """
-        self.produce(topic=producer_settings.success_topic, key=key, value=value)
+        return self.produce(topic=producer_settings.success_topic, key=key, value=value)

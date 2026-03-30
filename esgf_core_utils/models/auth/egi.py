@@ -4,7 +4,7 @@ Models relating to Authorisation for the ESGF Next Gen Core Architecture.
 
 import logging
 import re
-from typing import Literal
+from typing import Any, Literal
 from urllib.parse import urlparse
 
 from pydantic import BaseModel
@@ -54,7 +54,7 @@ class Nodes(BaseModel):
 
     nodes: dict[str, Node] = {}
 
-    def add(self, node: Node | dict):
+    def add(self, node: Node | dict[str, Any]) -> None:
         """
         Add a new project or update roles if project already exists.
 
@@ -70,9 +70,9 @@ class Nodes(BaseModel):
         else:
             self.nodes[node.id] = node
 
-    def authorize_href(self, asset_href: str, role: Role):
+    def authorize_href(self, asset_href: str, role: Role) -> None:
         asset_url = urlparse(asset_href)
-        node_permission = self.nodes.get(asset_url.hostname, None)
+        node_permission = self.nodes.get(asset_url.hostname or "", None)
 
         if not node_permission:
             raise MissingPermissionException(
@@ -87,7 +87,7 @@ class Nodes(BaseModel):
                 target=asset_href,
             )
 
-    def authorize(self, assets: dict, role: Role):
+    def authorize(self, assets: dict[str, Any], role: Role) -> None:
         """Check for appropriate authorisation.
 
         Args:
@@ -98,27 +98,14 @@ class Nodes(BaseModel):
             MissingPermissionException: Raised if either node or role permission is missing
         """
 
-        if assets:
-            for asset in assets.values():
-                if not isinstance(asset, dict):
-                    asset = asset.model_dump()
+        for asset in assets.values():
+            asset = asset.model_dump() if not isinstance(asset, dict) else asset
 
-                if href := asset.get("href"):
-                    if "globus" in href:
-                        self.authorize_href(f"https://{asset['alternate:name']}", role)
+            if "href" in asset:
+                self.authorize_href(f"https://{asset.get("alternate:name")}", role)
 
-                    else:
-                        self.authorize_href(href, role)
-
-                if alternates := asset.get("alternate"):
-                    for alternate in alternates.values():
-                        if "globus" in href:
-                            self.authorize_href(
-                                f"https://{alternate['alternate:name']}", role
-                            )
-
-                        else:
-                            self.authorize_href(alternate["href"], role)
+            if alternates := asset.get("alternate"):
+                self.authorize(alternates, role)
 
 
 class Projects(BaseModel):
@@ -128,7 +115,7 @@ class Projects(BaseModel):
 
     projects: dict[str, Project] = {}
 
-    def add(self, project: Project | dict):
+    def add(self, project: Project | dict[str, Any]) -> None:
         """
         Add a new project or update roles if project already exists.
 
@@ -144,7 +131,7 @@ class Projects(BaseModel):
         else:
             self.projects[project.id] = project
 
-    def authorize(self, project: str, role: Role):
+    def authorize(self, project: str, role: Role) -> None:
         """Check for appropriate authorisation.
 
         Args:
@@ -187,7 +174,7 @@ class EGIAuth(BaseModel):
         role: Role,
         request_id: str,
         event_id: str,
-    ):
+    ) -> None:
         """Check for appropriate authorisation.
 
         Args:
@@ -200,36 +187,36 @@ class EGIAuth(BaseModel):
         """
         try:
             self.projects.authorize(collection_id, role)
-            self.nodes.authorize(item.assets, role)
+            self.nodes.authorize(item.assets or {}, role)
 
         except MissingPermissionException as exc:
             raise AuthorizationException(instance=f"{request_id}:{event_id}") from exc
 
-    def add(self, entitlements: list[str]):
+    def add(self, entitlements: list[str]) -> None:
         """add entitlements to Authorizer.
 
         Args:
             entitlements (list[str]): list of entitlements to be added
         """
         for entitlement in entitlements:
-            if match := re.search(self.regex, entitlement):
+            match = re.search(self.regex, entitlement)
 
-                try:
-                    if match.group("type") == "project":
-                        self.projects.add(
-                            Project(
-                                id=match.group("id"),
-                                roles=[match.group("role")],
-                            )
+            try:
+                if match.group("type") == "project":
+                    self.projects.add(
+                        Project(
+                            id=match.group("id"),
+                            roles=[match.group("role")],
                         )
+                    )
 
-                    elif match.group("type") == "node":
-                        self.nodes.add(
-                            Node(
-                                id=match.group("id"),
-                                roles=[match.group("role")],
-                            )
+                elif match.group("type") == "node":
+                    self.nodes.add(
+                        Node(
+                            id=match.group("id"),
+                            roles=[match.group("role")],
                         )
+                    )
 
-                except ValidationError:
-                    logger.info("Entitlement skipped: %s", entitlement)
+            except ValidationError:
+                logger.info("Entitlement skipped: %s", entitlement)

@@ -1,44 +1,13 @@
 fail_fast: true
 repos:
-  - repo: https://github.com/python-poetry/poetry
-    rev: '2.1.0'  # add version here
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: '0.11.2'  # add version here
     hooks:
-      - id: poetry-check
-      - id: poetry-lock
+      - id: uv-lock
   - repo: local
     hooks:
-      - id: black
-        name: black
-        entry: poetry run black
-        language: system
-        types: [ file, python ]
-      - id: isort
-        name: isort
-        entry: poetry run isort
-        language: system
-        types: [ file, python ]
-      - id: ruff linter
-        name: ruff lint
-        entry: poetry run ruff check --fix
-        language: system
-        types: [ file, python ]
-      - id: bandit
-        name: bandit
-        entry: poetry run bandit -c pyproject.toml -r .
-        language: system
-        types: [ file, python ]
       - id: xenon
         name: xenon
-        entry: bash -c "poetry run xenon -a $(poetry run python -c \"import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['average'])\") -b $(poetry run python -c \"import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['block'])\") -m $(poetry run python -c \"import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['module'])\") . "
+        entry: bash -c "uv run xenon -a $(uv run python -c \"import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['average'])\") -b $(uv run python -c \"import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['block'])\") -m $(uv run python -c \"import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['module'])\") . "
         language: system
         types: [ file, python ]
-      - id: mypy
-        name: mypy
-        entry: poetry run mypy --no-namespace-packages --exclude esgf_core_utils/models/__init__.py
-        language: system
-        types: [ file, python ]
-      - id: docs
-        name: docs
-        entry: bash -c "poetry run sphinx-build -M dummy ./docs ./docs/_build -W -q -a"
-        language: system
-        types_or: [ file, python, rst, toml, markdown ]

@@ -1,6 +1,6 @@
-from typing import Annotated, Self
+from typing import Annotated, Any, Self
 
-from pydantic import field_validator, model_validator
+from pydantic import TypeAdapter, field_validator, model_validator
 from pydantic_settings import BaseSettings, NoDecode
 
 from esgf_core_utils.models.kafka.config import KafkaConsumerConfig
@@ -29,24 +29,18 @@ class ConsumerSettings(BaseSettings):
         Check if debug is set if so update kafka config.
         """
         if self.debug:
-            if self.config.debug is None:
-                setattr(self.config, "debug", "all")
-
-            if self.config.level is None:
-                setattr(self.config, "level", 7)
+            self.config.debug = self.config.debug or "all"
+            self.config.log_level = self.config.log_level or 7
 
         return self
 
     @field_validator("topics", mode="before")
     @classmethod
-    def split_topics(cls, v) -> list[str]:
+    def split_topics(cls, v: Any) -> list[str]:
         """
         Accept comma-separated string or list.
         """
         if isinstance(v, str):
-            return [t.strip() for t in v.split(",") if t.strip()]
+            v = [t.strip() for t in v.split(",")]
 
-        if isinstance(v, (list, tuple)):
-            return list(v)
-
-        raise TypeError("topics must be a string or list")
+        return TypeAdapter(list[str]).validate_python(v)

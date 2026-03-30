@@ -3,7 +3,7 @@ class MissingPermissionException(Exception):
     Missing Permission Exception
     """
 
-    def __init__(self, permission_type: str, target: str, role: str = ""):
+    def __init__(self, permission_type: str, target: str, role: str = "") -> None:
         self.type = permission_type
         self.role = role
         self.target = target
@@ -14,7 +14,7 @@ class OperationNotPermittedException(Exception):
     Operation not permitted Exception
     """
 
-    def __init__(self, op: str):
+    def __init__(self, op: str) -> None:
         self.status_code = 400
         self.type = "https://esgf.io/publication/errors/operation-not-permitted"
         self.title = "The operation you attempted is not permitted"
@@ -30,7 +30,7 @@ class UnexpectedExtensionException(Exception):
     Unexpected extenison Exception
     """
 
-    def __init__(self, extension: str):
+    def __init__(self, extension: str) -> None:
         self.status_code = 400
         self.type = "https://esgf.io/publication/errors/unexpected-extension"
         self.title = "There is an unexpected extension in your request"
@@ -45,7 +45,7 @@ class ExpectedExtensionsMissingException(Exception):
     Expected extension missing Exception
     """
 
-    def __init__(self, extensions: str):
+    def __init__(self, extensions: str) -> None:
         self.status_code = 400
         self.type = "https://esgf.io/publication/errors/expected-extension-missing"
         self.title = "A required extension is missing from your request"
@@ -72,7 +72,7 @@ class STACValidationException(RFC9457Exception):
     STAC validation Exception
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.status_code = 400
         self.type = "https://esgf.io/publication/errors/stac-validation"
         self.title = "Your request in invalid"
@@ -87,7 +87,7 @@ class AuthorizationException(RFC9457Exception):
     Authorization Exception
     """
 
-    def __init__(self, instance: str):
+    def __init__(self, instance: str) -> None:
         self.status_code = 403
         self.type = "https://esgf.io/publication/errors/missing-permission"
         self.title = "You do not have permission"
@@ -104,7 +104,7 @@ class ItemAlreadyExistsException(RFC9457Exception):
     Item already exists Exception
     """
 
-    def __init__(self, collection: str, item: str, instance: str):
+    def __init__(self, collection: str, item: str, instance: str) -> None:
         self.status_code = 409
         self.type = "https://esgf.io/publication/errors/item-already-exists"
         self.title = "The Item you attempted to publish already exists"
@@ -124,7 +124,7 @@ class ItemDoesNotExistException(RFC9457Exception):
     Item does not exist Exception
     """
 
-    def __init__(self, collection: str, item: str, instance: str):
+    def __init__(self, collection: str, item: str, instance: str) -> None:
         self.status_code = 404
         self.type = "https://esgf.io/publication/errors/item-does-not-exist"
         self.title = "The Item you attempted to update does not exist"
@@ -142,7 +142,7 @@ class UnknownException(RFC9457Exception):
     Unknown Exception
     """
 
-    def __init__(self, instance: str):
+    def __init__(self, instance: str) -> None:
         self.status_code = 500
         self.type = "https://esgf.io/publication/errors/unknown"
         self.title = "An unidentified server side error occurred"
