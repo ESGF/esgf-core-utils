@@ -14,16 +14,18 @@ class TestProducerSettings(unittest.TestCase):
     def test_init(self) -> None:
         """Settings should be creatable with no additional import or env files"""
 
-        settings = ProducerSettings(
-            config={
-                "bootstrap_servers": "boots",
-                "sasl_protocol": "SASL_PLAINTEXT",
-                "sasl_mechanism": "PLAIN",
-                "sasl_username": "hello",
-                "sasl_password": "world",
-            },  # nosec CWE-259
-            error_topic="error",
-            success_topic="success",
+        settings = ProducerSettings.model_validate(
+            {
+                "success_topic": "success",
+                "error_topic": "error",
+                "config": {
+                    "bootstrap_servers": "boots",
+                    "sasl_protocol": "SASL_PLAINTEXT",
+                    "sasl_mechanism": "PLAIN",
+                    "sasl_username": "hello",
+                    "sasl_password": "world",
+                },  # nosec CWE-259
+            }
         )
 
         # This appears to be meaningless, but it is actually to prevent automatic code
@@ -38,16 +40,18 @@ class TestConsumerSettings(unittest.TestCase):
     def test_init(self) -> None:
         """Settings should be creatable with no additional import or env files"""
 
-        settings = ConsumerSettings(
-            config={
-                "bootstrap_servers": "boots",
-                "sasl_protocol": "SASL_PLAINTEXT",
-                "sasl_mechanism": "PLAIN",
-                "sasl_username": "hello",
-                "sasl_password": "world",
-                "group_id": "foo",
-            },  # nosec CWE-259
-            topics="local",
+        settings = ConsumerSettings.model_validate(
+            {
+                "topics": "local",
+                "config": {
+                    "bootstrap_servers": "boots",
+                    "sasl_protocol": "SASL_PLAINTEXT",
+                    "sasl_mechanism": "PLAIN",
+                    "sasl_username": "hello",
+                    "sasl_password": "world",
+                    "group_id": "foo",
+                },  # nosec CWE-259
+            }
         )
 
         # This appears to be meaningless, but it is actually to prevent automatic code
