@@ -5,7 +5,7 @@ from typing import Any
 import attr
 from confluent_kafka import KafkaError, Message, Producer
 
-from esgf_core_utils.settings.kafka import producer_settings
+from esgf_core_utils.settings.kafka.settings import producer_settings
 
 # Setup logger
 logger = logging.getLogger(__name__)

@@ -3,7 +3,7 @@ from typing import Any
 
 from confluent_kafka import Consumer, KafkaException
 
-from esgf_core_utils.settings.kafka import consumer_settings
+from esgf_core_utils.settings.kafka.settings import consumer_settings
 
 
 class KafkaConsumer:
