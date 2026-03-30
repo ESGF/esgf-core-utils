@@ -67,9 +67,9 @@ jobs:
           uv run xenon --exclude 'use/lib/*' .
       - name: Run mypy
         run: |
-          uv pip install --with mypy
+          uv sync --group mypy
           uv run mypy .
       - name: Run sphinx
         run: |
-          uv pip install --with docs
+          uv sync --group docs
           uv run sphinx-build -M dummy ./docs ./docs/_build -W -a
