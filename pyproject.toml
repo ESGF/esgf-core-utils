@@ -42,7 +42,7 @@ exclude = [
 profile = "black"
 
 [tool.black]
-target-version = ["py311", "py312", "py313","py314"]
+target-version = ["py312", "py313","py314"]
 
 [tool.ruff]
 line-length = 88
