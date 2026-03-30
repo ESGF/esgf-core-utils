@@ -64,7 +64,7 @@ jobs:
       - name: Run xenon
         run: |
           uv sync --only-group xenon
-          uv run xenon --ignore 'use/lib/**' -a $(uv run python -c "import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['average'])") -b $(uv run python -c "import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['block'])") -m $(uv run python -c "import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['module'])") .
+          uv run xenon --exclude 'use/lib/*' .
       - name: Run mypy
         run: |
           uv pip install --with mypy

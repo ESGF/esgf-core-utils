@@ -201,6 +201,9 @@ class EGIAuth(BaseModel):
         for entitlement in entitlements:
             match = re.search(self.regex, entitlement)
 
+            if match is None:
+                continue
+
             try:
                 if match.group("type") == "project":
                     self.projects.add(

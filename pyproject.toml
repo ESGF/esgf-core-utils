@@ -56,10 +56,15 @@ branch = true
 [tool.coverage.report]
 fail_under = 100
 
-[tool.quality.mccabe]
-average = "A"
-block = "A"
-module = "A"
+[tool.xenon]
+max-absolute = "A"
+max-modules = "A"
+max-average = "A"
+exclude = [
+    "use/*",
+    "*/use/*",
+]
+
 
 [tool.bandit]
 skips = []
