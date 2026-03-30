@@ -13,13 +13,9 @@ jobs:
         python-version: ["3.11", "3.12", "3.13", "3.14"]
     steps:
       - uses: actions/checkout@v6
-      - name: Install UV
-        run: |
-          pipx install 'uv'
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-uv@v8
         with:
           python-version: ${{ matrix.python-version }}
-          cache: "uv"
       - name: Clear coverage
         run: |
           uv install --with test
@@ -36,13 +32,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Poetry
-        run: |
-          pipx install 'uv'
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-uv@v8
         with:
           python-version: "3.12"
-          cache: "uv"
       - name: Install Dependencies
         run: |
           uv env use 3.12
