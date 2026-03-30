@@ -31,18 +31,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: Install Poetry
+      - name: Install UV
         run: |
-          pipx install 'poetry'
+          pipx install 'uv'
       - name: Install dependencies
-        run: poetry install --with docs
+        run: uv sync --group docs
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5

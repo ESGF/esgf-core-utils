@@ -18,7 +18,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Clear coverage
         run: |
-          uv install --with test
+          uv sync --group test
           uv run python -m coverage erase
       - name: Run tests
         run: |
@@ -43,19 +43,19 @@ jobs:
           uv lock --check
       - name: Run black
         run: |
-          uv install --only black
+          uv sync --only-group black
           uv run black ./ --verbose --check
       - name: Run bandit
         run: |
-          uv install --only bandit
+          uv sync --only-group bandit
           uv run bandit -c pyproject.toml -r .
       - name: Run isort
         run: |
-          uv install --only isort
+          uv sync --only-group isort
           uv run isort . --check
       - name: Run ruff
         run: |
-          uv install --only ruff
+          uv sync --only-group ruff
           uv run ruff check
       # - name: Run audit
       #   run: |
@@ -63,13 +63,13 @@ jobs:
       #     uv audit $(uv run python -c "import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); ignore_codes = data['tool']['quality']['audit']['ignore-code']; print('--ignore-code=' + ','.join(ignore_codes)) if ignore_codes else print('')")
       - name: Run xenon
         run: |
-          uv install --only xenon
+          uv sync --only-group xenon
           uv run xenon -a $(uv run python -c "import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['average'])") -b $(uv run python -c "import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['block'])") -m $(uv run python -c "import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['module'])") .
       - name: Run mypy
         run: |
-          uv install --with mypy
+          uv pip install --with mypy
           uv run mypy .
       - name: Run sphinx
         run: |
-          uv install --with docs
+          uv pip install --with docs
           uv run sphinx-build -M dummy ./docs ./docs/_build -W -a
