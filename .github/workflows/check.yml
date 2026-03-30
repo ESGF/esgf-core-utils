@@ -64,7 +64,7 @@ jobs:
       - name: Run xenon
         run: |
           uv sync --only-group xenon
-          uv run xenon --exclude 'use/lib/*' .
+          uv run xenon .
       - name: Run mypy
         run: |
           uv sync --group mypy

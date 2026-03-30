@@ -34,6 +34,9 @@ plugins = [
 strict = true
 ignore_missing_imports = true
 python_version = "3.12"
+exclude = [
+    "^use/",
+]
 
 [tool.isort]
 profile = "black"
@@ -62,7 +65,6 @@ max-modules = "A"
 max-average = "A"
 exclude = [
     "use/*",
-    "*/use/*",
 ]
 
 
