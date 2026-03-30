@@ -42,7 +42,7 @@ class TestConsumerSettings(unittest.TestCase):
 
         settings = ConsumerSettings.model_validate(
             {
-                "topics": "local",
+                "topics": ["local"],
                 "config": {
                     "bootstrap_servers": "boots",
                     "sasl_protocol": "SASL_PLAINTEXT",
@@ -50,7 +50,7 @@ class TestConsumerSettings(unittest.TestCase):
                     "sasl_username": "hello",
                     "sasl_password": "world",
                     "group_id": "foo",
-                },  # nosec CWE-259
+                },
             }
         )
 
