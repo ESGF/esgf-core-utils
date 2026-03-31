@@ -8,6 +8,7 @@ These tests simulate behaviour of the start() loop, ensuring:
 - exception handlers run appropriately
 """
 
+import os
 import unittest
 from unittest.mock import MagicMock, patch
 
@@ -15,7 +16,16 @@ from confluent_kafka import KafkaException
 
 from esgf_core_utils.models.kafka.consumer import KafkaConsumer
 
+MOCK_ENV = {
+    "KAFKA_CONSUMER_TOPICS": ["local"],
+    "KAFKA_CONSUMER_CONFIG__BOOTSTRAP_SERVERS": "boots",
+    "KAFKA_CONSUMER_CONFIG__SASL_USERNAME": "hello",
+    "KAFKA_CONSUMER_CONFIG__SASL_PASSWORD": "world",
+    "KAFKA_CONSUMER_CONFIG__GROUP_ID": "foo",
+}  # nosec CWE-259
 
+
+@patch.dict(os.environ, MOCK_ENV, clear=True)
 class TestKafkaConsumerFunctional(unittest.TestCase):
     """Functional test suite for KafkaConsumer."""
 
@@ -25,16 +35,9 @@ class TestKafkaConsumerFunctional(unittest.TestCase):
     def test_start_processes_messages(
         self,
         mock_consumer: MagicMock,
-        mock_settings: MagicMock,
         mock_logging: MagicMock,
     ) -> None:
         """Simulate two poll cycles: one None message and one valid message."""
-        mock_settings.topics = ["topicA"]
-        mock_settings.timeout = 3
-        mock_settings.config.model_dump.return_value = {
-            "bootstrap.servers": "localhost"
-        }
-
         consumer_instance: MagicMock = mock_consumer.return_value
 
         msg: MagicMock = MagicMock()
@@ -60,16 +63,9 @@ class TestKafkaConsumerFunctional(unittest.TestCase):
     def test_start_handles_kafka_exception(
         self,
         mock_consumer: MagicMock,
-        mock_settings: MagicMock,
         mock_logging: MagicMock,
     ) -> None:
         """Ensure KafkaException inside loop triggers error logging and proper shutdown."""
-        mock_settings.topics = ["topicA"]
-        mock_settings.timeout = 3
-        mock_settings.config.model_dump.return_value = {
-            "bootstrap.servers": "localhost"
-        }
-
         consumer_instance: MagicMock = mock_consumer.return_value
         consumer_instance.poll.side_effect = KafkaException("boom")
 
@@ -87,16 +83,9 @@ class TestKafkaConsumerFunctional(unittest.TestCase):
     def test_start_keyboard_interrupt(
         self,
         mock_consumer: MagicMock,
-        mock_settings: MagicMock,
         mock_logging: MagicMock,
     ) -> None:
         """Ensure KeyboardInterrupt is handled gracefully and closes the consumer."""
-        mock_settings.topics = ["topicA"]
-        mock_settings.timeout = 2
-        mock_settings.config.model_dump.return_value = {
-            "bootstrap.servers": "localhost"
-        }
-
         consumer_instance: MagicMock = mock_consumer.return_value
         consumer_instance.poll.side_effect = KeyboardInterrupt()
 

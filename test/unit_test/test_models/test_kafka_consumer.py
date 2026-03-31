@@ -5,12 +5,22 @@ These tests verify constructor behaviour, commit behaviour,
 and correct usage of underlying Consumer methods.
 """
 
+import os
 import unittest
 from unittest.mock import MagicMock, patch
 
 from esgf_core_utils.models.kafka.consumer import KafkaConsumer
 
+MOCK_ENV = {
+    "KAFKA_CONSUMER_TOPICS": ["local"],
+    "KAFKA_CONSUMER_CONFIG__BOOTSTRAP_SERVERS": "boots",
+    "KAFKA_CONSUMER_CONFIG__SASL_USERNAME": "hello",
+    "KAFKA_CONSUMER_CONFIG__SASL_PASSWORD": "world",
+    "KAFKA_CONSUMER_CONFIG__GROUP_ID": "foo",
+}  # nosec CWE-259
 
+
+@patch.dict(os.environ, MOCK_ENV, clear=True)
 class TestKafkaConsumerUnit(unittest.TestCase):
     """Unit tests for KafkaConsumer."""
 
@@ -19,20 +29,13 @@ class TestKafkaConsumerUnit(unittest.TestCase):
     def test_constructor_initialises_consumer(
         self,
         mock_consumer: MagicMock,
-        mock_settings: MagicMock,
     ) -> None:
         """Ensure KafkaConsumer initialises the confluent_kafka.Consumer correctly."""
-        mock_settings.config.model_dump.return_value = {
-            "bootstrap.servers": "localhost"
-        }
-        mock_settings.topics = ["topicA"]
-        mock_settings.timeout = 5.0
-
         mock_processor_class: MagicMock = MagicMock()
         consumer: KafkaConsumer = KafkaConsumer(mock_processor_class)
 
         mock_processor_class.assert_called_once()
-        mock_consumer.assert_called_once_with({"bootstrap.servers": "localhost"})
+        mock_consumer.assert_called_once_with({"bootstrap.servers": "boots"})
 
         self.assertIsNotNone(consumer.consumer)
         self.assertIsNotNone(consumer.message_processor)
