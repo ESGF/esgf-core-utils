@@ -5,7 +5,7 @@ from typing import Any
 import attr
 from confluent_kafka import KafkaError, Message, Producer
 
-from esgf_core_utils.settings.kafka.settings import producer_settings
+from esgf_core_utils.settings.kafka.producer import ProducerSettings
 
 # Setup logger
 logger = logging.getLogger(__name__)
@@ -31,8 +31,9 @@ class StdoutProducer(BaseProducer):
 
 class KafkaProducer(BaseProducer):
     def __init__(self) -> None:
+        self.settings = ProducerSettings()
         self.producer = Producer(
-            producer_settings.config.model_dump(by_alias=True, exclude_none=True)
+            self.settings.config.model_dump(by_alias=True, exclude_none=True)
         )
         logger.info("KafkaProducer initialized")
 
@@ -68,7 +69,7 @@ class KafkaProducer(BaseProducer):
         Returns:
             list[tuple[KafkaError, Message]]: delivery reports
         """
-        return self.produce(topic=producer_settings.error_topic, key=key, value=value)
+        return self.produce(topic=self.settings.error_topic, key=key, value=value)
 
     def success(
         self, key: str | bytes, value: str | bytes
@@ -82,4 +83,4 @@ class KafkaProducer(BaseProducer):
         Returns:
             list[tuple[KafkaError, Message]]: delivery reports
         """
-        return self.produce(topic=producer_settings.success_topic, key=key, value=value)
+        return self.produce(topic=self.settings.success_topic, key=key, value=value)
