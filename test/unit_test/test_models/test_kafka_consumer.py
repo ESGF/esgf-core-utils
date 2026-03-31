@@ -34,7 +34,18 @@ class TestKafkaConsumerUnit(unittest.TestCase):
         consumer: KafkaConsumer = KafkaConsumer(mock_processor_class)
 
         mock_processor_class.assert_called_once()
-        mock_consumer.assert_called_once_with({"bootstrap.servers": "boots"})
+        mock_consumer.assert_called_once_with(
+            {
+                "bootstrap.servers": "boots",
+                "enable.auto.commit": False,
+                "sasl.mechanism": "PLAIN",
+                "sasl.username": "hello",
+                "sasl.password": "world",
+                "security.protocol": "SASL_SSL",
+                "auto.offset.reset": "earliest",
+                "group.id": "foo",
+            }
+        )
 
         self.assertIsNotNone(consumer.consumer)
         self.assertIsNotNone(consumer.message_processor)

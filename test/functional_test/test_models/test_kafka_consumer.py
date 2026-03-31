@@ -48,7 +48,7 @@ class TestKafkaConsumerFunctional(unittest.TestCase):
         consumer: KafkaConsumer = KafkaConsumer(mock_processor_class)
         consumer.start()
 
-        consumer_instance.subscribe.assert_called_once_with(["topicA"])
+        consumer_instance.subscribe.assert_called_once_with(["local"])
         mock_processor_instance.ingest.assert_called_once_with(msg)
         consumer_instance.commit.assert_called_once_with(
             message=msg,
