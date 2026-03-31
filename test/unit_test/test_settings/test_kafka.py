@@ -4,6 +4,7 @@ Test the functions in kafka.config module
 
 import unittest
 
+from esgf_core_utils.models.kafka.config import KafkaConsumerConfig
 from esgf_core_utils.settings.kafka.consumer import ConsumerSettings
 from esgf_core_utils.settings.kafka.producer import ProducerSettings
 
@@ -58,3 +59,59 @@ class TestConsumerSettings(unittest.TestCase):
         # formatters from removing the line (the tsts doesn't strictly need to assert anything, it just needs
         # not to raise an Exception
         self.assertIsInstance(settings, ConsumerSettings)
+
+    def test_split_topics_from_string(self) -> None:
+        """Ensure comma-separated topic strings are split into a list."""
+        topics = ConsumerSettings.split_topics("a,b,c")
+        self.assertEqual(topics, ["a", "b", "c"])
+    
+    def test_split_topics_from_list(self) -> None:
+        """Ensure lists of topics pass through unchanged."""
+        topics = ConsumerSettings.split_topics(["x", "y"])
+        self.assertEqual(topics, ["x", "y"])
+
+    def test_split_topics_strips_whitespace(self) -> None:
+        """Whitespace around topics should be removed."""
+        topics = ConsumerSettings.split_topics(" a ,  b , c ")
+        self.assertEqual(topics, ["a", "b", "c"])
+
+    def test_check_debug_updates_config(self) -> None:
+        """
+        check_debug should update config.debug and config.log_level
+        when debug=True.
+        """
+        cfg = KafkaConsumerConfig(
+            bootstrap_servers="boots",
+            sasl_username="hello",
+            sasl_password="world",
+            debug=None,
+            log_level=None,
+            group_id="foo",
+        )
+        settings = ConsumerSettings(
+            config=cfg,
+            topics=["topic"],
+            debug=True,
+        )
+
+        self.assertEqual(settings.config.debug, "all")
+        self.assertEqual(settings.config.log_level, 7)
+
+    def test_check_debug_no_update_when_debug_false(self) -> None:
+        """When debug=False, validator should not modify debug/log_level."""
+        cfg = KafkaConsumerConfig(
+            bootstrap_servers="boots",
+            sasl_username="hello",
+            sasl_password="world",
+            debug=None,
+            log_level=None,
+            group_id="foo",
+        )
+        settings = ConsumerSettings(
+            config=cfg,
+            topics=["topic"],
+            debug=False,
+        )
+
+        self.assertIsNone(settings.config.debug)
+        self.assertIsNone(settings.config.log_level)

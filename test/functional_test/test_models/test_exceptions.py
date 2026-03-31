@@ -93,7 +93,3 @@ class TestExceptionFunctional(unittest.TestCase):
         exc = ctx.exception
         self.assertEqual(exc.status_code, 500)
         self.assertEqual(exc.instance, "foo")
-
-
-if __name__ == "__main__":
-    unittest.main()

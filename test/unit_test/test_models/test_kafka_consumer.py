@@ -46,7 +46,6 @@ class TestKafkaConsumerUnit(unittest.TestCase):
                 "group.id": "foo",
             }
         )
-
         self.assertIsNotNone(consumer.consumer)
         self.assertIsNotNone(consumer.message_processor)
 
@@ -77,7 +76,3 @@ class TestKafkaConsumerUnit(unittest.TestCase):
         consumer.commit(None)
 
         consumer_instance.commit.assert_not_called()
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -149,7 +149,3 @@ class TestExceptionUnit(unittest.TestCase):
         )
         self.assertEqual(exc.instance, "instXYZ")
         self.assertIn("help@esgf.io", exc.detail)
-
-
-if __name__ == "__main__":
-    unittest.main()
