@@ -1,6 +1,6 @@
 from typing import Annotated, Any, Self
 
-from pydantic import TypeAdapter, field_validator, model_validator
+from pydantic import ConfigDict, TypeAdapter, field_validator, model_validator
 from pydantic_settings import BaseSettings, NoDecode
 
 from esgf_core_utils.models.kafka.config import KafkaConsumerConfig
@@ -11,11 +11,12 @@ class ConsumerSettings(BaseSettings):
     Event Stream Settings
     """
 
-    class Config:
-        validate_by_name = True
-        env_prefix = "KAFKA_CONSUMER_"
-        env_nested_delimiter = "__"
-        extra = "ignore"
+    model_config = ConfigDict(
+        validate_by_name=True,
+        env_prefix="KAFKA_CONSUMER_",
+        env_nested_delimiter="__",
+        extra="ignore",
+    )
 
     config: KafkaConsumerConfig
     topics: Annotated[list[str], NoDecode]

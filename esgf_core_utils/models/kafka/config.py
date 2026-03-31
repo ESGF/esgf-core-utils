@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class KafkaConfig(BaseModel):
@@ -6,10 +6,11 @@ class KafkaConfig(BaseModel):
     Kafka Config
     """
 
-    class Config:
-        validate_by_name = True
-        validate_by_alias = True
-        extra = "ignore"
+    model_config = ConfigDict(
+        validate_by_name=True,
+        validate_by_alias=True,
+        extra="ignore",
+    )
 
     bootstrap_servers: str = Field(alias="bootstrap.servers")
     enable_auto_commit: bool = Field(default=False, alias="enable.auto.commit")
