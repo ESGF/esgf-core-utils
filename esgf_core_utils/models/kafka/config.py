@@ -18,6 +18,7 @@ class KafkaConfig(BaseModel):
     sasl_username: str = Field(alias="sasl.username")
     sasl_password: str = Field(alias="sasl.password")
     security_protocol: str = Field(default="SASL_SSL", alias="security.protocol")
+    session_timeout_ms: int = Field(default=45000, alias="session.timeout.ms")
 
 
 class KafkaConsumerConfig(KafkaConfig):
