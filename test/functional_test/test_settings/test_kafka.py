@@ -26,7 +26,7 @@ class TestConsumerSettingsFunctional(unittest.TestCase):
             sasl_username="hello",
             sasl_password="world",
             group_id="foo",
-        )
+        )  # nosec CWE-259
 
         settings = ConsumerSettings(
             config=cfg,

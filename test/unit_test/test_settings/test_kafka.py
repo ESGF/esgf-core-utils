@@ -64,7 +64,7 @@ class TestConsumerSettings(unittest.TestCase):
         """Ensure comma-separated topic strings are split into a list."""
         topics = ConsumerSettings.split_topics("a,b,c")
         self.assertEqual(topics, ["a", "b", "c"])
-    
+
     def test_split_topics_from_list(self) -> None:
         """Ensure lists of topics pass through unchanged."""
         topics = ConsumerSettings.split_topics(["x", "y"])
@@ -87,7 +87,7 @@ class TestConsumerSettings(unittest.TestCase):
             debug=None,
             log_level=None,
             group_id="foo",
-        )
+        )  # nosec CWE-259
         settings = ConsumerSettings(
             config=cfg,
             topics=["topic"],
@@ -106,7 +106,7 @@ class TestConsumerSettings(unittest.TestCase):
             debug=None,
             log_level=None,
             group_id="foo",
-        )
+        )  # nosec CWE-259
         settings = ConsumerSettings(
             config=cfg,
             topics=["topic"],
