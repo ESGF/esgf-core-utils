@@ -1,5 +1,4 @@
-from pydantic import ConfigDict
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from esgf_core_utils.models.kafka.config import KafkaConfig
 
@@ -9,7 +8,7 @@ class ProducerSettings(BaseSettings):
     Event Stream Settings
     """
 
-    model_config = ConfigDict(
+    model_config = SettingsConfigDict(
         validate_by_name=True,
         env_prefix="KAFKA_PRODUCER_",
         env_nested_delimiter="__",

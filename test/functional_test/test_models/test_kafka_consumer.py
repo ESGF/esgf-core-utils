@@ -17,7 +17,7 @@ from confluent_kafka import KafkaException
 from esgf_core_utils.models.kafka.consumer import KafkaConsumer
 
 MOCK_ENV = {
-    "KAFKA_CONSUMER_TOPICS": ["local"],
+    "KAFKA_CONSUMER_TOPICS": "local",
     "KAFKA_CONSUMER_CONFIG__BOOTSTRAP_SERVERS": "boots",
     "KAFKA_CONSUMER_CONFIG__SASL_USERNAME": "hello",
     "KAFKA_CONSUMER_CONFIG__SASL_PASSWORD": "world",

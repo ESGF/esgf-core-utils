@@ -1,7 +1,7 @@
 from typing import Annotated, Any, Self
 
-from pydantic import ConfigDict, TypeAdapter, field_validator, model_validator
-from pydantic_settings import BaseSettings, NoDecode
+from pydantic import TypeAdapter, field_validator, model_validator
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 from esgf_core_utils.models.kafka.config import KafkaConsumerConfig
 
@@ -11,7 +11,7 @@ class ConsumerSettings(BaseSettings):
     Event Stream Settings
     """
 
-    model_config = ConfigDict(
+    model_config = SettingsConfigDict(
         validate_by_name=True,
         env_prefix="KAFKA_CONSUMER_",
         env_nested_delimiter="__",
