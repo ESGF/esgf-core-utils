@@ -29,9 +29,8 @@ MOCK_ENV = {
 class TestKafkaConsumerFunctional(unittest.TestCase):
     """Functional test suite for KafkaConsumer."""
 
-    @patch("kafka_consumer.logging")
-    @patch("kafka_consumer.consumer_settings")
-    @patch("kafka_consumer.Consumer")
+    @patch("esgf_core_utils.models.kafka.consumer.logging")
+    @patch("esgf_core_utils.models.kafka.consumer.Consumer")
     def test_start_processes_messages(
         self,
         mock_consumer: MagicMock,
@@ -57,9 +56,8 @@ class TestKafkaConsumerFunctional(unittest.TestCase):
         )
         consumer_instance.close.assert_called_once()
 
-    @patch("kafka_consumer.logging")
-    @patch("kafka_consumer.consumer_settings")
-    @patch("kafka_consumer.Consumer")
+    @patch("esgf_core_utils.models.kafka.consumer.logging")
+    @patch("esgf_core_utils.models.kafka.consumer.Consumer")
     def test_start_handles_kafka_exception(
         self,
         mock_consumer: MagicMock,
@@ -77,9 +75,8 @@ class TestKafkaConsumerFunctional(unittest.TestCase):
         mock_logging.error.assert_called()
         consumer_instance.close.assert_called_once()
 
-    @patch("kafka_consumer.logging")
-    @patch("kafka_consumer.consumer_settings")
-    @patch("kafka_consumer.Consumer")
+    @patch("esgf_core_utils.models.kafka.consumer.logging")
+    @patch("esgf_core_utils.models.kafka.consumer.Consumer")
     def test_start_keyboard_interrupt(
         self,
         mock_consumer: MagicMock,
