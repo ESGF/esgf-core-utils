@@ -1,3 +1,5 @@
+import socket
+
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -19,6 +21,7 @@ class KafkaConfig(BaseModel):
     sasl_password: str = Field(alias="sasl.password")
     security_protocol: str = Field(default="SASL_SSL", alias="security.protocol")
     session_timeout_ms: int = Field(default=45000, alias="session.timeout.ms")
+    client_id: str = Field(default=socket.gethostname(), alias="client.id")
 
 
 class KafkaConsumerConfig(KafkaConfig):
