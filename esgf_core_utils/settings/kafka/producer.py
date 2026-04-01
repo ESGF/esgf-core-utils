@@ -10,6 +10,7 @@ class ProducerSettings(BaseSettings):
 
     model_config = SettingsConfigDict(
         validate_by_name=True,
+        validate_by_alias=True,
         env_prefix="KAFKA_PRODUCER_",
         env_nested_delimiter="__",
         extra="ignore",
