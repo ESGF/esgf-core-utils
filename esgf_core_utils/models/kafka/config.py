@@ -15,12 +15,10 @@ class KafkaConfig(BaseModel):
     )
 
     bootstrap_servers: str = Field(alias="bootstrap.servers")
-    enable_auto_commit: bool = Field(default=False, alias="enable.auto.commit")
     sasl_mechanism: str = Field(default="PLAIN", alias="sasl.mechanism")
     sasl_username: str = Field(alias="sasl.username")
     sasl_password: str = Field(alias="sasl.password")
     security_protocol: str = Field(default="SASL_SSL", alias="security.protocol")
-    session_timeout_ms: int = Field(default=45000, alias="session.timeout.ms")
     client_id: str = Field(default=socket.gethostname(), alias="client.id")
 
 
@@ -30,6 +28,8 @@ class KafkaConsumerConfig(KafkaConfig):
     """
 
     auto_offset_reset: str = Field(default="earliest", alias="auto.offset.reset")
+    enable_auto_commit: bool = Field(default=False, alias="enable.auto.commit")
     group_id: str = Field(alias="group.id")
+    session_timeout_ms: int = Field(default=45000, alias="session.timeout.ms")
     debug: str | None = None
     log_level: int | None = None
