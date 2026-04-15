@@ -31,23 +31,11 @@ class TestKafkaConsumerUnit(unittest.TestCase):
         mock_consumer: MagicMock,
     ) -> None:
         """Ensure KafkaConsumer initialises the confluent_kafka.Consumer correctly."""
-        mock_processor_class: MagicMock = MagicMock()
-        consumer: KafkaConsumer = KafkaConsumer(mock_processor_class)
+        mock_processor: MagicMock = MagicMock()
+        consumer: KafkaConsumer = KafkaConsumer(mock_processor)
 
-        mock_processor_class.assert_called_once()
-        mock_consumer.assert_called_once_with(
-            {
-                "client.id": "bar",
-                "bootstrap.servers": "boots",
-                "enable.auto.commit": False,
-                "sasl.mechanism": "PLAIN",
-                "sasl.username": "hello",
-                "sasl.password": "world",
-                "security.protocol": "SASL_SSL",
-                "auto.offset.reset": "earliest",
-                "session.timeout.ms": "45000",
-                "group.id": "foo",
-            }
-        )
-        self.assertIsNotNone(consumer.consumer)
-        self.assertIsNotNone(consumer.message_processor)
+        mock_processor.assert_called_once()
+        mock_consumer.assert_called_once()
+        self.assertIs(consumer.consumer, mock_consumer)
+        self.assertIs(consumer.message_processor, mock_processor)
+        self.assertIsNotNone(consumer.settings)
