@@ -16,6 +16,7 @@ class BaseProducer(ABC):
     """
     Base Producer
     """
+
     @abstractmethod
     def produce(self, topic: str, key: AnyStr, value: AnyStr) -> Any:
         """Publish message
@@ -31,6 +32,7 @@ class DummyProducer(BaseProducer):
     """
     Dummy Producer
     """
+
     def produce(self, topic: str, key: AnyStr, value: AnyStr) -> None:
         logger.info("message: %s", repr(value))
 
@@ -39,6 +41,7 @@ class KafkaProducer(BaseProducer):
     """
     Kafka Producer
     """
+
     def __init__(self) -> None:
         self.settings = ProducerSettings()
         self.producer = Producer(

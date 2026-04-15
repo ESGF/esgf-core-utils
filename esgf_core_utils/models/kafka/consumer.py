@@ -11,6 +11,7 @@ class KafkaConsumer:
     """
     Kafka consumer
     """
+
     def __init__(self, message_processor: MessageProcessor):
         self.settings = ConsumerSettings()
         self.message_processor = message_processor

@@ -1,4 +1,3 @@
-
 import abc
 
 from confluent_kafka import Message as KafkaMessage

@@ -17,5 +17,5 @@ class ProducerSettings(BaseSettings):
     )
 
     config: KafkaConfig
-    error_topic: str | None = None
+    error_topic: str = ""
     success_topic: str

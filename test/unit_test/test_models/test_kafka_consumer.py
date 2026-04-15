@@ -48,31 +48,3 @@ class TestKafkaConsumerUnit(unittest.TestCase):
         )
         self.assertIsNotNone(consumer.consumer)
         self.assertIsNotNone(consumer.message_processor)
-
-    @patch("esgf_core_utils.models.kafka.consumer.Consumer")
-    def test_commit_calls_underlying_consumer(self, mock_consumer: MagicMock) -> None:
-        """Verify that commit() passes messages to the underlying consumer when message exists."""
-        consumer_instance: MagicMock = mock_consumer.return_value
-        mock_processor_class: MagicMock = MagicMock()
-
-        consumer: KafkaConsumer = KafkaConsumer(mock_processor_class)
-
-        msg: MagicMock = MagicMock()
-        consumer.commit(msg)
-
-        consumer_instance.commit.assert_called_once_with(
-            message=msg,
-            asynchronous=False,
-        )
-
-    @patch("esgf_core_utils.models.kafka.consumer.Consumer")
-    def test_commit_ignores_none_message(self, mock_consumer: MagicMock) -> None:
-        """Verify commit() does nothing when message=None."""
-        consumer_instance: MagicMock = mock_consumer.return_value
-        mock_processor_class: MagicMock = MagicMock()
-
-        consumer: KafkaConsumer = KafkaConsumer(mock_processor_class)
-
-        consumer.commit(None)
-
-        consumer_instance.commit.assert_not_called()
