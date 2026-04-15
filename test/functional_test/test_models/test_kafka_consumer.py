@@ -1,9 +1,10 @@
 # test_kafka_consumer_functional.py
-import os, patchimport os
+import os
+
+import patch
 
 # Adjust this import to match your package layout
 from esgf_core_utils.models.kafka.consumer import KafkaConsumer
-
 
 MOCK_ENV = {
     "KAFKA_CONSUMER_TOPICS": "local",
@@ -84,4 +85,5 @@ class TestKafkaConsumerFunctional(unittest.TestCase):
         processor.ingest.assert_not_called()
         consumer_instance.commit.assert_not_called()
         mock_sleep.assert_called_once_with(0.1)
+        consumer_instance.close.assert_called_once()
         consumer_instance.close.assert_called_once()
