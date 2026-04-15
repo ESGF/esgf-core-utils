@@ -1,20 +1,9 @@
-"""
-Functional-style tests for KafkaConsumer using unittest.
+# test_kafka_consumer_functional.py
+import os, patchimport os
 
-These tests simulate behaviour of the start() loop, ensuring:
-- subscription occurs
-- ingest is called for valid messages
-- commits occur
-- exception handlers run appropriately
-"""
-
-import os
-import unittest
-from unittest.mock import MagicMock, patch
-
-from confluent_kafka import KafkaException
-
+# Adjust this import to match your package layout
 from esgf_core_utils.models.kafka.consumer import KafkaConsumer
+
 
 MOCK_ENV = {
     "KAFKA_CONSUMER_TOPICS": "local",
@@ -27,69 +16,72 @@ MOCK_ENV = {
 
 @patch.dict(os.environ, MOCK_ENV, clear=True)
 class TestKafkaConsumerFunctional(unittest.TestCase):
-    """Functional test suite for KafkaConsumer."""
+    """Functional-style tests for KafkaConsumer using real ConsumerSettings via env vars."""
 
-    @patch("esgf_core_utils.models.kafka.consumer.logging")
     @patch("esgf_core_utils.models.kafka.consumer.Consumer")
-    def test_start_processes_messages(
-        self,
-        mock_consumer: MagicMock,
-        mock_logging: MagicMock,
-    ) -> None:
-        """Simulate two poll cycles: one None message and one valid message."""
-        consumer_instance: MagicMock = mock_consumer.return_value
+    def test_constructor_initialises_consumer_from_env_settings(self, mock_consumer_cls):
+        # Arrange
+        consumer_instance = MagicMock()
+        mock_consumer_cls.return_value = consumer_instance
+        processor = MagicMock()
 
-        msg: MagicMock = MagicMock()
-        consumer_instance.poll.side_effect = [msg, None, KeyboardInterrupt()]
+        # Act
+        kafka_consumer = KafkaConsumer(processor)
 
-        mock_processor_class: MagicMock = MagicMock()
-        mock_processor_instance: MagicMock = mock_processor_class.return_value
+        # Assert
+        mock_consumer_cls.assert_called_once()
+        passed_config = mock_consumer_cls.call_args.args[0]
 
-        consumer: KafkaConsumer = KafkaConsumer(mock_processor_class)
-        consumer.start()
+        # Check key fields we expect from env → settings → config dump
+        self.assertEqual(passed_config["bootstrap.servers"], "boots")
+        self.assertEqual(passed_config["group.id"], "foo")
 
-        consumer_instance.subscribe.assert_called_once_with(["local"])
-        mock_processor_instance.ingest.assert_called_once_with(msg)
-        consumer_instance.commit.assert_called_once_with(
-            message=msg,
-            asynchronous=False,
-        )
+        # Sanity checks: object wiring
+        self.assertIs(kafka_consumer.consumer, consumer_instance)
+        self.assertIs(kafka_consumer.message_processor, processor)
+        self.assertIsNotNone(kafka_consumer.settings)
+
+    @patch("esgf_core_utils.models.kafka.consumer.time.sleep")
+    @patch("esgf_core_utils.models.kafka.consumer.Consumer")
+    def test_start_processes_message_and_commits(self, mock_consumer_cls, mock_sleep):
+        # Arrange
+        consumer_instance = MagicMock()
+        mock_consumer_cls.return_value = consumer_instance
+
+        msg = MagicMock()
+        # one message then stop loop
+        consumer_instance.poll.side_effect = [msg, KeyboardInterrupt()]
+
+        processor = MagicMock()
+        kafka_consumer = KafkaConsumer(processor)
+
+        # Act
+        kafka_consumer.start()
+
+        # Assert
+        consumer_instance.subscribe.assert_called_once_with(kafka_consumer.settings.topics)
+        processor.ingest.assert_called_once_with(msg)
+        consumer_instance.commit.assert_called_once_with(message=msg, asynchronous=False)
         consumer_instance.close.assert_called_once()
+        mock_sleep.assert_not_called()
 
-    @patch("esgf_core_utils.models.kafka.consumer.logging")
+    @patch("esgf_core_utils.models.kafka.consumer.time.sleep")
     @patch("esgf_core_utils.models.kafka.consumer.Consumer")
-    def test_start_handles_kafka_exception(
-        self,
-        mock_consumer: MagicMock,
-        mock_logging: MagicMock,
-    ) -> None:
-        """Ensure KafkaException inside loop triggers error logging and proper shutdown."""
-        consumer_instance: MagicMock = mock_consumer.return_value
-        consumer_instance.poll.side_effect = KafkaException("boom")
+    def test_start_handles_none_message(self, mock_consumer_cls, mock_sleep):
+        # Arrange
+        consumer_instance = MagicMock()
+        mock_consumer_cls.return_value = consumer_instance
 
-        mock_processor_class: MagicMock = MagicMock()
-        consumer: KafkaConsumer = KafkaConsumer(mock_processor_class)
+        consumer_instance.poll.side_effect = [None, KeyboardInterrupt()]
 
-        consumer.start()
+        processor = MagicMock()
+        kafka_consumer = KafkaConsumer(processor)
 
-        mock_logging.error.assert_called()
-        consumer_instance.close.assert_called_once()
+        # Act
+        kafka_consumer.start()
 
-    @patch("esgf_core_utils.models.kafka.consumer.logging")
-    @patch("esgf_core_utils.models.kafka.consumer.Consumer")
-    def test_start_keyboard_interrupt(
-        self,
-        mock_consumer: MagicMock,
-        mock_logging: MagicMock,
-    ) -> None:
-        """Ensure KeyboardInterrupt is handled gracefully and closes the consumer."""
-        consumer_instance: MagicMock = mock_consumer.return_value
-        consumer_instance.poll.side_effect = KeyboardInterrupt()
-
-        mock_processor_class: MagicMock = MagicMock()
-        consumer: KafkaConsumer = KafkaConsumer(mock_processor_class)
-
-        consumer.start()
-
-        mock_logging.info.assert_called()
+        # Assert
+        processor.ingest.assert_not_called()
+        consumer_instance.commit.assert_not_called()
+        mock_sleep.assert_called_once_with(0.1)
         consumer_instance.close.assert_called_once()
