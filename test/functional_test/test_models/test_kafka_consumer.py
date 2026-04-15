@@ -1,7 +1,6 @@
 # test_kafka_consumer_functional.py
 import os
-
-import patch
+from unittest.mock import MagicMock, patch
 
 # Adjust this import to match your package layout
 from esgf_core_utils.models.kafka.consumer import KafkaConsumer
