@@ -164,5 +164,8 @@ cython_debug/
 .idea/
 /.idea/
 
+# VSCode
+.DS_Store
+
 # Ruff
 .ruff_cache/
