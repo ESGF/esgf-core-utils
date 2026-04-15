@@ -17,6 +17,7 @@ MOCK_ENV = {
     "KAFKA_CONSUMER_CONFIG__SASL_USERNAME": "hello",
     "KAFKA_CONSUMER_CONFIG__SASL_PASSWORD": "world",
     "KAFKA_CONSUMER_CONFIG__GROUP_ID": "foo",
+    "KAFKA_CONSUMER_CONFIG__CLIENT_ID": "bar",
 }  # nosec CWE-259
 
 
@@ -36,6 +37,7 @@ class TestKafkaConsumerUnit(unittest.TestCase):
         mock_processor_class.assert_called_once()
         mock_consumer.assert_called_once_with(
             {
+                "client.id": "bar",
                 "bootstrap.servers": "boots",
                 "enable.auto.commit": False,
                 "sasl.mechanism": "PLAIN",
@@ -43,6 +45,7 @@ class TestKafkaConsumerUnit(unittest.TestCase):
                 "sasl.password": "world",
                 "security.protocol": "SASL_SSL",
                 "auto.offset.reset": "earliest",
+                "session.timeout.ms": "45000",
                 "group.id": "foo",
             }
         )

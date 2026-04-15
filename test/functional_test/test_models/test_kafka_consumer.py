@@ -40,7 +40,7 @@ class TestKafkaConsumerFunctional(unittest.TestCase):
         consumer_instance: MagicMock = mock_consumer.return_value
 
         msg: MagicMock = MagicMock()
-        consumer_instance.poll.side_effect = [None, msg, KeyboardInterrupt()]
+        consumer_instance.poll.side_effect = [msg, None, KeyboardInterrupt()]
 
         mock_processor_class: MagicMock = MagicMock()
         mock_processor_instance: MagicMock = mock_processor_class.return_value
