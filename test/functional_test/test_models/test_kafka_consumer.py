@@ -1,5 +1,6 @@
 # test_kafka_consumer_functional.py
 import os
+import unittest
 from unittest.mock import MagicMock, patch
 
 # Adjust this import to match your package layout
@@ -84,5 +85,4 @@ class TestKafkaConsumerFunctional(unittest.TestCase):
         processor.ingest.assert_not_called()
         consumer_instance.commit.assert_not_called()
         mock_sleep.assert_called_once_with(0.1)
-        consumer_instance.close.assert_called_once()
         consumer_instance.close.assert_called_once()
