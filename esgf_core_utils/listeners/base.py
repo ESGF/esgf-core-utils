@@ -5,24 +5,30 @@ import json
 import yaml
 import os
 
-listeners = {
-    'citation': CitationMessageProcessor
-}
+listeners = {"citation": CitationMessageProcessor}
+
 
 def probe_success():
-    os.system('touch /tmp/healthcheck')
+    if not os.access("/tmp", os.W_OK):
+        raise PermissionError("Permission denied accessing healthcheck area")
+    os.system("touch /tmp/healthcheck")
+
 
 def probe_fail():
-    os.system('rm -f /tmp/healthcheck')
+    if not os.access("/tmp", os.W_OK):
+        raise PermissionError("Permission denied accessing healthcheck area")
+    os.system("rm -f /tmp/healthcheck")
+
 
 @click.command()
-@click.argument('listener')
-@click.argument('config')
-@click.argument('secrets')
-@click.option('--fail-state', is_flag=True, help='State to transition to on failure')
-@click.option('--success-state', is_flag=True, help='State to transition to on success')
-
-def main(listener: str, config: str, secrets: str, fail_state: bool, success_state: bool):
+@click.argument("listener")
+@click.argument("config")
+@click.argument("secrets")
+@click.option("--fail-state", is_flag=True, help="State to transition to on failure")
+@click.option("--success-state", is_flag=True, help="State to transition to on success")
+def main(
+    listener: str, config: str, secrets: str, fail_state: bool, success_state: bool
+):
 
     # use importlib to define fail_state, success_state?
 
@@ -35,7 +41,9 @@ def main(listener: str, config: str, secrets: str, fail_state: bool, success_sta
 
     # Start KafkaListener
     if listener not in listeners:
-        raise ValueError(f'Listener "{listener}" not recognised - available listeners: {list(listeners.keys())}')
+        raise ValueError(
+            f'Listener "{listener}" not recognised - available listeners: {list(listeners.keys())}'
+        )
 
     message_processor = listeners.get(listener)(**conf)
     consumer = KafkaConsumer(message_processor=message_processor)
@@ -47,5 +55,6 @@ def main(listener: str, config: str, secrets: str, fail_state: bool, success_sta
         if fail_state:
             probe_fail()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
