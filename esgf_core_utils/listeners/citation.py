@@ -1,8 +1,9 @@
-from esgf_core_utils.models.kafka.message_processor import MessageProcessor
+import json
+
+import requests
 from confluent_kafka import Message as KafkaMessage
 
-import json
-import requests
+from esgf_core_utils.models.kafka.message_processor import MessageProcessor
 
 
 class CitationMessageProcessor(MessageProcessor):

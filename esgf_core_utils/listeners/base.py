@@ -1,9 +1,11 @@
-from esgf_core_utils.models.kafka.consumer import KafkaConsumer
-from esgf_core_utils.listeners.citation import CitationMessageProcessor
-import click
 import json
-import yaml
 import os
+
+import click
+import yaml
+
+from esgf_core_utils.listeners.citation import CitationMessageProcessor
+from esgf_core_utils.models.kafka.consumer import KafkaConsumer
 
 listeners = {"citation": CitationMessageProcessor}
 
@@ -51,7 +53,7 @@ def main(listener: str, config: str, secrets: str, healthcheck: str):
         if healthcheck:
             probe_success(healthcheck)
         consumer.start()
-    except:
+    except Exception as _:
         if healthcheck:
             probe_fail(healthcheck)
 
