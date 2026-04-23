@@ -7,7 +7,7 @@ import yaml
 from esgf_core_utils.listeners.citation import CitationMessageProcessor
 from esgf_core_utils.models.kafka.consumer import KafkaConsumer
 
-listeners = {"citation": CitationMessageProcessor}
+listeners = {"create_citations": CitationMessageProcessor}
 
 
 def probe_success(healthcheck: str) -> None:

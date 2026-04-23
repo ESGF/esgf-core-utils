@@ -20,6 +20,9 @@ dependencies = [
     "confluent-kafka>=2.6.0",
 ]
 
+[project.scripts]
+esgf_listener = "esgf_core_utils.listeners.base:main"
+
 [dependency-groups]
 black = ["black>=24.4.2", "pre-commit>=3.7.1"]
 mypy = ["mypy>=1.10.1", "pre-commit>=3.7.1", "types-pyyaml>=6.0.12.20260408","types-requests>=2.33.0.20260408"]
