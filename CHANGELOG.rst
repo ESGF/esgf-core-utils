@@ -12,6 +12,8 @@ adheres to `Semantic Versioning <https://semver.org>`_.
 Added
 ^^^^^
 
+- Citation Listener and Base modules for Publication and Internal listeners.
+
 Changed
 ^^^^^^^
 

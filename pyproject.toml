@@ -1,12 +1,13 @@
 [project]
 name = "esgf-core-utils"
-version = "1.0.6"
+version = "1.0.7"
 description = "Common library and models for the ESGF core architecture"
 readme = "README.rst"
 authors = [
     {"name" = "David Poulter", "email" = "david.poulter@stfc.ac.uk"},
     {"name" = "Rhys Evans", "email" = "rhys.r.evans@stfc.ac.uk"},
     {"name" = "Ed Borthwick", "email" = "ed.borthwick@stfc.ac.uk"},
+    {"name" = "Daniel Westwood", "email" = "daniel.westwood@stfc.ac.uk"}
 ]
 requires-python = ">=3.12,<4.0"
 dependencies = [
