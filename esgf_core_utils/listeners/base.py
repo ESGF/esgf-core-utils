@@ -10,7 +10,7 @@ from esgf_core_utils.models.kafka.consumer import KafkaConsumer
 listeners = {"citation": CitationMessageProcessor}
 
 
-def probe_success(healthcheck: str):
+def probe_success(healthcheck: str) -> None:
 
     hdir = "/".join(healthcheck.split("/")[:-1])
     if not os.access(hdir, os.W_OK):
@@ -18,7 +18,7 @@ def probe_success(healthcheck: str):
     open(healthcheck, "a").close()
 
 
-def probe_fail(healthcheck: str):
+def probe_fail(healthcheck: str) -> None:
     hdir = "/".join(healthcheck.split("/")[:-1])
     if not os.access(hdir, os.W_OK):
         raise PermissionError("Permission denied accessing healthcheck area")
@@ -30,7 +30,7 @@ def probe_fail(healthcheck: str):
 @click.argument("config")
 @click.argument("secrets")
 @click.option("--healthcheck", dest="healthcheck", help="path to healthcheck probe")
-def main(listener: str, config: str, secrets: str, healthcheck: str):
+def main(listener: str, config: str, secrets: str, healthcheck: str) -> None:
 
     # use importlib to define fail_state, success_state?
 
@@ -47,7 +47,11 @@ def main(listener: str, config: str, secrets: str, healthcheck: str):
             f'Listener "{listener}" not recognised - available listeners: {list(listeners.keys())}'
         )
 
-    message_processor = listeners.get(listener)(**conf)
+    mptype = listeners.get(listener)
+    if mptype is None:
+        raise ValueError("No listener defined")
+
+    message_processor = mptype(**conf)
     consumer = KafkaConsumer(message_processor=message_processor)
     try:
         if healthcheck:

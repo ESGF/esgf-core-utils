@@ -1,5 +1,7 @@
 import json
 
+from typing import Any
+
 import requests
 from confluent_kafka import Message as KafkaMessage
 
@@ -12,7 +14,7 @@ class CitationMessageProcessor(MessageProcessor):
         self.citation_base_url = citation_base_url
         self.citation_api_token = citation_api_token
 
-    def post_citation(self, citation_url: str, citation_data):  # stac_item: dict):
+    def post_citation(self, citation_url: str, citation_data: dict[str, Any]) -> None:
         """
         Assemble the citation record for publication.
 
@@ -38,15 +40,16 @@ class CitationMessageProcessor(MessageProcessor):
         print(r.content)
 
     def citation_exists(self, citation_url: str) -> bool:
-        return requests.get(citation_url, timeout=300).status_code == 200
+        return bool(requests.get(citation_url, timeout=300).status_code == 200)
 
-    def ingest(self, message: KafkaMessage):
+    def ingest(self, message: KafkaMessage) -> None:
         """
         Handle a message received from the kafka topic
         """
 
         # get stac content from message
-        stac_publication = message.get("data", {}).get("payload", {}).get("item", None)
+        # stac_publication = message.value().get("data", {}).get("payload", {}).get("item", None)
+        stac_publication: dict[str, Any] = {}
 
         if not stac_publication:
             # Ignore message with no payload content
