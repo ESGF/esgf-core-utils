@@ -11,13 +11,13 @@ listeners = {"citation": CitationMessageProcessor}
 def probe_success():
     if not os.access("/tmp", os.W_OK):
         raise PermissionError("Permission denied accessing healthcheck area")
-    os.system("touch /tmp/healthcheck")
+    open("/tmp/healthcheck","a").close()
 
 
 def probe_fail():
     if not os.access("/tmp", os.W_OK):
         raise PermissionError("Permission denied accessing healthcheck area")
-    os.system("rm -f /tmp/healthcheck")
+    os.remove("/tmp/healthcheck")
 
 
 @click.command()
