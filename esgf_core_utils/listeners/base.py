@@ -8,27 +8,27 @@ import os
 listeners = {"citation": CitationMessageProcessor}
 
 
-def probe_success():
-    if not os.access("/tmp", os.W_OK):
+def probe_success(healthcheck: str):
+
+    hdir = "/".join(healthcheck.split("/")[:-1])
+    if not os.access(hdir, os.W_OK):
         raise PermissionError("Permission denied accessing healthcheck area")
-    open("/tmp/healthcheck", "a").close()
+    open(healthcheck, "a").close()
 
 
-def probe_fail():
-    if not os.access("/tmp", os.W_OK):
+def probe_fail(healthcheck: str):
+    hdir = "/".join(healthcheck.split("/")[:-1])
+    if not os.access(hdir, os.W_OK):
         raise PermissionError("Permission denied accessing healthcheck area")
-    os.remove("/tmp/healthcheck")
+    os.remove(healthcheck)
 
 
 @click.command()
 @click.argument("listener")
 @click.argument("config")
 @click.argument("secrets")
-@click.option("--fail-state", is_flag=True, help="State to transition to on failure")
-@click.option("--success-state", is_flag=True, help="State to transition to on success")
-def main(
-    listener: str, config: str, secrets: str, fail_state: bool, success_state: bool
-):
+@click.option("--healthcheck", dest="healthcheck", help="path to healthcheck probe")
+def main(listener: str, config: str, secrets: str, healthcheck: str):
 
     # use importlib to define fail_state, success_state?
 
@@ -48,12 +48,12 @@ def main(
     message_processor = listeners.get(listener)(**conf)
     consumer = KafkaConsumer(message_processor=message_processor)
     try:
-        if success_state:
-            probe_success()
+        if healthcheck:
+            probe_success(healthcheck)
         consumer.start()
     except:
-        if fail_state:
-            probe_fail()
+        if healthcheck:
+            probe_fail(healthcheck)
 
 
 if __name__ == "__main__":
