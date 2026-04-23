@@ -1,0 +1,66 @@
+import json
+import os
+
+import click
+import yaml
+
+from esgf_core_utils.listeners.citation import CitationMessageProcessor
+from esgf_core_utils.models.kafka.consumer import KafkaConsumer
+
+listeners = {"create_citations": CitationMessageProcessor}
+
+
+def probe_success(healthcheck: str) -> None:
+
+    hdir = "/".join(healthcheck.split("/")[:-1])
+    if not os.access(hdir, os.W_OK):
+        raise PermissionError("Permission denied accessing healthcheck area")
+    open(healthcheck, "a").close()
+
+
+def probe_fail(healthcheck: str) -> None:
+    hdir = "/".join(healthcheck.split("/")[:-1])
+    if not os.access(hdir, os.W_OK):
+        raise PermissionError("Permission denied accessing healthcheck area")
+    os.remove(healthcheck)
+
+
+@click.command()
+@click.argument("listener")
+@click.argument("config")
+@click.argument("secrets")
+@click.option("--healthcheck", dest="healthcheck", help="path to healthcheck probe")
+def main(listener: str, config: str, secrets: str, healthcheck: str) -> None:
+    """
+    Set up a listener given a listener type and set of configurations."""
+
+    conf = {}
+    with open(config) as f:
+        conf.update(json.load(f))
+
+    with open(secrets) as f:
+        conf.update(yaml.safe_load(f))
+
+    # Start KafkaListener
+    if listener not in listeners:
+        raise ValueError(
+            f'Listener "{listener}" not recognised - available listeners: {list(listeners.keys())}'
+        )
+
+    mptype = listeners.get(listener)
+    if mptype is None:
+        raise ValueError("No listener defined")
+
+    message_processor = mptype(**conf)
+    consumer = KafkaConsumer(message_processor=message_processor)
+    try:
+        if healthcheck:
+            probe_success(healthcheck)
+        consumer.start()
+    except Exception as _:
+        if healthcheck:
+            probe_fail(healthcheck)
+
+
+if __name__ == "__main__":
+    main()
