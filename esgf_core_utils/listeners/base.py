@@ -11,7 +11,7 @@ listeners = {"citation": CitationMessageProcessor}
 def probe_success():
     if not os.access("/tmp", os.W_OK):
         raise PermissionError("Permission denied accessing healthcheck area")
-    open("/tmp/healthcheck","a").close()
+    open("/tmp/healthcheck", "a").close()
 
 
 def probe_fail():
