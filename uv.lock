@@ -406,7 +406,7 @@ wheels = [
 
 [[package]]
 name = "esgf-core-utils"
-version = "1.0.6"
+version = "1.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "confluent-kafka" },

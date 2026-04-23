@@ -31,8 +31,8 @@ def probe_fail(healthcheck: str) -> None:
 @click.argument("secrets")
 @click.option("--healthcheck", dest="healthcheck", help="path to healthcheck probe")
 def main(listener: str, config: str, secrets: str, healthcheck: str) -> None:
-
-    # use importlib to define fail_state, success_state?
+    """
+    Set up a listener given a listener type and set of configurations."""
 
     conf = {}
     with open(config) as f:

@@ -39,6 +39,7 @@ class CitationMessageProcessor(MessageProcessor):
         print(r.content)
 
     def citation_exists(self, citation_url: str) -> bool:
+        """Check if a citation exists."""
         return bool(requests.get(citation_url, timeout=300).status_code == 200)
 
     def ingest(self, message: KafkaMessage) -> None:
