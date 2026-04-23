@@ -21,7 +21,7 @@ dependencies = [
 
 [dependency-groups]
 black = ["black>=24.4.2", "pre-commit>=3.7.1"]
-mypy = ["mypy>=1.10.1", "pre-commit>=3.7.1"]
+mypy = ["mypy>=1.10.1", "pre-commit>=3.7.1", "types-pyyaml>=6.0.12.20260408","types-requests>=2.33.0.20260408"]
 bandit = ["bandit>=1.7.9", "pre-commit>=3.7.1"]
 ruff = ["ruff>=0.5.2", "pre-commit>=3.7.1"]
 isort = ["isort>=5.13.2", "pre-commit>=3.7.1"]
