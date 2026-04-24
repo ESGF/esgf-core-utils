@@ -29,6 +29,7 @@ class KafkaConsumerConfig(KafkaConfig):
 
     auto_offset_reset: str = Field(default="earliest", alias="auto.offset.reset")
     enable_auto_commit: bool = Field(default=False, alias="enable.auto.commit")
+    enable_auto_offset_store: bool = Field(default=False, alias="enable.auto.offset.store")
     group_id: str = Field(alias="group.id")
     session_timeout_ms: int = Field(default=45000, alias="session.timeout.ms")
     debug: str | None = None
