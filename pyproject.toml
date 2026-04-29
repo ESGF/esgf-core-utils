@@ -1,6 +1,6 @@
 [project]
 name = "esgf-core-utils"
-version = "1.0.6"
+version = "1.0.7"
 description = "Common library and models for the ESGF core architecture"
 readme = "README.rst"
 authors = [
@@ -8,47 +8,26 @@ authors = [
     {"name" = "Rhys Evans", "email" = "rhys.r.evans@stfc.ac.uk"},
     {"name" = "Ed Borthwick", "email" = "ed.borthwick@stfc.ac.uk"},
 ]
-requires-python = ">=3.10,<4.0"
+requires-python = ">=3.12,<4.0"
 dependencies = [
-    "pydantic-settings (>=2.6.1,<3.0.0)",
-    "stac-pydantic (>=3.1.1,<4.0.0)",
-    "jinja2 (>=3.1.6,<4.0.0)",
-    "stac-fastapi.extensions==6.0.0"
+    "pydantic>=2.11.0",
+    "pydantic-settings>=2.6.1",
+    "stac-pydantic>=3.1.1",
+    "jinja2>=3.1.6",
+    "stac-fastapi.extensions>=6.0.0",
+    "fastapi>=0.114.0",
+    "confluent-kafka>=2.6.0",
 ]
 
-[tool.poetry.group.black.dependencies]
-black = "^24.4.2"
-pre-commit = "^3.7.1"
-
-[tool.poetry.group.mypy.dependencies]
-mypy = "^1.10.1"
-pre-commit = "^3.7.1"
-
-[tool.poetry.group.bandit.dependencies]
-bandit = "^1.7.9"
-pre-commit = "^3.7.1"
-
-[tool.poetry.group.ruff.dependencies]
-ruff = "^0.5.2"
-pre-commit = "^3.7.1"
-
-[tool.poetry.group.isort.dependencies]
-isort = "^5.13.2"
-pre-commit = "^3.7.1"
-
-[tool.poetry.group.xenon.dependencies]
-xenon = "^0.9.1"
-pre-commit = "^3.7.1"
-
-[tool.poetry.group.test.dependencies]
-coverage = { extras = ["toml"], version = "^7.6.0" }
-
-[tool.poetry.group.docs.dependencies]
-sphinx = "^7.4.7"
-sphinx-autoapi = "^3.2.1"
-sphinx-pydantic = "^0.1.1"
-sphinx-rtd-theme = "^2.0.0"
-sphinx-mdinclude = "^0.6.2"
+[dependency-groups]
+black = ["black>=25.9.0", "pre-commit>=4.3.0"]
+mypy = ["mypy>=1.10.1", "pre-commit>=4.3.0"]
+bandit = ["bandit>=1.7.9", "pre-commit>=4.3.0"]
+ruff = ["ruff>=0.14.2", "pre-commit>=4.3.0"]
+isort = ["isort>=7.0.0", "pre-commit>=4.3.0"]
+xenon = ["xenon>=0.9.1", "pre-commit>=4.3.0"]
+test = ["coverage[toml]>=7.6.0"]
+docs = ["sphinx>=7.4.7", "sphinx-autoapi>=3.2.1", "sphinx-pydantic>=0.1.1", "sphinx-rtd-theme>=3.0.2", "sphinx-mdinclude>=0.6.2"]
 
 [tool.mypy]
 plugins = [
@@ -56,18 +35,21 @@ plugins = [
 ]
 strict = true
 ignore_missing_imports = true
-python_version = "3.10"
+python_version = "3.12"
+exclude = [
+    "^use/",
+]
 
 [tool.isort]
 profile = "black"
 
 [tool.black]
-target-version = ["py310", "py311", "py312", "py313"]
+target-version = ["py312", "py313","py314"]
 
 [tool.ruff]
 line-length = 88
 indent-width = 4
-target-version = "py39"
+target-version = "py312"
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -79,10 +61,14 @@ branch = true
 [tool.coverage.report]
 fail_under = 100
 
-[tool.quality.mccabe]
-average = "A"
-block = "A"
-module = "A"
+[tool.xenon]
+max-absolute = "A"
+max-modules = "A"
+max-average = "A"
+exclude = [
+    "use/*",
+]
+
 
 [tool.bandit]
 skips = []

@@ -10,74 +10,66 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.10", "3.11", "3.12" ]
+        python-version: ["3.12", "3.13", "3.14"]
     steps:
-      - uses: actions/checkout@v4
-      - name: Install Poetry
-        run: |
-          pipx install 'poetry'
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v8.0.0
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'poetry'
       - name: Clear coverage
         run: |
-          poetry install --with test
-          poetry run python -m coverage erase
+          uv sync --group test
+          uv run python -m coverage erase
       - name: Run tests
         run: |
-          poetry run python -m coverage erase
-          poetry run python -m coverage run -m unittest discover
+          uv run python -m coverage erase
+          uv run python -m coverage run -m unittest discover
       - name: Check coverage
         run: |
-          poetry run python -m coverage report
+          uv run python -m coverage report
 
   quality:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Poetry
-        run: |
-          pipx install 'poetry'
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v8.0.0
         with:
           python-version: "3.12"
-          cache: 'poetry'
       - name: Install Dependencies
         run: |
-          poetry env use 3.12
-      - name: Check Poetry
+          uv venv use --python 3.12
+      - name: Check UV
         run: |
-          poetry check --lock
+          uv lock --check
       - name: Run black
         run: |
-          poetry install --only black
-          poetry run black ./ --verbose --check
+          uv sync --only-group black
+          uv run black ./ --verbose --check
       - name: Run bandit
         run: |
-          poetry install --only bandit
-          poetry run bandit -c pyproject.toml -r .
+          uv sync --only-group bandit
+          uv run bandit -c pyproject.toml --exclude './.venv' -r .
       - name: Run isort
         run: |
-          poetry install --only isort
-          poetry run isort . --check
+          uv sync --only-group isort
+          uv run isort . --check
       - name: Run ruff
         run: |
-          poetry install --only ruff
-          poetry run ruff check
+          uv sync --only-group ruff
+          uv run ruff check
       # - name: Run audit
       #   run: |
-      #     pipx inject poetry poetry-audit-plugin
-      #     poetry audit $(poetry run python -c "import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); ignore_codes = data['tool']['quality']['audit']['ignore-code']; print('--ignore-code=' + ','.join(ignore_codes)) if ignore_codes else print('')")
+      #     pipx inject uv uv-audit-plugin
+      #     uv audit $(uv run python -c "import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); ignore_codes = data['tool']['quality']['audit']['ignore-code']; print('--ignore-code=' + ','.join(ignore_codes)) if ignore_codes else print('')")
       - name: Run xenon
         run: |
-          poetry install --only xenon
-          poetry run xenon -a $(poetry run python -c "import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['average'])") -b $(poetry run python -c "import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['block'])") -m $(poetry run python -c "import tomllib; f = open('pyproject.toml','rb') ; data =  tomllib.load(f); f.close(); print(data['tool']['quality']['mccabe']['module'])") .
+          uv sync --only-group xenon
+          uv run xenon .
       - name: Run mypy
         run: |
-          poetry install --with mypy
-          poetry run mypy .
+          uv sync --group mypy
+          uv run mypy .
       - name: Run sphinx
         run: |
-          poetry install --with docs
-          poetry run sphinx-build -M dummy ./docs ./docs/_build -W -a
+          uv sync --group docs
+          uv run sphinx-build -M dummy ./docs ./docs/_build -W -a
