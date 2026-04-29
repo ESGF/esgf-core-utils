@@ -468,34 +468,34 @@ requires-dist = [
 [package.metadata.requires-dev]
 bandit = [
     { name = "bandit", specifier = ">=1.7.9" },
-    { name = "pre-commit", specifier = ">=3.7.1" },
+    { name = "pre-commit", specifier = ">=4.3.0" },
 ]
 black = [
-    { name = "black", specifier = ">=24.4.2" },
-    { name = "pre-commit", specifier = ">=3.7.1" },
+    { name = "black", specifier = ">=25.9.0" },
+    { name = "pre-commit", specifier = ">=4.3.0" },
 ]
 docs = [
     { name = "sphinx", specifier = ">=7.4.7" },
     { name = "sphinx-autoapi", specifier = ">=3.2.1" },
     { name = "sphinx-mdinclude", specifier = ">=0.6.2" },
     { name = "sphinx-pydantic", specifier = ">=0.1.1" },
-    { name = "sphinx-rtd-theme", specifier = ">=2.0.0" },
+    { name = "sphinx-rtd-theme", specifier = ">=3.0.2" },
 ]
 isort = [
-    { name = "isort", specifier = ">=5.13.2" },
-    { name = "pre-commit", specifier = ">=3.7.1" },
+    { name = "isort", specifier = ">=7.0.0" },
+    { name = "pre-commit", specifier = ">=4.3.0" },
 ]
 mypy = [
     { name = "mypy", specifier = ">=1.10.1" },
-    { name = "pre-commit", specifier = ">=3.7.1" },
+    { name = "pre-commit", specifier = ">=4.3.0" },
 ]
 ruff = [
-    { name = "pre-commit", specifier = ">=3.7.1" },
-    { name = "ruff", specifier = ">=0.5.2" },
+    { name = "pre-commit", specifier = ">=4.3.0" },
+    { name = "ruff", specifier = ">=0.14.2" },
 ]
 test = [{ name = "coverage", extras = ["toml"], specifier = ">=7.6.0" }]
 xenon = [
-    { name = "pre-commit", specifier = ">=3.7.1" },
+    { name = "pre-commit", specifier = ">=4.3.0" },
     { name = "xenon", specifier = ">=0.9.1" },
 ]
 

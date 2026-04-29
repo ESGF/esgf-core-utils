@@ -11,7 +11,7 @@ authors = [
 requires-python = ">=3.12,<4.0"
 dependencies = [
     "pydantic>=2.11.0",
-    "pydantic-settings[dotenv]>=2.6.1",
+    "pydantic-settings>=2.6.1",
     "stac-pydantic>=3.1.1",
     "jinja2>=3.1.6",
     "stac-fastapi.extensions>=6.0.0",
@@ -20,14 +20,14 @@ dependencies = [
 ]
 
 [dependency-groups]
-black = ["black>=24.4.2", "pre-commit>=3.7.1"]
-mypy = ["mypy>=1.10.1", "pre-commit>=3.7.1"]
-bandit = ["bandit>=1.7.9", "pre-commit>=3.7.1"]
-ruff = ["ruff>=0.5.2", "pre-commit>=3.7.1"]
-isort = ["isort>=5.13.2", "pre-commit>=3.7.1"]
-xenon = ["xenon>=0.9.1", "pre-commit>=3.7.1"]
+black = ["black>=25.9.0", "pre-commit>=4.3.0"]
+mypy = ["mypy>=1.10.1", "pre-commit>=4.3.0"]
+bandit = ["bandit>=1.7.9", "pre-commit>=4.3.0"]
+ruff = ["ruff>=0.14.2", "pre-commit>=4.3.0"]
+isort = ["isort>=7.0.0", "pre-commit>=4.3.0"]
+xenon = ["xenon>=0.9.1", "pre-commit>=4.3.0"]
 test = ["coverage[toml]>=7.6.0"]
-docs = ["sphinx>=7.4.7", "sphinx-autoapi>=3.2.1", "sphinx-pydantic>=0.1.1", "sphinx-rtd-theme>=2.0.0", "sphinx-mdinclude>=0.6.2"]
+docs = ["sphinx>=7.4.7", "sphinx-autoapi>=3.2.1", "sphinx-pydantic>=0.1.1", "sphinx-rtd-theme>=3.0.2", "sphinx-mdinclude>=0.6.2"]
 
 [tool.mypy]
 plugins = [
