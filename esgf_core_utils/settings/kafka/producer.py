@@ -13,6 +13,7 @@ class ProducerSettings(BaseSettings):
         validate_by_alias=True,
         env_prefix="KAFKA_PRODUCER_",
         env_nested_delimiter="__",
+        env_file=".env",
         extra="ignore",
     )
 
