@@ -13,6 +13,7 @@ jobs:
       url: https://pypi.org/p/esgf-core-utils
     permissions:
       id-token: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v6
