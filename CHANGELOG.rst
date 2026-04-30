@@ -23,6 +23,26 @@ Removed
 Fixed
 ^^^^^
 
+`1.0.7 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.7>`_  - 2026-04-29
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+- Added RFC9457 Exceptions.
+- EGI auth class.
+- Added message processor abstract base class.
+- Added Kafka consumer and producer classes and pydantic settings.
+
+Changed
+^^^^^^^
+
+- Gitlab workflows CI to use uv.
+- Bumped pre-commit depenedecies.
+
+Fixed
+^^^^^
+
 `1.0.6 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.6>`_  - 2026-03-25
 -----------------------------------------------------------------------------------------
 

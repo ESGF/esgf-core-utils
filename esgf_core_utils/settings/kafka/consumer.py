@@ -16,6 +16,7 @@ class ConsumerSettings(BaseSettings):
         validate_by_alias=True,
         env_prefix="KAFKA_CONSUMER_",
         env_nested_delimiter="__",
+        env_file=".env",
         extra="ignore",
     )
 

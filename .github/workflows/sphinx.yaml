@@ -4,12 +4,12 @@ name: Deploy Sphinx site to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: [main]
+    branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+    # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
@@ -48,7 +48,7 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Build docs
         run: |
-          poetry run sphinx-build -M html ./docs ./docs/_build -q -a
+          uv run sphinx-build -M html ./docs ./docs/_build -q -a
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
