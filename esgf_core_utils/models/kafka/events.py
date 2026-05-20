@@ -48,7 +48,16 @@ class UpdatePayload(_Payload):
     """
 
     method: Literal["PUT"]
-    item: PartialItem
+    item: Item
+    item_id: str
+
+
+class ResultPayload(_Payload):
+    """
+    Model describing a result payload.
+    """
+
+    method: Literal["POST", "PATCH", "PUT"]
     item_id: str
 
 
@@ -64,6 +73,20 @@ class Data(BaseModel):
 
     type: Literal["STAC"]
     payload: Union[CreatePayload, UpdatePayload, PatchPayload]
+
+
+class ResultData(BaseModel):
+    """
+    Model describing the ``DATA`` component of a result Kafka message. This contains the payload itself.
+
+    .. note::
+
+      Whilst the ``type`` and ``version`` attributes are available, it is not expected that these will change for
+      a significant length of time.
+    """
+
+    type: Literal["STAC"]
+    payload: ResultPayload
 
 
 class RequesterData(BaseModel):
@@ -142,3 +165,15 @@ class KafkaErrorEvent(KafkaEvent):
     """
 
     error: Error
+    metadata: Metadata
+    data: ResultData
+
+
+class KafkaSuccessEvent(KafkaEvent):
+    """
+    The full content of a Kafka error message, containing the STAC payload, the request description,
+    ESGF mandated metadata, and error.
+    """
+
+    metadata: Metadata
+    data: ResultData
