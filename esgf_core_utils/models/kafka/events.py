@@ -158,22 +158,20 @@ class KafkaEvent(BaseModel):
     metadata: Metadata
 
 
-class KafkaErrorEvent(KafkaEvent):
+class KafkaSuccessEvent(BaseModel):
+    """
+    The full content of a Kafka error message, containing the STAC payload, the request description,
+    ESGF mandated metadata, and error.
+    """
+
+    data: ResultData
+    metadata: Metadata
+
+
+class KafkaErrorEvent(KafkaSuccessEvent):
     """
     The full content of a Kafka error message, containing the STAC payload, the request description,
     ESGF mandated metadata, and error.
     """
 
     error: Error
-    metadata: Metadata
-    data: ResultData
-
-
-class KafkaSuccessEvent(KafkaEvent):
-    """
-    The full content of a Kafka error message, containing the STAC payload, the request description,
-    ESGF mandated metadata, and error.
-    """
-
-    metadata: Metadata
-    data: ResultData
