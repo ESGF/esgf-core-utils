@@ -21,6 +21,25 @@ Removed
 Fixed
 ^^^^^
 
+`1.0.8 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.8>`_  - 2026-05-20
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+- Added success Kafka event model.
+
+Changed
+^^^^^^^
+
+- Updated error kafka event model.
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
 `1.0.7 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.7>`_  - 2026-04-29
 -----------------------------------------------------------------------------------------
 
