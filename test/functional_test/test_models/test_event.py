@@ -373,6 +373,33 @@ class TestKafkaEvent(unittest.TestCase):
         "type": "Feature",
         "id": "CMIP6.ScenarioMIP.IPSL.IPSL-CM6A-LR.ssp119.r4i1p1f1.CFmon.clcalipso.gr.v20191122",
         "collection": "CMIP6",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -71.04548482586011,
+                -40.70724540817599
+              ],
+              [
+                70.95154804339046,
+                -40.70724540817599
+              ],
+              [
+                70.95154804339046,
+                18.041543625553206
+              ],
+              [
+                -71.04548482586011,
+                18.041543625553206
+              ],
+              [
+                -71.04548482586011,
+                -40.70724540817599
+              ]
+            ]
+          ]
+        },
         "properties": {
           "size": 1691149215,
           "created": "2026-03-06T01:15:44Z",
@@ -405,7 +432,9 @@ class TestKafkaEvent(unittest.TestCase):
           "cmip6:variable_long_name": "CALIPSO Percentage Cloud Cover",
           "cmip6:variable_units": "%",
           "cmip6:variant_label": "r4i1p1f1"
-        }
+        },
+        "assets": {},
+        "links: []
       }
     }
   },
