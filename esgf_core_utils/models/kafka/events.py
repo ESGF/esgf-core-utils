@@ -105,7 +105,7 @@ class Auth(BaseModel):
 
      .. note::
 
-      This is not an authorisation token or other verified identity. It is the simply an indication of the institute
+      This is not an authorisation token or other verified identity. It is simply an indication of the institute
       providing the message.
     """
 

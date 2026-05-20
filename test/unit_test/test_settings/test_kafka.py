@@ -30,7 +30,7 @@ class TestProducerSettings(unittest.TestCase):
         )
 
         # This appears to be meaningless, but it is actually to prevent automatic code
-        # formatters from removing the line (the tsts doesn't strictly need to assert anything, it just needs
+        # formatters from removing the line (the tests doesn't strictly need to assert anything, it just needs
         # not to raise an Exception
         self.assertIsInstance(settings, ProducerSettings)
 
@@ -56,7 +56,7 @@ class TestConsumerSettings(unittest.TestCase):
         )
 
         # This appears to be meaningless, but it is actually to prevent automatic code
-        # formatters from removing the line (the tsts doesn't strictly need to assert anything, it just needs
+        # formatters from removing the line (the tests doesn't strictly need to assert anything, it just needs
         # not to raise an Exception
         self.assertIsInstance(settings, ConsumerSettings)
 

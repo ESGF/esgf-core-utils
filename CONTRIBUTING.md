@@ -44,7 +44,7 @@ When you commit, the following checks will be run:
 -   ruff linter (Python linter)
 -   mypy (Python static type analysis)
 -   bandit (Python SAST analyis)
--   xenon (McCabe cyclomatc complexity analysis)
+-   xenon (McCabe cyclomatic complexity analysis)
 -   sphinx (dry-run documentation build)
 
 You can disable the `pre-commit hooks` per commit with the flag
