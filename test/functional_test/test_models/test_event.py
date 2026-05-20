@@ -433,8 +433,37 @@ class TestKafkaEvent(unittest.TestCase):
           "cmip6:variable_units": "%",
           "cmip6:variant_label": "r4i1p1f1"
         },
-        "assets": {},
-        "links: []
+        "assets": {
+          "cudrjPnkDBusxfZNPXib": {
+            "href": "252",
+            "type": "uLBhENjsjwedAAYcAlZp",
+            "title": "UwlqbQPrzhfkvbIDxYSI",
+            "description": "CMwrUkEnGNshrhDiwsHk",
+            "roles": null
+          }
+        },
+        "links": [
+          {
+            "href": "http://ceda.stac.ac.uk/collections/cmip6/items/CMIP6.CMIP.IPSL.CMCC-ESM2.ssp585.r1i1000p1f2.3hr.vas.gr.v20220101",
+            "rel": "self",
+            "type": "application/geo+json"
+          },
+          {
+            "href": "http://ceda.stac.ac.uk/collections/cmip6",
+            "rel": "parent",
+            "type": "application/json"
+          },
+          {
+            "href": "http://ceda.stac.ac.uk/collections/cmip6",
+            "rel": "collection",
+            "type": "application/json"
+          },
+          {
+            "href": "http://ceda.stac.ac.uk",
+            "rel": "root",
+            "type": "application/json"
+          }
+        ]
       }
     }
   },
