@@ -247,12 +247,6 @@ class TestKafkaEvent(unittest.TestCase):
             ]
           ]
         },
-        "bbox": [
-          0,
-          -90,
-          357.5,
-          90
-        ],
         "properties": {
           "title": "CMIP6.CMIP.IPSL.CMCC-ESM2.ssp585.r1i1000p1f2.3hr.vas.gr.v20220101",
           "description": null,
@@ -406,6 +400,12 @@ class TestKafkaEvent(unittest.TestCase):
             ]
           ]
         },
+        "bbox": [
+          0,
+          -90,
+          357.5,
+          90
+        ],
         "properties": {
           "size": 1691149215,
           "created": "2026-03-06T01:15:44Z",
