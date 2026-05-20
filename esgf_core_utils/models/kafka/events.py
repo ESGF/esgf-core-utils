@@ -6,13 +6,17 @@ from datetime import datetime
 from typing import Literal, Optional, Union
 
 from pydantic import BaseModel
-from stac_fastapi.extensions.core.transaction.request import PartialItem, PatchOperation
+from stac_fastapi.extensions.core.transaction.request import (
+    PartialItem,
+    PatchOperation,
+)
 from stac_pydantic.item import Item
 
 
 class _Payload(BaseModel):
     """
-    Base model for payloads in a Kafka message, provides the required ``collection_id`` attribute.
+    Base model for payloads in a Kafka message,
+    provides the required ``collection_id`` attribute.
 
     .. warning::
 
@@ -25,7 +29,8 @@ class _Payload(BaseModel):
 
 class CreatePayload(_Payload):
     """
-    Model describing a ``CREATE`` payload. This must be sent as a ``POST`` request.
+    Model describing a ``CREATE`` payload.
+    This must be sent as a ``POST`` request.
     """
 
     method: Literal["POST"]
@@ -34,7 +39,8 @@ class CreatePayload(_Payload):
 
 class PatchPayload(_Payload):
     """
-    Model describing a ``PARTIAL_UPDATE`` payload. This must be sent as a ``PATCH`` request.
+    Model describing a ``PARTIAL_UPDATE`` payload.
+    This must be sent as a ``PATCH`` request.
     """
 
     method: Literal["PATCH"]
@@ -44,7 +50,8 @@ class PatchPayload(_Payload):
 
 class UpdatePayload(_Payload):
     """
-    Model describing a ``UPDATE`` payload. This must be sent as a ``PUT`` request.
+    Model describing a ``UPDATE`` payload.
+    This must be sent as a ``PUT`` request.
     """
 
     method: Literal["PUT"]
@@ -63,12 +70,13 @@ class ResultPayload(_Payload):
 
 class Data(BaseModel):
     """
-    Model describing the ``DATA`` component of a Kafka message. This contains the payload itself.
+    Model describing the ``DATA`` component of a Kafka message.
+    This contains the payload itself.
 
     .. note::
 
-      Whilst the ``type`` and ``version`` attributes are available, it is not expected that these will change for
-      a significant length of time.
+      Whilst the ``type`` and ``version`` attributes are available, it is not
+      expected that these will change for a significant length of time.
     """
 
     type: Literal["STAC"]
@@ -77,12 +85,14 @@ class Data(BaseModel):
 
 class ResultData(BaseModel):
     """
-    Model describing the ``DATA`` component of a result Kafka message. This contains the payload itself.
+    Model describing the ``DATA`` component of a result Kafka message.
+    This contains the payload itself.
 
     .. note::
 
-      Whilst the ``type`` and ``version`` attributes are available, it is not expected that these will change for
-      a significant length of time.
+      Whilst the ``type`` and ``version`` attributes are available,
+      it is not expected that these will change fora significant
+      length of time.
     """
 
     type: Literal["STAC"]
@@ -91,7 +101,8 @@ class ResultData(BaseModel):
 
 class RequesterData(BaseModel):
     """
-    Model describing ``Requests Data`` for the ``Auth`` component of a Kafka message in more detail.
+    Model describing ``Requests Data`` for the ``Auth`` component of a Kafka
+    message in more detail.
     """
 
     client_id: str
@@ -105,8 +116,8 @@ class Auth(BaseModel):
 
      .. note::
 
-      This is not an authorisation token or other verified identity. It is simply an indication of the institute
-      providing the message.
+      This is not an authorisation token or other verified identity.
+      It is simply an indication of the institute providing the message.
     """
 
     auth_policy_id: Optional[str] = None
@@ -115,8 +126,9 @@ class Auth(BaseModel):
 
 class Publisher(BaseModel):
     """
-    Model describing the ``PUBLISHER`` component of a Kafka message. This is the name and version of the software used
-    to publish the Kafka message.
+    Model describing the ``PUBLISHER`` component of a Kafka message.
+    This is the name and version of the software used to publish
+    the Kafka message.
     """
 
     package: str
@@ -125,7 +137,8 @@ class Publisher(BaseModel):
 
 class Metadata(BaseModel):
     """
-    Multiple metadata attributes required for ESGF but not part of the STAC payload.
+    Multiple metadata attributes required for ESGF but not part of
+    the STAC payload.
     """
 
     auth: Auth
@@ -150,8 +163,8 @@ class Error(BaseModel):
 
 class KafkaEvent(BaseModel):
     """
-    The full content of a Kafka message, containing both the STAC payload, the request description
-    and the ESGF mandated metadata.
+    The full content of a Kafka message, containing both the STAC payload,
+    the request description and the ESGF mandated metadata.
     """
 
     data: Data
@@ -160,8 +173,8 @@ class KafkaEvent(BaseModel):
 
 class KafkaSuccessEvent(BaseModel):
     """
-    The full content of a Kafka error message, containing the STAC payload, the request description,
-    ESGF mandated metadata, and error.
+    The full content of a Kafka error message, containing the STAC payload,
+    the request description, ESGF mandated metadata, and error.
     """
 
     data: ResultData
@@ -170,8 +183,8 @@ class KafkaSuccessEvent(BaseModel):
 
 class KafkaErrorEvent(KafkaSuccessEvent):
     """
-    The full content of a Kafka error message, containing the STAC payload, the request description,
-    ESGF mandated metadata, and error.
+    The full content of a Kafka error message, containing the STAC payload,
+    the request description, ESGF mandated metadata, and error.
     """
 
     error: Error
