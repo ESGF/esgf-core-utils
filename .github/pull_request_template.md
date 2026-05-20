@@ -5,7 +5,7 @@
 
 ### Quality checks:
 
-* [ ] Have you updates the **CHANGELOG.rst** file?
+* [ ] Have you updated the **CHANGELOG.rst** file?
 * [ ] Have you updated the `version` and `author` attributes (as appropriate) in the **pyproject.toml** file?
 
 ### Community standards:
