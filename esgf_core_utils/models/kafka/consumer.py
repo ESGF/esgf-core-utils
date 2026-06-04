@@ -51,5 +51,4 @@ class KafkaConsumer:
 
         finally:
             logging.info("Closing Kafka consumer")
-            time.sleep(35.0)
             self.consumer.close()

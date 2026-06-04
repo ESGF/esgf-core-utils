@@ -147,6 +147,7 @@ class Metadata(BaseModel):
     request_id: str
     time: datetime
     schema_version: str
+    kafka_offset: Optional[int] = None
 
 
 class Error(BaseModel):
