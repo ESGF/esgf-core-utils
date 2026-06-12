@@ -31,9 +31,10 @@ class KafkaConsumer:
 
             while True:
                 message = self.consumer.poll(timeout=self.settings.timeout)
+
                 logging.info(
                     "Kafka consuming message: %s",
-                    message.value().decode("utf8") if message else None,
+                    ((message.value() or b"None").decode("utf8") if message else None),
                 )
                 if message is None:
                     time.sleep(0.1)
