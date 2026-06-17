@@ -73,6 +73,8 @@ class Nodes(BaseModel):
     def authorize_href(self, asset_href: str, role: Role) -> None:
         asset_url = urlparse(asset_href)
         node_permission = self.nodes.get(asset_url.hostname or "", None)
+        if not node_permission:
+            node_permission = self.nodes.get("*", None)
 
         if not node_permission:
             raise MissingPermissionException(
@@ -142,6 +144,8 @@ class Projects(BaseModel):
             MissingPermissionException: Raised if either node or role permission is missing
         """
         project_permission = self.projects.get(project, None)
+        if not project_permission:
+            project_permission = self.projects.get("*", None)
 
         if not project_permission:
             raise MissingPermissionException(
