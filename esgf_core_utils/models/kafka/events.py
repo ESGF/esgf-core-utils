@@ -147,8 +147,6 @@ class Metadata(BaseModel):
     request_id: str
     time: datetime
     schema_version: str
-    kafka_offset: Optional[int] = None
-    kafka_partition: Optional[int] = None
 
 
 class Error(BaseModel):
@@ -161,6 +159,16 @@ class Error(BaseModel):
     status: int
     title: str
     type: str
+
+
+class OriginalEvent(BaseModel):
+    """
+    Metadata associated with the original event.
+    """
+
+    event_id: str
+    offset: int
+    partition: int
 
 
 class KafkaEvent(BaseModel):
@@ -181,6 +189,7 @@ class KafkaSuccessEvent(BaseModel):
 
     data: ResultData
     metadata: Metadata
+    original_event: OriginalEvent
 
 
 class KafkaErrorEvent(KafkaSuccessEvent):
