@@ -148,6 +148,7 @@ class Metadata(BaseModel):
     time: datetime
     schema_version: str
     kafka_offset: Optional[int] = None
+    kafka_partition: Optional[int] = None
 
 
 class Error(BaseModel):
