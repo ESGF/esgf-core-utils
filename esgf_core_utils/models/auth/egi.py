@@ -18,7 +18,7 @@ from esgf_core_utils.models.exceptions import (
 )
 from esgf_core_utils.models.kafka.events import RequesterData
 
-logger = logging.getLogger("EGI_AUTH")
+logger = logging.getLogger("AUTHORIZER")
 
 Role = Literal[
     "CREATE",
@@ -157,7 +157,7 @@ class Projects(BaseModel):
             )
 
 
-class EGIAuth(BaseModel):
+class Authorizer(BaseModel):
     """
     Model describing Authentication information of a ESGF publisher.
     """
