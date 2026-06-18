@@ -68,7 +68,7 @@ class ExtensionBelowMinimumException(Exception):
         )
         self.detail = (
             f"Your request includes an extension: `{extension}` below the mimimum: "
-            f"{minimum_version} allowed version -- please update this extenison's "
+            f"{minimum_version} allowed version -- please update this extension's "
             "version and try again."
         )
 
