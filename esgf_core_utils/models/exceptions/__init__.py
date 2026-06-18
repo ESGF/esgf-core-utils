@@ -55,6 +55,24 @@ class ExpectedExtensionsMissingException(Exception):
         )
 
 
+class ExtensionBelowMinimumException(Exception):
+    """
+    Extenison below minimum Exception
+    """
+
+    def __init__(self, extension: str, minimum_version=str) -> None:
+        self.status_code = 400
+        self.type = "https://esgf.io/publication/errors/extension-below-minimum"
+        self.title = (
+            "There is an extension in your request below the mimimum allowed version"
+        )
+        self.detail = (
+            f"Your request includes an extension: `{extension}` below the mimimum: "
+            f"{minimum_version} allowed version -- please update this extenison's "
+            "version and try again."
+        )
+
+
 class RFC9457Exception(Exception):
     """
     RFC 9457 Exception
