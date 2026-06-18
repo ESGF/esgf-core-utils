@@ -60,7 +60,7 @@ class ExtensionBelowMinimumException(Exception):
     Extenison below minimum Exception
     """
 
-    def __init__(self, extension: str, minimum_version=str) -> None:
+    def __init__(self, extension: str, minimum_version: str) -> None:
         self.status_code = 400
         self.type = "https://esgf.io/publication/errors/extension-below-minimum"
         self.title = (
