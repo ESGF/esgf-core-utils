@@ -10,6 +10,7 @@ import unittest
 from esgf_core_utils.models.exceptions import (
     AuthorizationException,
     ExpectedExtensionsMissingException,
+    ExtensionBelowMinimumException,
     ItemAlreadyExistsException,
     ItemDoesNotExistException,
     MissingPermissionException,
@@ -75,6 +76,22 @@ class TestExceptionUnit(unittest.TestCase):
             "A required extension is missing from your request",
         )
         self.assertIn("[extA,extB]", exc.detail.replace(" ", ""))
+
+    def test_extension_below_minimum_exception(self) -> None:
+        """Validate ExtensionBelowMinimumException fields and detail message."""
+        exc = ExtensionBelowMinimumException("old-ext", "v1.0.0")
+
+        self.assertEqual(exc.status_code, 400)
+        self.assertEqual(
+            exc.type,
+            "https://esgf.io/publication/errors/extension-below-minimum",
+        )
+        self.assertEqual(
+            exc.title,
+            "There is an extension in your request below the mimimum allowed version",
+        )
+        self.assertIn("old-ext", exc.detail)
+        self.assertIn("v1.0.0", exc.detail)
 
     def test_stac_validation_exception(self) -> None:
         """Verify STACValidationException default metadata."""

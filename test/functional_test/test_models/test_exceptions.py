@@ -11,6 +11,7 @@ import unittest
 from esgf_core_utils.models.exceptions import (
     AuthorizationException,
     ExpectedExtensionsMissingException,
+    ExtensionBelowMinimumException,
     ItemAlreadyExistsException,
     ItemDoesNotExistException,
     MissingPermissionException,
@@ -54,6 +55,11 @@ class TestExceptionFunctional(unittest.TestCase):
             raise ExpectedExtensionsMissingException(["a", "b"])
 
         self.assertIn("[a,b]", ctx.exception.detail.replace(" ", ""))
+
+    def test_raise_extension_below_minimum_exception(self) -> None:
+        """Ensure ExtensionBelowMinimumException raises normally."""
+        with self.assertRaises(ExtensionBelowMinimumException):
+            raise ExtensionBelowMinimumException("old-ext", "v1.0.1")
 
     def test_raise_stac_validation_exception(self) -> None:
         """Ensure STACValidationException raises without extra parameters."""
