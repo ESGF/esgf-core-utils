@@ -11,6 +11,7 @@ from esgf_core_utils.models.exceptions import (
     AuthorizationException,
     ExpectedExtensionsMissingException,
     ExtensionBelowMinimumException,
+    InvalidTokenAudienceException,
     ItemAlreadyExistsException,
     ItemDoesNotExistException,
     MissingPermissionException,
@@ -92,6 +93,22 @@ class TestExceptionUnit(unittest.TestCase):
         )
         self.assertIn("old-ext", exc.detail)
         self.assertIn("v1.0.0", exc.detail)
+
+    def test_invalid_token_audience_exception(self) -> None:
+        """Validate InvalidTokenAudienceException fields and detail message."""
+        exc = InvalidTokenAudienceException("token-aud", "exepected-aud")
+
+        self.assertEqual(exc.status_code, 401)
+        self.assertEqual(
+            exc.type,
+            "https://esgf.io/publication/errors/invalid-token-audience",
+        )
+        self.assertEqual(
+            exc.title,
+            "Invalid token audience",
+        )
+        self.assertIn("token-aud", exc.detail)
+        self.assertIn("exepected-aud", exc.detail)
 
     def test_stac_validation_exception(self) -> None:
         """Verify STACValidationException default metadata."""

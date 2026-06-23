@@ -73,6 +73,21 @@ class ExtensionBelowMinimumException(Exception):
         )
 
 
+class InvalidTokenAudienceException(Exception):
+    """
+    Token Audience is invalid
+    """
+
+    def __init__(self, token_audience: str, expected_audience: str) -> None:
+        self.status_code = 401
+        self.type = "https://esgf.io/publication/errors/invalid-token-audience"
+        self.title = "Invalid token audience"
+        self.detail = (
+            f"The access token was issued for audience: `{token_audience}` but this "
+            f"resource expects audience: {expected_audience}."
+        )
+
+
 class RFC9457Exception(Exception):
     """
     RFC 9457 Exception

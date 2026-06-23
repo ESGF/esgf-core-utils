@@ -12,6 +12,7 @@ from esgf_core_utils.models.exceptions import (
     AuthorizationException,
     ExpectedExtensionsMissingException,
     ExtensionBelowMinimumException,
+    InvalidTokenAudienceException,
     ItemAlreadyExistsException,
     ItemDoesNotExistException,
     MissingPermissionException,
@@ -60,6 +61,11 @@ class TestExceptionFunctional(unittest.TestCase):
         """Ensure ExtensionBelowMinimumException raises normally."""
         with self.assertRaises(ExtensionBelowMinimumException):
             raise ExtensionBelowMinimumException("old-ext", "v1.0.1")
+
+    def test_raise_invalid_token_audience_exception(self) -> None:
+        """Ensure InvalidTokenAudienceException raises normally."""
+        with self.assertRaises(InvalidTokenAudienceException):
+            raise InvalidTokenAudienceException("token-aud", "expected-aud")
 
     def test_raise_stac_validation_exception(self) -> None:
         """Ensure STACValidationException raises without extra parameters."""
