@@ -461,7 +461,7 @@ requires-dist = [
     { name = "jinja2", specifier = ">=3.1.6" },
     { name = "pydantic", specifier = ">=2.11.0" },
     { name = "pydantic-settings", specifier = ">=2.6.1" },
-    { name = "stac-fastapi-extensions", specifier = ">=6.0.0" },
+    { name = "stac-fastapi-extensions", specifier = ">=6.3.0" },
     { name = "stac-pydantic", specifier = ">=3.1.1" },
 ]
 
@@ -1338,15 +1338,15 @@ wheels = [
 
 [[package]]
 name = "stac-fastapi-extensions"
-version = "6.2.1"
+version = "6.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "stac-fastapi-api" },
     { name = "stac-fastapi-types" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7b/62/c71166b1f959ada3ea72e12ed5270e6b59b4e18f1b2f1825f4f8e58896c4/stac_fastapi_extensions-6.2.1.tar.gz", hash = "sha256:355c0c5f0d2c9b87d0238fff031963b2878d66a67faec93ff6f47d530aa370c0", size = 16673, upload-time = "2026-02-10T15:34:43.402Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b7/cd/3e70da182a38ead9e59604dffa286d3440fbd8810f8fef2dd841a02b177c/stac_fastapi_extensions-6.3.0.tar.gz", hash = "sha256:79f941bb7aa7f6a4e3c19da8deacda1dee42f19c596360f5ce9a9f9ecde214d8", size = 17508, upload-time = "2026-06-22T12:24:30.101Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f9/0e/f6306c9a984934eb17ff27f61b57c37942adda86302833f3dd9ec64eede8/stac_fastapi_extensions-6.2.1-py3-none-any.whl", hash = "sha256:d72f5c9323df3f54a9731f3813f9b036b81235e8728a17a6c99ca202751e4308", size = 34011, upload-time = "2026-02-10T15:34:44.239Z" },
+    { url = "https://files.pythonhosted.org/packages/6d/f1/7db9d54208a64c013727de149a4cc33da0f9c9fd47ac7170ade63bf6e12c/stac_fastapi_extensions-6.3.0-py3-none-any.whl", hash = "sha256:d4c541dff1e2a2b7997c01b676fce0c4cd1c82faa88630efe3da3f976a738b24", size = 34854, upload-time = "2026-06-22T12:24:28.972Z" },
 ]
 
 [[package]]

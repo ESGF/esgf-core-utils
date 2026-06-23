@@ -14,7 +14,7 @@ dependencies = [
     "pydantic-settings>=2.6.1",
     "stac-pydantic>=3.1.1",
     "jinja2>=3.1.6",
-    "stac-fastapi.extensions>=6.0.0",
+    "stac-fastapi.extensions>=6.3.0",
     "fastapi>=0.114.0",
     "confluent-kafka>=2.6.0",
 ]

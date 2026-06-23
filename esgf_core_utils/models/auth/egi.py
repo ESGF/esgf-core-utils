@@ -9,7 +9,7 @@ from urllib.parse import urlparse
 
 from pydantic import BaseModel
 from pydantic_core import ValidationError
-from stac_fastapi.extensions.core.transaction.request import PartialItem
+from stac_fastapi.extensions.transaction.request import PartialItem
 from stac_pydantic.item import Item
 
 from esgf_core_utils.models.exceptions import (
