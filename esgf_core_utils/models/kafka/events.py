@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import Literal, Optional, Union
 
 from pydantic import BaseModel
-from stac_fastapi.extensions.core.transaction.request import (
+from stac_fastapi.extensions.transaction.request import (
     PartialItem,
     PatchOperation,
 )
