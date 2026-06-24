@@ -146,7 +146,7 @@ class Metadata(BaseModel):
     publisher: Publisher
     request_id: str
     time: datetime
-    schema_version: str
+    schema_version: Literal["1.0.0"]
 
 
 class Error(BaseModel):

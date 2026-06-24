@@ -12,7 +12,26 @@ adheres to `Semantic Versioning <https://semver.org>`_.
 Added
 ^^^^^
 
+Changed
+^^^^^^^
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
+`1.1.0 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.1.0>`_  - 2026-06-24
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
 - Wildcard entitlement support
+- ExtensionBelowMinimumException exception added
+- InvalidTokenAudienceException exception added
+- KafkaSuccessEvent & KafkaErrorEvent and subclasses (OriginalEvent, ResultData & OriginalEvent) classes
+- Testing for ``Authorizer`` & additional exceptions
 
 Changed
 ^^^^^^^
