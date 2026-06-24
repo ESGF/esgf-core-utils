@@ -1,7 +1,7 @@
 """Functional tests for Authorizer."""
 
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from esgf_core_utils.models.auth import (
     Authorizer,
@@ -17,7 +17,7 @@ class TestAuthorizer(unittest.TestCase):
 
     def setUp(self) -> None:
         """Create common test fixtures."""
-        self.regex = r"(?P<type>project|node):" r"(?P<id>[^:]+):" r"(?P<role>[A-Z]+)"
+        self.regex = r"(?P<type>project|node):(?P<id>[^:]+):(?P<role>[A-Z]+)"
 
         self.requester_data = RequesterData.model_construct(
             client_id="test_client", iss="test_iss", sub="test_sub"
@@ -93,6 +93,43 @@ class TestAuthorizer(unittest.TestCase):
         self.assertEqual(
             authorizer.projects.projects,
             {},
+        )
+
+    def test_add_ignores_unknown_type(self) -> None:
+        """Ensure unknown entitlement types are ignored."""
+
+        authorizer = Authorizer(
+            requester_data=self.requester_data,
+            regex=r"(?P<type>[^:]+):(?P<id>[^:]+):(?P<role>[A-Z]+)",
+        )
+
+        authorizer.add(
+            [
+                "unknown:cmip6:CREATE",
+            ]
+        )
+
+        self.assertEqual(authorizer.projects.projects, {})
+        self.assertEqual(authorizer.nodes.nodes, {})
+
+    def test_add_mixed_valid_and_invalid_entitlements(self) -> None:
+        """Ensure processing continues after invalid entitlements."""
+
+        authorizer = Authorizer(
+            requester_data=self.requester_data,
+            regex=self.regex,
+        )
+
+        authorizer.add(
+            [
+                "project::cmip6:INVALID",
+                "project:cmip7:CREATE",
+            ]
+        )
+
+        self.assertIn(
+            "cmip7",
+            authorizer.projects.projects,
         )
 
     def test_authorize_success(self) -> None:
