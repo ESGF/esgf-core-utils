@@ -100,9 +100,11 @@ class TestNodes(unittest.TestCase):
         nodes.add(Node(id="example.com", roles={"CREATE"}))
 
         assets = {
-            "asset": Asset(
-                href="dummy",
-                alternate_name="example.com",
+            "asset": Asset.model_validate(
+                {
+                    "href": "dummy",
+                    "alternate:name": "example.com",
+                }
             )
         }
 
