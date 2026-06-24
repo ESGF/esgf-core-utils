@@ -1,7 +1,7 @@
 """Functional tests for Authorizer."""
 
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 from esgf_core_utils.models.auth import (
     Authorizer,

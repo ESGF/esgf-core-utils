@@ -204,6 +204,7 @@ class Authorizer(BaseModel):
             match = re.search(self.regex, entitlement)
 
             if match is None:
+                logger.info("Entitlement skipped: %s : match not found", entitlement)
                 continue
 
             try:
@@ -224,4 +225,4 @@ class Authorizer(BaseModel):
                     )
 
             except ValidationError:
-                logger.info("Entitlement skipped: %s", entitlement)
+                logger.info("Entitlement skipped: %s : validation failed", entitlement)
