@@ -2,7 +2,7 @@
 
 import unittest
 
-from pydantic import BaseModel
+from stac_pydantic.shared import Asset
 
 from esgf_core_utils.models.auth import (
     Node,
@@ -11,13 +11,6 @@ from esgf_core_utils.models.auth import (
     Projects,
 )
 from esgf_core_utils.models.exceptions import MissingPermissionException
-
-
-class DummyAsset(BaseModel):
-    """Dummy asset model."""
-
-    href: str
-    alternate_name: str | None = None
 
 
 class TestNodes(unittest.TestCase):
@@ -107,7 +100,7 @@ class TestNodes(unittest.TestCase):
         nodes.add(Node(id="example.com", roles={"CREATE"}))
 
         assets = {
-            "asset": DummyAsset(
+            "asset": Asset(
                 href="dummy",
                 alternate_name="example.com",
             )
