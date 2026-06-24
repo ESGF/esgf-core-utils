@@ -10,6 +10,8 @@ import unittest
 from esgf_core_utils.models.exceptions import (
     AuthorizationException,
     ExpectedExtensionsMissingException,
+    ExtensionBelowMinimumException,
+    InvalidTokenAudienceException,
     ItemAlreadyExistsException,
     ItemDoesNotExistException,
     MissingPermissionException,
@@ -75,6 +77,38 @@ class TestExceptionUnit(unittest.TestCase):
             "A required extension is missing from your request",
         )
         self.assertIn("[extA,extB]", exc.detail.replace(" ", ""))
+
+    def test_extension_below_minimum_exception(self) -> None:
+        """Validate ExtensionBelowMinimumException fields and detail message."""
+        exc = ExtensionBelowMinimumException("old-ext", "v1.0.0")
+
+        self.assertEqual(exc.status_code, 400)
+        self.assertEqual(
+            exc.type,
+            "https://esgf.io/publication/errors/extension-below-minimum",
+        )
+        self.assertEqual(
+            exc.title,
+            "There is an extension in your request below the mimimum allowed version",
+        )
+        self.assertIn("old-ext", exc.detail)
+        self.assertIn("v1.0.0", exc.detail)
+
+    def test_invalid_token_audience_exception(self) -> None:
+        """Validate InvalidTokenAudienceException fields and detail message."""
+        exc = InvalidTokenAudienceException("token-aud", "exepected-aud")
+
+        self.assertEqual(exc.status_code, 401)
+        self.assertEqual(
+            exc.type,
+            "https://esgf.io/publication/errors/invalid-token-audience",
+        )
+        self.assertEqual(
+            exc.title,
+            "Invalid token audience",
+        )
+        self.assertIn("token-aud", exc.detail)
+        self.assertIn("exepected-aud", exc.detail)
 
     def test_stac_validation_exception(self) -> None:
         """Verify STACValidationException default metadata."""

@@ -55,6 +55,39 @@ class ExpectedExtensionsMissingException(Exception):
         )
 
 
+class ExtensionBelowMinimumException(Exception):
+    """
+    Extenison below minimum Exception
+    """
+
+    def __init__(self, extension: str, minimum_version: str) -> None:
+        self.status_code = 400
+        self.type = "https://esgf.io/publication/errors/extension-below-minimum"
+        self.title = (
+            "There is an extension in your request below the mimimum allowed version"
+        )
+        self.detail = (
+            f"Your request includes an extension: `{extension}` below the mimimum: "
+            f"{minimum_version} allowed version -- please update this extension's "
+            "version and try again."
+        )
+
+
+class InvalidTokenAudienceException(Exception):
+    """
+    Token Audience is invalid
+    """
+
+    def __init__(self, token_audience: str, expected_audience: str) -> None:
+        self.status_code = 401
+        self.type = "https://esgf.io/publication/errors/invalid-token-audience"
+        self.title = "Invalid token audience"
+        self.detail = (
+            f"The access token was issued for audience: `{token_audience}` but this "
+            f"resource expects audience: {expected_audience}."
+        )
+
+
 class RFC9457Exception(Exception):
     """
     RFC 9457 Exception

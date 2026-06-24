@@ -12,12 +12,50 @@ adheres to `Semantic Versioning <https://semver.org>`_.
 Added
 ^^^^^
 
+Changed
+^^^^^^^
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
+`1.1.0 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.1.0>`_  - 2026-06-24
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
 - Wildcard entitlement support
+- ExtensionBelowMinimumException exception added
+- InvalidTokenAudienceException exception added
+- KafkaSuccessEvent & KafkaErrorEvent and subclasses (OriginalEvent, ResultData & OriginalEvent) classes
+- Testing for ``Authorizer`` & additional exceptions
 
 Changed
 ^^^^^^^
 
 - **Breaking:** ``EGIAuth`` was renamed to ``Authorizer``
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
+`1.0.8 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.8>`_  - 2026-05-20
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+- Added success Kafka event model.
+
+Changed
+^^^^^^^
+
+- Updated error kafka event model.
 
 Removed
 ^^^^^^^
