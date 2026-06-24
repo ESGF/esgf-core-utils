@@ -9,7 +9,7 @@ from urllib.parse import urlparse
 
 from pydantic import BaseModel
 from pydantic_core import ValidationError
-from stac_fastapi.extensions.core.transaction.request import PartialItem
+from stac_fastapi.extensions.transaction.request import PartialItem
 from stac_pydantic.item import Item
 
 from esgf_core_utils.models.exceptions import (
@@ -18,7 +18,7 @@ from esgf_core_utils.models.exceptions import (
 )
 from esgf_core_utils.models.kafka.events import RequesterData
 
-logger = logging.getLogger("AUTHORIZER")
+logger = logging.getLogger("uvicorn.error")
 
 Role = Literal[
     "CREATE",
@@ -72,9 +72,9 @@ class Nodes(BaseModel):
 
     def authorize_href(self, asset_href: str, role: Role) -> None:
         asset_url = urlparse(asset_href)
-        node_permission = self.nodes.get(asset_url.hostname or "", None)
-        if not node_permission:
-            node_permission = self.nodes.get("*", None)
+        node_permission = self.nodes.get(asset_url.hostname or "") or self.nodes.get(
+            "*"
+        )
 
         if not node_permission:
             raise MissingPermissionException(
@@ -143,9 +143,7 @@ class Projects(BaseModel):
         Raises:
             MissingPermissionException: Raised if either node or role permission is missing
         """
-        project_permission = self.projects.get(project, None)
-        if not project_permission:
-            project_permission = self.projects.get("*", None)
+        project_permission = self.projects.get(project) or self.projects.get("*")
 
         if not project_permission:
             raise MissingPermissionException(
