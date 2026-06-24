@@ -12,8 +12,12 @@ adheres to `Semantic Versioning <https://semver.org>`_.
 Added
 ^^^^^
 
+- Wildcard entitlement support
+
 Changed
 ^^^^^^^
+
+- **Breaking:** ``EGIAuth`` was renamed to ``Authorizer``
 
 Removed
 ^^^^^^^
