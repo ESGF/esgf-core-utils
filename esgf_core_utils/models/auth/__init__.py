@@ -78,13 +78,13 @@ class Nodes(BaseModel):
 
         if not node_permission:
             raise MissingPermissionException(
-                permission_type="node",
+                type="node",
                 target=asset_href,
             )
 
         if role not in node_permission.roles:
             raise MissingPermissionException(
-                permission_type="node",
+                type="node",
                 role=role,
                 target=asset_href,
             )
@@ -147,13 +147,13 @@ class Projects(BaseModel):
 
         if not project_permission:
             raise MissingPermissionException(
-                permission_type="project",
+                type="project",
                 target=project,
             )
 
         if role not in project_permission.roles:
             raise MissingPermissionException(
-                permission_type="project",
+                type="project",
                 role=role,
                 target=project,
             )

@@ -2,7 +2,7 @@
 Exception used by ESGF packages.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import ClassVar, TypedDict
 
 
@@ -24,13 +24,13 @@ class MissingPermissionException(Exception):
     Raised when a user does not possess a required permission.
     """
 
-    permission_type: str
+    type: str
     target: str
-    role: str
+    role: str = ""
 
     def __str__(self) -> str:
-        """Return a human-readable error message."""
-        return f"Missing permission '{self.permission_type}' " f"for '{self.target}'."
+        """Exception message."""
+        return f"Missing permission '{self.type}' for '{self.target}'."
 
 
 @dataclass(slots=True)
@@ -39,7 +39,7 @@ class RFC9457Exception(Exception):
     Base class for RFC 9457 Exceptions.
     """
 
-    instance: str
+    instance: str = field(default="", kw_only=True)
 
     status_code: ClassVar[int]
     type: ClassVar[str]
@@ -47,28 +47,20 @@ class RFC9457Exception(Exception):
 
     @property
     def detail(self) -> str:
-        """
-        Details of exception.
-        """
+        """Details of exception."""
         raise NotImplementedError
 
     @property
     def status(self) -> int:
-        """
-        HTTP status code.
-        """
+        """HTTP status code."""
         return self.status_code
 
     def __str__(self) -> str:
-        """
-        Exception message.
-        """
+        """Exception message."""
         return self.detail
 
     def rfc945response(self) -> RFC9457Response:
-        """
-        RFC9457 Response.
-        """
+        """RFC9457 Response."""
         return {
             "type": self.type,
             "title": self.title,
@@ -114,9 +106,8 @@ class UnexpectedExtensionException(RFC9457Exception):
 
     @property
     def detail(self) -> str:
-        """Return the problem description."""
         return (
-            f"Your request includes an unexpected extension: "
+            "Your request includes an unexpected extension: "
             f"`{self.extension}` -- please remove this extension "
             "and try again."
         )
@@ -140,8 +131,8 @@ class ExpectedExtensionsMissingException(RFC9457Exception):
     def detail(self) -> str:
         return (
             "Your request is missing required extensions: "
-            f"`[{','.join(self.extensions)}]` "
-            "-- please add this extension and try again."
+            f"`[{', '.join(self.extensions)}]` "
+            "-- please add these extensions and try again."
         )
 
 
@@ -163,7 +154,7 @@ class ExtensionBelowMinimumException(RFC9457Exception):
     @property
     def detail(self) -> str:
         return (
-            f"Your request includes an extension: "
+            "Your request includes an extension: "
             f"`{self.extension}` below the minimum allowed version "
             f"`{self.minimum_version}` -- please update the extension "
             "version and try again."
@@ -186,7 +177,7 @@ class InvalidTokenAudienceException(RFC9457Exception):
     @property
     def detail(self) -> str:
         return (
-            f"The access token was issued for audience: "
+            "The access token was issued for audience: "
             f"`{self.token_audience}` but this resource "
             f"expects audience: {self.expected_audience}."
         )
@@ -245,9 +236,11 @@ class ItemAlreadyExistsException(RFC9457Exception):
     @property
     def detail(self) -> str:
         return (
-            f"You attempted to publish a new STAC Item with id "
-            f"`{self.item}`, but an item with that id already exists "
-            f"at /collections/{self.collection}/items/{self.item}."
+            f"You attempted to publish a new STAC Item with id `{self.item}`, "
+            "but an item with that id already exists at /collections/"
+            f"{self.collection}/items/{self.item} -- please ensure this is "
+            "the Item id you intended to publish or retract the existing item "
+            "via https://esgf.io/publication/api/v1/retract and try again."
         )
 
 
@@ -267,9 +260,10 @@ class ItemDoesNotExistException(RFC9457Exception):
     @property
     def detail(self) -> str:
         return (
-            f"You attempted to update a STAC Item with id "
-            f"`{self.item}`, but an item with that id does not exist "
-            f"at /collections/{self.collection}/items/{self.item}."
+            f"You attempted to update a STAC Item with id `{self.item}`, "
+            "but an item with that id does not exist at /collections/"
+            f"{self.collection}/items/{self.item} -- please ensure the the "
+            "Item you intended to update has been published and try again."
         )
 
 

@@ -124,7 +124,7 @@ class TestExceptionUnit(unittest.TestCase):
 
     def test_authorization_exception(self) -> None:
         """Ensure AuthorizationException includes instance and permission metadata."""
-        exc = AuthorizationException("instance-123")
+        exc = AuthorizationException(instance="instance-123")
 
         self.assertEqual(exc.status_code, 403)
         self.assertEqual(
@@ -136,7 +136,7 @@ class TestExceptionUnit(unittest.TestCase):
 
     def test_item_already_exists_exception(self) -> None:
         """Validate ItemAlreadyExistsException stores item, collection, and instance."""
-        exc = ItemAlreadyExistsException("colA", "itemX", "inst99")
+        exc = ItemAlreadyExistsException("colA", "itemX", instance="inst99")
 
         self.assertEqual(exc.status_code, 409)
         self.assertEqual(
@@ -154,7 +154,7 @@ class TestExceptionUnit(unittest.TestCase):
 
     def test_item_does_not_exist_exception(self) -> None:
         """Validate ItemDoesNotExistException fields and instance metadata."""
-        exc = ItemDoesNotExistException("colA", "itemX", "inst55")
+        exc = ItemDoesNotExistException("colA", "itemX", instance="inst55")
 
         self.assertEqual(exc.status_code, 404)
         self.assertEqual(
@@ -170,7 +170,7 @@ class TestExceptionUnit(unittest.TestCase):
 
     def test_unknown_exception(self) -> None:
         """Verify UnknownException includes correct status, title, and instance."""
-        exc = UnknownException("instXYZ")
+        exc = UnknownException(instance="instXYZ")
 
         self.assertEqual(exc.status_code, 500)
         self.assertEqual(

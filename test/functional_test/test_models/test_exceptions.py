@@ -75,14 +75,14 @@ class TestExceptionFunctional(unittest.TestCase):
     def test_raise_authorization_exception(self) -> None:
         """Confirm AuthorizationException stores the instance field correctly."""
         with self.assertRaises(AuthorizationException) as ctx:
-            raise AuthorizationException("instA")
+            raise AuthorizationException(instance="instA")
 
         self.assertEqual(ctx.exception.instance, "instA")
 
     def test_raise_item_already_exists_exception(self) -> None:
         """Verify ItemAlreadyExistsException sets item and instance when raised."""
         with self.assertRaises(ItemAlreadyExistsException) as ctx:
-            raise ItemAlreadyExistsException("colA", "itemX", "inst1")
+            raise ItemAlreadyExistsException("colA", "itemX", instance="inst1")
 
         exc = ctx.exception
         self.assertEqual(exc.item, "itemX")
@@ -91,7 +91,7 @@ class TestExceptionFunctional(unittest.TestCase):
     def test_raise_item_does_not_exist_exception(self) -> None:
         """Test that ItemDoesNotExistException captures missing item metadata."""
         with self.assertRaises(ItemDoesNotExistException) as ctx:
-            raise ItemDoesNotExistException("colZ", "itemY", "instB")
+            raise ItemDoesNotExistException("colZ", "itemY", instance="instB")
 
         exc = ctx.exception
         self.assertEqual(exc.item, "itemY")
@@ -100,7 +100,7 @@ class TestExceptionFunctional(unittest.TestCase):
     def test_raise_unknown_exception(self) -> None:
         """Ensure UnknownException raises and contains instance and detail fields."""
         with self.assertRaises(UnknownException) as ctx:
-            raise UnknownException("foo")
+            raise UnknownException(instance="foo")
 
         exc = ctx.exception
         self.assertEqual(exc.status_code, 500)
