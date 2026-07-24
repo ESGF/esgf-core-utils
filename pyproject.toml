@@ -4,9 +4,8 @@ version = "1.1.0"
 description = "Common library and models for the ESGF core architecture"
 readme = "README.rst"
 authors = [
-    {"name" = "David Poulter", "email" = "david.poulter@stfc.ac.uk"},
+    {"name" = "Lukasz Lacinski", "email" = "lukasz@uchicago.edu"},
     {"name" = "Rhys Evans", "email" = "rhys.r.evans@stfc.ac.uk"},
-    {"name" = "Ed Borthwick", "email" = "ed.borthwick@stfc.ac.uk"},
 ]
 requires-python = ">=3.12,<4.0"
 dependencies = [
