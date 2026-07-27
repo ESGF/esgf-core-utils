@@ -5,8 +5,7 @@ from unittest.mock import Mock
 
 from esgf_core_utils.models.auth import (
     Authorizer,
-    Node,
-    Project,
+    Permission,
 )
 from esgf_core_utils.models.exceptions import AuthorizationException
 from esgf_core_utils.models.kafka.events import RequesterData
@@ -38,7 +37,7 @@ class TestAuthorizer(unittest.TestCase):
 
         self.assertIn(
             "cmip6",
-            authorizer.projects.projects,
+            authorizer.projects.permissions,
         )
 
     def test_add_node_entitlement(self) -> None:
@@ -56,7 +55,7 @@ class TestAuthorizer(unittest.TestCase):
 
         self.assertIn(
             "example.com",
-            authorizer.nodes.nodes,
+            authorizer.nodes.permissions,
         )
 
     def test_add_ignores_unmatched_entitlement(self) -> None:
@@ -69,11 +68,11 @@ class TestAuthorizer(unittest.TestCase):
         authorizer.add(["invalid"])
 
         self.assertEqual(
-            authorizer.projects.projects,
+            authorizer.projects.permissions,
             {},
         )
         self.assertEqual(
-            authorizer.nodes.nodes,
+            authorizer.nodes.permissions,
             {},
         )
 
@@ -91,7 +90,7 @@ class TestAuthorizer(unittest.TestCase):
         )
 
         self.assertEqual(
-            authorizer.projects.projects,
+            authorizer.projects.permissions,
             {},
         )
 
@@ -109,8 +108,8 @@ class TestAuthorizer(unittest.TestCase):
             ]
         )
 
-        self.assertEqual(authorizer.projects.projects, {})
-        self.assertEqual(authorizer.nodes.nodes, {})
+        self.assertEqual(authorizer.projects.permissions, {})
+        self.assertEqual(authorizer.nodes.permissions, {})
 
     def test_add_mixed_valid_and_invalid_entitlements(self) -> None:
         """Ensure processing continues after invalid entitlements."""
@@ -129,7 +128,7 @@ class TestAuthorizer(unittest.TestCase):
 
         self.assertIn(
             "cmip7",
-            authorizer.projects.projects,
+            authorizer.projects.permissions,
         )
 
     def test_authorize_success(self) -> None:
@@ -140,14 +139,14 @@ class TestAuthorizer(unittest.TestCase):
         )
 
         authorizer.projects.add(
-            Project(
+            Permission(
                 id="cmip6",
                 roles={"CREATE"},
             )
         )
 
         authorizer.nodes.add(
-            Node(
+            Permission(
                 id="example.com",
                 roles={"CREATE"},
             )

@@ -112,7 +112,7 @@ PATCH_SCHEMAS = {
     },
 }
 
-PATCH_VALIDATORS = {
+PATCH_VALIDATORS: dict[str, Draft202012Validator] = {
     schema_name.upper(): Draft202012Validator(schema)
     for schema_name, schema in PATCH_SCHEMAS.items()
 }

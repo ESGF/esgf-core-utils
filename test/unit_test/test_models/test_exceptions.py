@@ -89,7 +89,7 @@ class TestExceptionUnit(unittest.TestCase):
         )
         self.assertEqual(
             exc.title,
-            "There is an extension in your request below the mimimum allowed version",
+            "There is an extension in your request below the minimum allowed version",
         )
         self.assertIn("old-ext", exc.detail)
         self.assertIn("v1.0.0", exc.detail)
@@ -119,7 +119,7 @@ class TestExceptionUnit(unittest.TestCase):
             exc.type,
             "https://esgf.io/publication/errors/stac-validation",
         )
-        self.assertEqual(exc.title, "Your request in invalid")
+        self.assertEqual(exc.title, "Your request is invalid")
         self.assertIn("invalid", exc.detail)
 
     def test_authorization_exception(self) -> None:

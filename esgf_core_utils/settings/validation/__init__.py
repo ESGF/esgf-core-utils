@@ -1,4 +1,4 @@
-from typing import Pattern
+from typing import Any, Pattern
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -159,11 +159,11 @@ class Settings(BaseSettings):
     )
 
     version_regex: Pattern[str] = (
-        r"/v((?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)"
+        r"/v((?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)"  # type: ignore[assignment]
         r"(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?)/"
     )
 
-    default_extensions: dict = DEFAULT_EXTENSIONS
+    default_extensions: dict[str, Any] = DEFAULT_EXTENSIONS
 
 
 settings = Settings()

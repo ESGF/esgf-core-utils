@@ -3,12 +3,10 @@ import logging
 import re
 from typing import Any
 
-import httpx
 import jsonschema
+import requests
 from jsonschema.protocols import Validator
-from models.validation.patch_validators import PATCH_VALIDATORS
 from packaging.version import Version
-from settings.validation import settings
 from shapely.geometry import shape
 from stac_fastapi.extensions.transaction.request import (
     PartialItem,
@@ -24,9 +22,21 @@ from esgf_core_utils.models.exceptions import (
     STACValidationException,
     UnexpectedExtensionException,
 )
+from esgf_core_utils.models.validation.patch_validators import PATCH_VALIDATORS
+from esgf_core_utils.settings.validation import settings
 
 # Setup logger
 logger = logging.getLogger("uvicorn.error")
+
+type BBox2D = tuple[float | int, float | int, float | int, float | int]
+type BBox3D = tuple[
+    float | int,
+    float | int,
+    float | int,
+    float | int,
+    float | int,
+    float | int,
+]
 
 
 def operation_to_partial_item(
@@ -44,7 +54,7 @@ def operation_to_partial_item(
     Returns:
         PartialItem: Partial item equivalent to operations
     """
-    item = {}
+    item: dict[str, Any] = {}
 
     for operation in operations:
 
@@ -55,7 +65,7 @@ def operation_to_partial_item(
             if operation.path.lstrip("/") == "stac_extensions":
                 validate_extensions(
                     collection_id=collection_id,
-                    item_extensions=operation.value,
+                    item_extensions=operation.value,  # type: ignore[union-attr]
                     strict=True,
                 )
 
@@ -66,7 +76,7 @@ def operation_to_partial_item(
                 nest = [operation.value]
 
             else:
-                nest = operation.value
+                nest = operation.value  # type: ignore[union-attr]
 
             if isinstance(nest, list):
                 existing = item.copy()
@@ -88,6 +98,26 @@ def operation_to_partial_item(
     return PartialItem.model_validate(item)
 
 
+def extract_version(url: str) -> str:
+    """extract version from extension url.
+
+    Args:
+        url (str): extension url.
+
+    Raises:
+        ValueError: If version can not be extracted.
+
+    Returns:
+        str: extracted version.
+    """
+    match = settings.version_regex.search(url)
+
+    if match is None:
+        raise ValueError(f"Could not parse version from {url!r}")
+
+    return match.group(1)
+
+
 def validate_extension_version(minimum: str, extension: str) -> None:
     """Validate an extenions version is above the minimum.
 
@@ -99,8 +129,8 @@ def validate_extension_version(minimum: str, extension: str) -> None:
         ExtensionBelowMinimumException: extension below minimum
     """
 
-    minimum_version = settings.version_regex.search(minimum).group(1)
-    extension_version = settings.version_regex.search(extension).group(1)
+    minimum_version = extract_version(minimum)
+    extension_version = extract_version(extension)
 
     if Version(extension_version) < Version(minimum_version):
         raise ExtensionBelowMinimumException(
@@ -171,7 +201,7 @@ def get_null_keys(item: PartialItem) -> tuple[PartialItem, set[str]]:
         tuple[dict, list[str]]: The PartialItem with nulls removed and list of null keys
     """
 
-    def nested_null_keys(d: dict) -> tuple[dict, set[str]]:
+    def nested_null_keys(d: dict[str, Any]) -> tuple[dict[str, Any], set[str]]:
         null_keys = set()
         for k, v in d.items():
 
@@ -201,7 +231,7 @@ def get_extension_validator(extension: str) -> Validator:
     Returns:
         Validator: Validator for extension
     """
-    schema = httpx.get(extension).json()
+    schema = requests.get(extension, timeout=5.0).json()
     # This block is cribbed (w/ change in error handling) from
     # jsonschema.validate
     cls = jsonschema.validators.validator_for(schema)
@@ -209,7 +239,9 @@ def get_extension_validator(extension: str) -> Validator:
     return cls(schema)
 
 
-def validate_bbox(bbox: list[int | float]) -> None:
+def validate_bbox(
+    bbox: BBox2D | BBox3D | None,
+) -> None:
     """Validate bounding box is WGS84
 
     Args:
@@ -218,6 +250,9 @@ def validate_bbox(bbox: list[int | float]) -> None:
     Raises:
         STACValidationException: _description_
     """
+    if bbox is None:
+        raise STACValidationException()
+
     minx, miny, maxx, maxy = bbox[:4]
     if not (
         -180.0 <= minx <= 180.0
@@ -228,7 +263,7 @@ def validate_bbox(bbox: list[int | float]) -> None:
         raise STACValidationException()
 
 
-def validate_geometry(geometry: dict) -> None:
+def validate_geometry(geometry: Any | None) -> None:
     """Validate GeoJSON geometry
 
     Args:
@@ -237,7 +272,11 @@ def validate_geometry(geometry: dict) -> None:
     Raises:
         STACValidationException: Validation error
     """
+    if not geometry:
+        raise STACValidationException()
+
     geometry_shape = shape(geometry)
+
     if not geometry_shape.is_valid:
         raise STACValidationException()
 
@@ -254,7 +293,7 @@ def get_patch_validator(extension: str) -> Validator:
     Returns:
         Validator: Validator for extension
     """
-    schema = httpx.get(extension).json()
+    schema = requests.get(extension, timeout=5.0).json()
     # This block is cribbed (w/ change in error handling) from
     # jsonschema.validate
     cls = jsonschema.validators.validator_for(schema)
