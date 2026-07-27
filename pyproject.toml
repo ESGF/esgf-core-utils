@@ -20,7 +20,7 @@ dependencies = [
 
 [dependency-groups]
 black = ["black>=25.9.0", "pre-commit>=4.3.0"]
-mypy = ["mypy>=1.10.1", "pre-commit>=4.3.0"]
+mypy = ["mypy>=1.10.1", "pre-commit>=4.3.0", "types-requests>=2.33.0.20260712"]
 bandit = ["bandit>=1.7.9", "pre-commit>=4.3.0"]
 ruff = ["ruff>=0.14.2", "pre-commit>=4.3.0"]
 isort = ["isort>=7.0.0", "pre-commit>=4.3.0"]
