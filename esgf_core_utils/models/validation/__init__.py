@@ -23,11 +23,21 @@ from esgf_core_utils.models.exceptions import (
     UnexpectedExtensionException,
 )
 from esgf_core_utils.models.validation.patch_validators import PATCH_VALIDATORS
-from esgf_core_utils.models.validation.types import BBox2D, BBox3D, PatchAddReplace
 from esgf_core_utils.settings.validation import settings
 
 # Setup logger
 logger = logging.getLogger("uvicorn.error")
+
+
+type BBox2D = tuple[float | int, float | int, float | int, float | int]
+type BBox3D = tuple[
+    float | int,
+    float | int,
+    float | int,
+    float | int,
+    float | int,
+    float | int,
+]
 
 
 def operation_to_partial_item(
@@ -53,7 +63,10 @@ def operation_to_partial_item(
         if operation.op == "remove":
             operation = PatchAddReplaceTest(op="add", path=operation.path, value=None)
 
-        if isinstance(operation, PatchAddReplace):
+        if isinstance(operation, PatchAddReplaceTest) and operation.op in [
+            "add",
+            "replace",
+        ]:
             if operation.path.lstrip("/") == "stac_extensions":
                 validate_extensions(
                     collection_id=collection_id,
