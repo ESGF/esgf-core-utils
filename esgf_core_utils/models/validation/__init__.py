@@ -60,45 +60,46 @@ def operation_to_partial_item(
 
     for operation in operations:
 
-        if operation.op == "remove":
-            operation = PatchAddReplaceTest(op="add", path=operation.path, value=None)
+        match operation.op:
 
-        if isinstance(operation, PatchAddReplaceTest) and operation.op in [
-            "add",
-            "replace",
-        ]:
-            if operation.path.lstrip("/") == "stac_extensions":
-                validate_extensions(
-                    collection_id=collection_id,
-                    item_extensions=operation.value,
-                    strict=True,
+            case "remove":
+                operations.append(
+                    PatchAddReplaceTest(op="add", path=operation.path, value=None)
                 )
 
-            path_parts = operation.path.lstrip("/").split("/")
+            case "add" | "replace":
+                if operation.path.lstrip("/") == "stac_extensions":
+                    validate_extensions(
+                        collection_id=collection_id,
+                        item_extensions=operation.value,
+                        strict=True,
+                    )
 
-            if path_parts[-1] == "-" or path_parts[-1].lstrip("-").isdigit():
-                path_parts.pop()
-                nest = [operation.value]
+                path_parts = operation.path.lstrip("/").split("/")
 
-            else:
-                nest = operation.value
+                if path_parts[-1] == "-" or path_parts[-1].lstrip("-").isdigit():
+                    path_parts.pop()
+                    nest = [operation.value]
 
-            if isinstance(nest, list):
-                existing = item.copy()
-                for path_part in path_parts:
-                    existing = existing.get(path_part, {})
+                else:
+                    nest = operation.value
 
-                if existing:
-                    nest.extend(existing)
+                if isinstance(nest, list):
+                    existing = item.copy()
+                    for path_part in path_parts:
+                        existing = existing.get(path_part, {})
 
-            for path_part in reversed(path_parts):
-                nest = {path_part: nest}
+                    if existing:
+                        nest.extend(existing)
 
-            item |= nest
+                for path_part in reversed(path_parts):
+                    nest = {path_part: nest}
 
-        if operation.op in ["move", "copy"]:
-            # May need to update this for alternat asset updates
-            raise OperationNotPermittedException(op=operation.op)
+                item |= nest
+
+            case "move" | "copy":
+                # May need to update this for alternat asset updates
+                raise OperationNotPermittedException(op=operation.op)
 
     return PartialItem.model_validate(item)
 
