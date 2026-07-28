@@ -607,6 +607,18 @@ files = [
 ]
 
 [[package]]
+name = "packaging"
+version = "26.2"
+description = "Core utilities for Python packages"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "packaging-26.2-py3-none-any.whl", hash = "sha256:5fc45236b9446107ff2415ce77c807cee2862cb6fac22b8a73826d0693b0980e"},
+    {file = "packaging-26.2.tar.gz", hash = "sha256:ff452ff5a3e828ce110190feff1178bb1f2ea2281fa2075aadb987c2fb221661"},
+]
+
+[[package]]
 name = "pydantic"
 version = "2.11.7"
 description = "Data validation using Python type hints"
@@ -1092,4 +1104,4 @@ zstd = ["backports-zstd (>=1.0.0) ; python_version < \"3.14\""]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<4.0"
-content-hash = "06e56e14fd1dbdc1274c6835dc8903d0ee72386b97fb19de49a321e595b38912"
+content-hash = "ef5cdf85a4394f4eacbd3af45e6a3c6fae3e811eac67c3762619445c8363f46b"
