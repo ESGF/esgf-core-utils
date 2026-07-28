@@ -146,6 +146,74 @@ class TestOperationToPartialItem(unittest.TestCase):
             ["new", "existing"],
         )
 
+    def test_remove_operation(self) -> None:
+        """Ensure remove operations become add None."""
+
+        item = operation_to_partial_item(
+            "cmip6",
+            [
+                Mock(
+                    op="remove",
+                    path="/properties/title",
+                )
+            ],
+        )
+
+        self.assertIsNotNone(item.properties)
+
+        self.assertIsNone(item.properties["title"])  # type: ignore[index]
+
+    def test_add_list_value(self) -> None:
+        """Ensure list values are handled."""
+
+        item = operation_to_partial_item(
+            "cmip6",
+            [
+                PatchAddReplaceTest(
+                    op="add",
+                    path="/properties/keywords",
+                    value=["a", "b"],
+                )
+            ],
+        )
+
+        self.assertIsNotNone(item.properties)
+
+        self.assertEqual(
+            item.properties["keywords"],  # type: ignore[index]
+            ["a", "b"],
+        )
+
+    @patch("esgf_core_utils.models.validation.get_extension_validator")
+    @patch("esgf_core_utils.models.validation.get_null_keys")
+    def test_validate_patch_required_removed_key(
+        self,
+        mock_null_keys: Mock,
+        mock_validator: Mock,
+    ) -> None:
+        """Ensure removed required properties raise."""
+        error = Mock()
+        error.validator = "required"
+        error.validator_value = ["removed"]
+
+        validator = Mock()
+        validator.iter_errors.return_value = [error]
+        mock_validator.return_value = validator
+
+        item = PartialItem.model_validate({})
+
+        mock_null_keys.return_value = (
+            item,
+            {'["removed"]'},
+        )
+
+        with self.assertRaises(STACValidationException):
+            validate_patch(
+                "item1",
+                item,
+                ["ext"],
+            )
+
 
 class TestValidateExtensions(unittest.TestCase):
     """Functional tests for validate_extensions."""
@@ -245,71 +313,6 @@ class TestValidateExtensions(unittest.TestCase):
         )
 
         mock_validate.assert_called_once()
-
-
-class TestValidateGeometry(unittest.TestCase):
-    """Functional tests for validate_geometry."""
-
-    def test_validate_geometry_success(
-        self,
-    ) -> None:
-        """Ensure valid geometry passes."""
-
-        validate_geometry(
-            {
-                "type": "Point",
-                "coordinates": [
-                    0.0,
-                    0.0,
-                ],
-            }
-        )
-
-    def test_validate_geometry_missing(
-        self,
-    ) -> None:
-        """Ensure missing geometry raises."""
-
-        with self.assertRaises(STACValidationException):
-            validate_geometry(None)
-
-    def test_remove_operation(self) -> None:
-        """Ensure remove operations become add None."""
-
-        item = operation_to_partial_item(
-            "cmip6",
-            [
-                Mock(
-                    op="remove",
-                    path="/properties/title",
-                )
-            ],
-        )
-
-        self.assertIsNotNone(item.properties)
-
-        self.assertIsNone(item.properties["title"])  # type: ignore[index]
-
-    def test_add_list_value(self) -> None:
-        """Ensure list values are handled."""
-
-        item = operation_to_partial_item(
-            "cmip6",
-            [
-                PatchAddReplaceTest(
-                    op="add",
-                    path="/properties/keywords",
-                    value=["a", "b"],
-                )
-            ],
-        )
-
-        self.assertIsNotNone(item.properties)
-
-        self.assertEqual(
-            item.properties["keywords"],  # type: ignore[index]
-            ["a", "b"],
-        )
 
     @patch("esgf_core_utils.models.validation.validate_extensions")
     def test_patch_stac_extensions_validation(
@@ -495,6 +498,33 @@ class TestValidateGeometry(unittest.TestCase):
             ["ext"],
         )
 
+
+class TestValidateGeometry(unittest.TestCase):
+    """Functional tests for validate_geometry."""
+
+    def test_validate_geometry_success(
+        self,
+    ) -> None:
+        """Ensure valid geometry passes."""
+
+        validate_geometry(
+            {
+                "type": "Point",
+                "coordinates": [
+                    0.0,
+                    0.0,
+                ],
+            }
+        )
+
+    def test_validate_geometry_missing(
+        self,
+    ) -> None:
+        """Ensure missing geometry raises."""
+
+        with self.assertRaises(STACValidationException):
+            validate_geometry(None)
+
     @patch("esgf_core_utils.models.validation.get_extension_validator")
     def test_validate_post_success(
         self,
@@ -584,33 +614,3 @@ class TestValidateGeometry(unittest.TestCase):
             "STAC validation error: %s",
             "item1",
         )
-
-    @patch("esgf_core_utils.models.validation.get_extension_validator")
-    @patch("esgf_core_utils.models.validation.get_null_keys")
-    def test_validate_patch_required_removed_key(
-        self,
-        mock_null_keys: Mock,
-        mock_validator: Mock,
-    ) -> None:
-        """Ensure removed required properties raise."""
-        error = Mock()
-        error.validator = "required"
-        error.validator_value = ["removed"]
-
-        validator = Mock()
-        validator.iter_errors.return_value = [error]
-        mock_validator.return_value = validator
-
-        item = PartialItem.model_validate({})
-
-        mock_null_keys.return_value = (
-            item,
-            {'["removed"]'},
-        )
-
-        with self.assertRaises(STACValidationException):
-            validate_patch(
-                "item1",
-                item,
-                ["ext"],
-            )

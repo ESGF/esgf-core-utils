@@ -97,7 +97,8 @@ def operation_to_partial_item(
 
                 item |= nest
 
-            case "move" | "copy":
+            # Loop continuation branch is impossible because this path always raises.
+            case "move" | "copy":  # pragma: no branch
                 # May need to update this for alternat asset updates
                 raise OperationNotPermittedException(op=operation.op)
 
