@@ -9,14 +9,15 @@ authors = [
 ]
 requires-python = ">=3.12,<4.0"
 dependencies = [
+    "confluent-kafka>=2.6.0",
+    "fastapi>=0.114.0",
+    "jinja2>=3.1.6",
+    "jsonschema>=4.26.0",
     "pydantic>=2.11.0",
     "pydantic-settings>=2.6.1",
+    "requests>=2.34.2",
     "stac-pydantic>=3.1.1",
-    "jinja2>=3.1.6",
     "stac-fastapi.extensions>=6.3.0",
-    "fastapi>=0.114.0",
-    "confluent-kafka>=2.6.0",
-    "jsonschema>=4.26.0",
 ]
 
 [dependency-groups]
