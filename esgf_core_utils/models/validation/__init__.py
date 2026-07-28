@@ -23,20 +23,11 @@ from esgf_core_utils.models.exceptions import (
     UnexpectedExtensionException,
 )
 from esgf_core_utils.models.validation.patch_validators import PATCH_VALIDATORS
+from esgf_core_utils.models.validation.types import BBox2D, BBox3D, PatchAddReplace
 from esgf_core_utils.settings.validation import settings
 
 # Setup logger
 logger = logging.getLogger("uvicorn.error")
-
-type BBox2D = tuple[float | int, float | int, float | int, float | int]
-type BBox3D = tuple[
-    float | int,
-    float | int,
-    float | int,
-    float | int,
-    float | int,
-    float | int,
-]
 
 
 def operation_to_partial_item(
@@ -55,28 +46,29 @@ def operation_to_partial_item(
         PartialItem: Partial item equivalent to operations
     """
     item: dict[str, Any] = {}
+    nest: Any
 
     for operation in operations:
 
         if operation.op == "remove":
             operation = PatchAddReplaceTest(op="add", path=operation.path, value=None)
 
-        if operation.op in ["add", "replace"]:
+        if isinstance(operation, PatchAddReplace):
             if operation.path.lstrip("/") == "stac_extensions":
                 validate_extensions(
                     collection_id=collection_id,
-                    item_extensions=operation.value,  # type: ignore[union-attr]
+                    item_extensions=operation.value,
                     strict=True,
                 )
 
             path_parts = operation.path.lstrip("/").split("/")
 
-            if isinstance(path_parts[-1], int):
-                path_parts.remove(-1)
+            if path_parts[-1] == "-" or path_parts[-1].lstrip("-").isdigit():
+                path_parts.pop()
                 nest = [operation.value]
 
             else:
-                nest = operation.value  # type: ignore[union-attr]
+                nest = operation.value
 
             if isinstance(nest, list):
                 existing = item.copy()
@@ -203,7 +195,7 @@ def get_null_keys(item: PartialItem) -> tuple[PartialItem, set[str]]:
 
     def nested_null_keys(d: dict[str, Any]) -> tuple[dict[str, Any], set[str]]:
         null_keys = set()
-        for k, v in d.items():
+        for k, v in d.copy().items():
 
             if v is None:
                 del d[k]

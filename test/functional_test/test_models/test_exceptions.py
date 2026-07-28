@@ -17,10 +17,23 @@ from esgf_core_utils.models.exceptions import (
     ItemDoesNotExistException,
     MissingPermissionException,
     OperationNotPermittedException,
+    RFC9457Exception,
     STACValidationException,
     UnexpectedExtensionException,
     UnknownException,
 )
+
+
+class DummyRFC9457Exception(RFC9457Exception):
+    """Concrete RFC9457Exception for functional testing."""
+
+    status_code = 418
+    type = "dummy-type"
+    title = "dummy-title"
+
+    @property
+    def detail(self) -> str:
+        return "dummy-detail"
 
 
 class TestExceptionFunctional(unittest.TestCase):
@@ -105,3 +118,32 @@ class TestExceptionFunctional(unittest.TestCase):
         exc = ctx.exception
         self.assertEqual(exc.status_code, 500)
         self.assertEqual(exc.instance, "foo")
+
+    def test_rfc9457_response_generation(self) -> None:
+        """Ensure RFC9457 responses are generated correctly."""
+        exc = DummyRFC9457Exception(
+            instance="instance-id",
+        )
+
+        response = exc.rfc945response()
+
+        self.assertEqual(response["type"], "dummy-type")
+        self.assertEqual(response["title"], "dummy-title")
+        self.assertEqual(response["status"], 418)
+        self.assertEqual(response["detail"], "dummy-detail")
+        self.assertEqual(response["instance"], "instance-id")
+
+    def test_rfc9457_str_conversion(self) -> None:
+        """Ensure string conversion delegates to detail."""
+        exc = DummyRFC9457Exception()
+
+        self.assertEqual(
+            str(exc),
+            "dummy-detail",
+        )
+
+    def test_rfc9457_status_property(self) -> None:
+        """Ensure status property exposes status_code."""
+        exc = DummyRFC9457Exception()
+
+        self.assertEqual(exc.status, 418)

@@ -8,6 +8,7 @@ from esgf_core_utils.models.auth import (
     Nodes,
     Permission,
     Projects,
+    Services,
 )
 from esgf_core_utils.models.exceptions import MissingPermissionException
 
@@ -200,3 +201,44 @@ class TestProjects(unittest.TestCase):
                 "cmip6",
                 "CREATE",
             )
+
+    def test_authorize_href_wildcard_permission(self) -> None:
+        """Ensure wildcard node permissions are honoured."""
+        nodes = Nodes()
+        nodes.add(Permission(id="*", roles={"CREATE"}))
+
+        nodes.authorize_href(
+            "https://unknown.example/file.nc",
+            "CREATE",
+        )
+
+    def test_authorize_wildcard_project(self) -> None:
+        """Ensure wildcard project permissions are honoured."""
+        projects = Projects()
+        projects.add(Permission(id="*", roles={"CREATE"}))
+
+        projects.authorize(
+            "cmip7",
+            "CREATE",
+        )
+
+
+class TestServices(unittest.TestCase):
+    """Tests for Services."""
+
+    def test_authorize_success(self) -> None:
+        """Ensure a service permission can be authorised."""
+        services = Services()
+        services.add(
+            Permission(
+                id="CITATION",
+                roles={"CITATION"},
+            )
+        )
+
+        services.authorize("CITATION")
+
+    def test_authorize_missing_service(self) -> None:
+        """Ensure missing service permissions raise exceptions."""
+        with self.assertRaises(MissingPermissionException):
+            Services().authorize("CITATION")

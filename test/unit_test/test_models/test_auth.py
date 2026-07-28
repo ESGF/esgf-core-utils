@@ -186,3 +186,99 @@ class TestAuthorizer(unittest.TestCase):
                 request_id="request-id",
                 event_id="event-id",
             )
+
+    def test_add_citation_entitlement(self) -> None:
+        """Ensure citation entitlements are parsed."""
+        authorizer = Authorizer(
+            requester_data=self.requester_data,
+            regex=r"(?P<type>project|node|citation|errata):(?P<id>[^:]+):(?P<role>[A-Z]+)",
+        )
+
+        authorizer.add(
+            [
+                "citation:any:CITATION",
+            ]
+        )
+
+        self.assertIn(
+            "CITATION",
+            authorizer.services.permissions,
+        )
+
+    def test_add_errata_entitlement(self) -> None:
+        """Ensure errata entitlements are parsed."""
+        authorizer = Authorizer(
+            requester_data=self.requester_data,
+            regex=r"(?P<type>project|node|citation|errata):(?P<id>[^:]+):(?P<role>[A-Z]+)",
+        )
+
+        authorizer.add(
+            [
+                "errata:any:ERRATA",
+            ]
+        )
+
+        self.assertIn(
+            "ERRATA",
+            authorizer.services.permissions,
+        )
+
+    def test_authorize_citation_service_success(self) -> None:
+        """Ensure citation authorisation uses services."""
+        authorizer = Authorizer(
+            requester_data=self.requester_data,
+            regex=self.regex,
+        )
+
+        authorizer.services.add(
+            Permission(
+                id="CITATION",
+                roles={"CITATION"},
+            )
+        )
+
+        authorizer.authorize(
+            collection_id="cmip6",
+            item=Mock(),
+            role="CITATION",
+            request_id="request-id",
+            event_id="event-id",
+        )
+
+    def test_authorize_citation_service_failure(self) -> None:
+        """Ensure service permission failures are wrapped."""
+        authorizer = Authorizer(
+            requester_data=self.requester_data,
+            regex=self.regex,
+        )
+
+        with self.assertRaises(AuthorizationException):
+            authorizer.authorize(
+                collection_id="cmip6",
+                item=Mock(),
+                role="CITATION",
+                request_id="request-id",
+                event_id="event-id",
+            )
+
+    def test_authorize_errata_service_success(self) -> None:
+        """Ensure errata authorisation uses services."""
+        authorizer = Authorizer(
+            requester_data=self.requester_data,
+            regex=self.regex,
+        )
+
+        authorizer.services.add(
+            Permission(
+                id="ERRATA",
+                roles={"ERRATA"},
+            )
+        )
+
+        authorizer.authorize(
+            collection_id="cmip6",
+            item=Mock(),
+            role="ERRATA",
+            request_id="request-id",
+            event_id="event-id",
+        )
