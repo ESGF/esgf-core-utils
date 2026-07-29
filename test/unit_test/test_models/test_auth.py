@@ -196,13 +196,13 @@ class TestAuthorizer(unittest.TestCase):
 
         authorizer.add(
             [
-                "citation:any:CITATION",
+                "project:any:CITATION",
             ]
         )
 
         self.assertIn(
             "CITATION",
-            authorizer.services.permissions,
+            authorizer.projects.permissions,
         )
 
     def test_add_errata_entitlement(self) -> None:
@@ -214,13 +214,13 @@ class TestAuthorizer(unittest.TestCase):
 
         authorizer.add(
             [
-                "errata:any:ERRATA",
+                "project:any:ERRATA",
             ]
         )
 
         self.assertIn(
             "ERRATA",
-            authorizer.services.permissions,
+            authorizer.projects.permissions,
         )
 
     def test_authorize_citation_service_success(self) -> None:
@@ -230,9 +230,9 @@ class TestAuthorizer(unittest.TestCase):
             regex=self.regex,
         )
 
-        authorizer.services.add(
+        authorizer.projects.add(
             Permission(
-                id="CITATION",
+                id="*",
                 roles={"CITATION"},
             )
         )
@@ -268,9 +268,9 @@ class TestAuthorizer(unittest.TestCase):
             regex=self.regex,
         )
 
-        authorizer.services.add(
+        authorizer.projects.add(
             Permission(
-                id="ERRATA",
+                id="*",
                 roles={"ERRATA"},
             )
         )

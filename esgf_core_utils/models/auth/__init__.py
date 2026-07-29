@@ -150,30 +150,6 @@ class Projects(PermissionStore):
             )
 
 
-class Services(PermissionStore):
-    """
-    Model describing Service auth info of a ESGF publisher.
-    """
-
-    def authorize(self, role: Role) -> None:
-        """Check for appropriate authorisation.
-
-        Args:
-            service (str): service to be authorised
-            role (Role): required role for auhroisation
-
-        Raises:
-            MissingPermissionException: Raised if either node or role permission is missing
-        """
-        permission = self.permissions.get(role)
-
-        if not permission:
-            raise MissingPermissionException(
-                type="service",
-                target=role,
-            )
-
-
 class Authorizer(BaseModel):
     """
     Model describing Authentication information of a ESGF publisher.
@@ -182,7 +158,6 @@ class Authorizer(BaseModel):
     requester_data: RequesterData
     nodes: Nodes = Nodes()
     projects: Projects = Projects()
-    services: Services = Services()
     regex: str
 
     def authorize(
@@ -204,12 +179,8 @@ class Authorizer(BaseModel):
             AuthorizationException: Raised if either node or role permission is missing
         """
         try:
-            if role in ["CITATION", "ERRATA"]:
-                self.services.authorize(role)
-
-            else:
-                self.projects.authorize(collection_id, role)
-                self.nodes.authorize(item.assets or {}, role)
+            self.projects.authorize(collection_id, role)
+            self.nodes.authorize(item.assets or {}, role)
 
         except MissingPermissionException as exc:
             raise AuthorizationException(instance=f"{request_id}:{event_id}") from exc
@@ -240,14 +211,6 @@ class Authorizer(BaseModel):
                     self.nodes.add(
                         Permission(
                             id=match.group("id"),
-                            roles=[match.group("role")],
-                        )
-                    )
-
-                elif match.group("type") in ["citation", "errata"]:
-                    self.services.add(
-                        Permission(
-                            id=match.group("type").upper(),
                             roles=[match.group("role")],
                         )
                     )

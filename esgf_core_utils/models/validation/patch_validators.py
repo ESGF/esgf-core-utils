@@ -1,7 +1,7 @@
 from jsonschema import Draft202012Validator
 
 PATCH_SCHEMAS = {
-    "citation": {
+    "CITATION": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": "Citation Link Patch",
         "type": "array",
@@ -26,7 +26,7 @@ PATCH_SCHEMAS = {
             "additionalProperties": False,
         },
     },
-    "errata": {
+    "ERRATA": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": "Errata Link Patch",
         "type": "array",
@@ -52,7 +52,7 @@ PATCH_SCHEMAS = {
             "additionalProperties": False,
         },
     },
-    "replicate": {
+    "REPLICATE": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": "Replicate Asset Patch",
         "type": "array",
@@ -70,7 +70,7 @@ PATCH_SCHEMAS = {
             "additionalProperties": False,
         },
     },
-    "retract": {
+    "RETRACT": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": "Retract Patch",
         "type": "array",

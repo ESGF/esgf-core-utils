@@ -221,24 +221,3 @@ class TestProjects(unittest.TestCase):
             "cmip7",
             "CREATE",
         )
-
-
-class TestServices(unittest.TestCase):
-    """Tests for Services."""
-
-    def test_authorize_success(self) -> None:
-        """Ensure a service permission can be authorised."""
-        services = Services()
-        services.add(
-            Permission(
-                id="CITATION",
-                roles={"CITATION"},
-            )
-        )
-
-        services.authorize("CITATION")
-
-    def test_authorize_missing_service(self) -> None:
-        """Ensure missing service permissions raise exceptions."""
-        with self.assertRaises(MissingPermissionException):
-            Services().authorize("CITATION")
