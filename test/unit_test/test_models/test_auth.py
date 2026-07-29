@@ -196,7 +196,7 @@ class TestAuthorizer(unittest.TestCase):
 
         authorizer.add(
             [
-                "project:any:CITATION",
+                "project:*:CITATION",
             ]
         )
 
@@ -214,7 +214,7 @@ class TestAuthorizer(unittest.TestCase):
 
         authorizer.add(
             [
-                "project:any:ERRATA",
+                "project:*:ERRATA",
             ]
         )
 
