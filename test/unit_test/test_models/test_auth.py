@@ -202,7 +202,7 @@ class TestAuthorizer(unittest.TestCase):
 
         self.assertIn(
             "CITATION",
-            authorizer.projects.permissions,
+            authorizer.projects.permissions["*"].roles,
         )
 
     def test_add_errata_entitlement(self) -> None:
@@ -220,11 +220,11 @@ class TestAuthorizer(unittest.TestCase):
 
         self.assertIn(
             "ERRATA",
-            authorizer.projects.permissions,
+            authorizer.projects.permissions["*"].roles,
         )
 
     def test_authorize_citation_service_success(self) -> None:
-        """Ensure citation authorisation uses services."""
+        """Ensure citation authorisation."""
         authorizer = Authorizer(
             requester_data=self.requester_data,
             regex=self.regex,
@@ -237,9 +237,12 @@ class TestAuthorizer(unittest.TestCase):
             )
         )
 
+        item = Mock()
+        item.assets = {}
+
         authorizer.authorize(
             collection_id="cmip6",
-            item=Mock(),
+            item=item,
             role="CITATION",
             request_id="request-id",
             event_id="event-id",
@@ -252,17 +255,20 @@ class TestAuthorizer(unittest.TestCase):
             regex=self.regex,
         )
 
+        item = Mock()
+        item.assets = {}
+
         with self.assertRaises(AuthorizationException):
             authorizer.authorize(
                 collection_id="cmip6",
-                item=Mock(),
+                item=item,
                 role="CITATION",
                 request_id="request-id",
                 event_id="event-id",
             )
 
     def test_authorize_errata_service_success(self) -> None:
-        """Ensure errata authorisation uses services."""
+        """Ensure errata authorisation."""
         authorizer = Authorizer(
             requester_data=self.requester_data,
             regex=self.regex,
@@ -275,9 +281,12 @@ class TestAuthorizer(unittest.TestCase):
             )
         )
 
+        item = Mock()
+        item.assets = {}
+
         authorizer.authorize(
             collection_id="cmip6",
-            item=Mock(),
+            item=item,
             role="ERRATA",
             request_id="request-id",
             event_id="event-id",
