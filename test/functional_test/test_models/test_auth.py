@@ -8,7 +8,6 @@ from esgf_core_utils.models.auth import (
     Nodes,
     Permission,
     Projects,
-    Services,
 )
 from esgf_core_utils.models.exceptions import MissingPermissionException
 
