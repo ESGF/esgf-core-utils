@@ -384,12 +384,12 @@ class TestValidateExtensions(unittest.TestCase):
         validator.is_valid.return_value = True
 
         mock_validators.items.return_value = [
-            ("RETRACT", validator),
+            ("CREATE", validator),
         ]
 
         self.assertEqual(
             evaluate_patch({}),
-            "RETRACT",
+            "CREATE",
         )
 
     @patch("esgf_core_utils.models.validation.get_extension_validator")

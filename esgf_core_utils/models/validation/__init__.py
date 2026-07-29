@@ -317,12 +317,12 @@ def evaluate_patch(
         data (Any): Patch payload to validate
 
     Returns:
-        name (str): Name of successfull validation
+        role (str): role required for patch type
     """
 
-    for name, validator in PATCH_VALIDATORS.items():
+    for role, validator in PATCH_VALIDATORS.items():
         if validator.is_valid(data):
-            return name
+            return role
 
     return "UPDATE"
 

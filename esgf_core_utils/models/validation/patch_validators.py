@@ -70,7 +70,7 @@ PATCH_SCHEMAS = {
             "additionalProperties": False,
         },
     },
-    "RETRACT": {
+    "CREATE": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": "Retract Patch",
         "type": "array",
