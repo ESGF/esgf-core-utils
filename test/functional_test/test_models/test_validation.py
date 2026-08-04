@@ -612,6 +612,5 @@ class TestValidateGeometry(unittest.TestCase):
             )
 
         mock_logger.error.assert_called_once_with(
-            "STAC validation error: %s",
-            "item1",
+            "STAC validation error: item1",
         )
