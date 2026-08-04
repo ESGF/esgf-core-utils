@@ -3,6 +3,7 @@
 import unittest
 from unittest.mock import Mock, patch
 
+from jsonschema import ValidationError
 from stac_fastapi.extensions.transaction.request import (
     PartialItem,
     PatchAddReplaceTest,
@@ -558,7 +559,7 @@ class TestValidateGeometry(unittest.TestCase):
     ) -> None:
         """Ensure post validation errors raise."""
 
-        error = Mock()
+        error = ValidationError("Validation failed")
 
         validator = Mock()
         validator.iter_errors.return_value = [error]
@@ -589,7 +590,7 @@ class TestValidateGeometry(unittest.TestCase):
     ) -> None:
         """Ensure validation failures are logged."""
 
-        error = Mock()
+        error = ValidationError("Validation failed")
 
         validator = Mock()
         validator.iter_errors.return_value = [error]
