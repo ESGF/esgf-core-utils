@@ -8,6 +8,7 @@ import requests
 from jsonschema.exceptions import relevance
 from jsonschema.protocols import Validator
 from packaging.version import Version
+from pydantic import TypeAdapter
 from shapely.geometry import shape
 from stac_fastapi.extensions.transaction.request import (
     PartialItem,
@@ -40,6 +41,7 @@ type BBox3D = tuple[
     float | int,
     float | int,
 ]
+patch_adapter = TypeAdapter(PartialItem | list[PatchOperation])
 
 
 def operation_to_partial_item(
@@ -331,19 +333,19 @@ def get_patch_validator(extension: str) -> Validator:
 
 
 def evaluate_patch(
-    data: Any,
+    patch: Any,
 ) -> str:
     """Evaluate Patch payload
 
     Args:
-        data (Any): Patch payload to validate
+        data (PartialItem | list[PatchOperation]): Patch payload to validate
 
     Returns:
         role (str): role required for patch type
     """
 
     for role, validator in PATCH_VALIDATORS.items():
-        if validator.is_valid(data):
+        if validator.is_valid(patch):
             return role
 
     return "UPDATE"
