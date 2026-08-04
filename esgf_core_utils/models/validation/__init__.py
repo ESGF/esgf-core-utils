@@ -5,6 +5,7 @@ from typing import Any
 
 import jsonschema
 import requests
+from jsonschema.exceptions import relevance
 from jsonschema.protocols import Validator
 from packaging.version import Version
 from shapely.geometry import shape
@@ -238,7 +239,24 @@ def get_extension_validator(extension: str) -> Validator:
     Returns:
         Validator: Validator for extension
     """
-    schema = requests.get(extension, timeout=5.0).json()
+    try:
+        response = requests.get(extension, timeout=5.0)
+        response.raise_for_status()
+        schema = response.json()
+    except requests.exceptions.HTTPError as exc:
+        e = UnexpectedExtensionException(extension=extension)
+        e.detail = f"Error {exc.response.status_code} while getting the extension schema {exc.request.url}"
+        raise e
+    except requests.exceptions.RequestException as exc:
+        e = UnexpectedExtensionException(extension=extension)
+        e.detail = (
+            f"An error occurred while getting the extension schema {exc.request.url}"
+        )
+        raise e
+    except json.JSONDecodeError as exc:
+        e = UnexpectedExtensionException(extension=extension)
+        e.detail = f"Failed to decode the extension schema {extension}: {exc.msg}. Error occured at line: {exc.lineno}, column: {exc.colno}"
+        raise e
     # This block is cribbed (w/ change in error handling) from
     # jsonschema.validate
     cls = jsonschema.validators.validator_for(schema)
@@ -401,13 +419,26 @@ def validate_post(
     for extension in extensions:
         extension_validator = get_extension_validator(str(extension))
 
-        raise_errors = []
-        for error in extension_validator.iter_errors(
-            json.loads(item.model_dump_json())
-        ):
-            raise_errors.append(error)
+        raise_errors = sorted(
+            extension_validator.iter_errors(json.loads(item.model_dump_json())),
+            key=relevance,
+        )
 
         if raise_errors:
-            logger.error("STAC validation error: %s", item_id)
+            error_parts = []
+            for error in raise_errors:
+                # anyOf/oneOf failures expose root causes in context (jsonschema docs).
+                if error.context:
+                    error_parts.append(error.context[0].message)
+                else:
+                    error_parts.append(error.message)
 
-            raise STACValidationException()
+            validation_errors = "; ".join(error_parts)
+            detail = (
+                "Your request is invalid -- please ensure your request is valid and try again. "
+                f"Item `{item_id}` failed validation against `{extension}`: {validation_errors}"
+            )
+            logger.error(f"STAC validation error: {item_id}")
+            exc = STACValidationException()
+            exc.detail = detail
+            raise exc
