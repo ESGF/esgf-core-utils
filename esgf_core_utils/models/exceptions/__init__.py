@@ -93,6 +93,20 @@ class OperationNotPermittedException(RFC9457Exception):
 
 
 @dataclass(slots=True)
+class ExtensionValidationException(RFC9457Exception):
+    """
+    Raised when an error occuse during extension validation.
+    """
+
+    extension: str
+    detail: str
+
+    status_code: ClassVar[int] = 400
+    type: ClassVar[str] = "https://esgf.io/publication/errors/unexpected-extension"
+    title: ClassVar[str] = "There is an unexpected extension in your request"
+
+
+@dataclass(slots=True)
 class UnexpectedExtensionException(RFC9457Exception):
     """
     Raised when an unexpected extension is supplied.
@@ -192,13 +206,10 @@ class STACValidationException(RFC9457Exception):
     status_code: ClassVar[int] = 400
     type: ClassVar[str] = "https://esgf.io/publication/errors/stac-validation"
     title: ClassVar[str] = "Your request is invalid"
-
-    @property
-    def detail(self) -> str:
-        return (
-            "Your request is invalid -- please ensure your "
-            "request is valid and try again."
-        )
+    detail: str = (
+        "Your request is invalid -- please ensure your "
+        "request is valid and try again."
+    )
 
 
 @dataclass(slots=True)

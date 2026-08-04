@@ -19,6 +19,7 @@ from stac_pydantic.item import Item
 from esgf_core_utils.models.exceptions import (
     ExpectedExtensionsMissingException,
     ExtensionBelowMinimumException,
+    ExtensionValidationException,
     OperationNotPermittedException,
     STACValidationException,
     UnexpectedExtensionException,
@@ -244,19 +245,22 @@ def get_extension_validator(extension: str) -> Validator:
         response.raise_for_status()
         schema = response.json()
     except requests.exceptions.HTTPError as exc:
-        e = UnexpectedExtensionException(extension=extension)
-        e.detail = f"Error {exc.response.status_code} while getting the extension schema {exc.request.url}"
-        raise e
-    except requests.exceptions.RequestException as exc:
-        e = UnexpectedExtensionException(extension=extension)
-        e.detail = (
-            f"An error occurred while getting the extension schema {exc.request.url}"
+        raise ExtensionValidationException(
+            extension=extension,
+            detail=f"Error {exc.response.status_code} while getting the extension schema {exc.request.url or extension}",
         )
-        raise e
+    except requests.exceptions.RequestException as exc:
+        raise ExtensionValidationException(
+            extension=extension,
+            detail=(
+                f"An error occurred while getting the extension schema {exc.request.url if exc.request is not None else extension}"
+            ),
+        )
     except json.JSONDecodeError as exc:
-        e = UnexpectedExtensionException(extension=extension)
-        e.detail = f"Failed to decode the extension schema {extension}: {exc.msg}. Error occured at line: {exc.lineno}, column: {exc.colno}"
-        raise e
+        raise ExtensionValidationException(
+            extension=extension,
+            detail=f"Failed to decode the extension schema {extension}: {exc.msg}. Error occured at line: {exc.lineno}, column: {exc.colno}",
+        )
     # This block is cribbed (w/ change in error handling) from
     # jsonschema.validate
     cls = jsonschema.validators.validator_for(schema)
@@ -434,11 +438,10 @@ def validate_post(
                     error_parts.append(error.message)
 
             validation_errors = "; ".join(error_parts)
-            detail = (
-                "Your request is invalid -- please ensure your request is valid and try again. "
-                f"Item `{item_id}` failed validation against `{extension}`: {validation_errors}"
-            )
             logger.error(f"STAC validation error: {item_id}")
-            exc = STACValidationException()
-            exc.detail = detail
-            raise exc
+            raise STACValidationException(
+                detail=(
+                    "Your request is invalid -- please ensure your request is valid and try again. "
+                    f"Item `{item_id}` failed validation against `{extension}`: {validation_errors}"
+                )
+            )
