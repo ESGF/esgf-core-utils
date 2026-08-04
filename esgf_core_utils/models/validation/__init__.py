@@ -438,7 +438,7 @@ def validate_post(
                     error_parts.append(error.message)
 
             validation_errors = "; ".join(error_parts)
-            logger.error(f"STAC validation error: {item_id}")
+            logger.error("STAC validation error: %s", item_id)
             raise STACValidationException(
                 detail=(
                     "Your request is invalid -- please ensure your request is valid and try again. "

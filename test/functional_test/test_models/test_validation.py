@@ -11,12 +11,14 @@ from stac_fastapi.extensions.transaction.request import (
 
 from esgf_core_utils.models.exceptions import (
     ExpectedExtensionsMissingException,
+    ExtensionValidationException,
     OperationNotPermittedException,
     STACValidationException,
     UnexpectedExtensionException,
 )
 from esgf_core_utils.models.validation import (
     evaluate_patch,
+    get_extension_validator,
     get_null_keys,
     operation_to_partial_item,
     validate_extensions,
@@ -499,6 +501,27 @@ class TestValidateExtensions(unittest.TestCase):
             ["ext"],
         )
 
+    @patch("esgf_core_utils.models.validation.requests.get")
+    def test_get_extension_validator_json_decode_error(
+        self,
+        mock_get: Mock,
+    ) -> None:
+        """Ensure invalid JSON raises."""
+        import json
+
+        response = Mock()
+        response.raise_for_status.return_value = None
+        response.json.side_effect = json.JSONDecodeError(
+            "invalid",
+            "doc",
+            0,
+        )
+
+        mock_get.return_value = response
+
+        with self.assertRaises(ExtensionValidationException):
+            get_extension_validator("http://example/schema.json")
+
 
 class TestValidateGeometry(unittest.TestCase):
     """Functional tests for validate_geometry."""
@@ -525,6 +548,9 @@ class TestValidateGeometry(unittest.TestCase):
 
         with self.assertRaises(STACValidationException):
             validate_geometry(None)
+
+
+class TestValidatePost(unittest.TestCase):
 
     @patch("esgf_core_utils.models.validation.get_extension_validator")
     def test_validate_post_success(
@@ -612,5 +638,40 @@ class TestValidateGeometry(unittest.TestCase):
             )
 
         mock_logger.error.assert_called_once_with(
-            "STAC validation error: item1",
+            "STAC validation error: %s",
+            "item1",
         )
+
+    @patch("esgf_core_utils.models.validation.get_extension_validator")
+    def test_validate_post_context_error(
+        self,
+        mock_validator: Mock,
+    ) -> None:
+        """Ensure nested validation errors use context messages."""
+
+        root_cause = Mock()
+        root_cause.message = "Root cause"
+
+        error = ValidationError("Validation failed")
+        error.context = [root_cause]
+        error.message = "Top level message"
+
+        validator = Mock()
+        validator.iter_errors.return_value = [error]
+
+        mock_validator.return_value = validator
+
+        item = Mock()
+        item.geometry = {
+            "type": "Point",
+            "coordinates": [0.0, 0.0],
+        }
+        item.bbox = [-1.0, -1.0, 1.0, 1.0]
+        item.model_dump_json.return_value = "{}"
+
+        with self.assertRaises(STACValidationException):
+            validate_post(
+                "item1",
+                item,
+                ["ext"],
+            )
