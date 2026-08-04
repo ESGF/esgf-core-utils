@@ -391,7 +391,7 @@ class TestValidateExtensions(unittest.TestCase):
         ]
 
         self.assertEqual(
-            evaluate_patch({}),
+            evaluate_patch([]),
             "CREATE",
         )
 

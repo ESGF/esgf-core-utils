@@ -158,7 +158,7 @@ class TestEvaluatePatch(unittest.TestCase):
         ]
 
         self.assertEqual(
-            evaluate_patch({}),
+            evaluate_patch([]),
             "DELETE",
         )
 
@@ -180,7 +180,7 @@ class TestEvaluatePatch(unittest.TestCase):
         ]
 
         self.assertEqual(
-            evaluate_patch({}),
+            evaluate_patch([]),
             "UPDATE",
         )
 

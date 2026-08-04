@@ -41,7 +41,9 @@ type BBox3D = tuple[
     float | int,
     float | int,
 ]
-patch_adapter = TypeAdapter(PartialItem | list[PatchOperation])
+patch_adapter: TypeAdapter[PartialItem | list[PatchOperation]] = TypeAdapter(
+    PartialItem | list[PatchOperation]
+)
 
 
 def operation_to_partial_item(
@@ -333,7 +335,7 @@ def get_patch_validator(extension: str) -> Validator:
 
 
 def evaluate_patch(
-    patch: Any,
+    patch: PartialItem | list[PatchOperation],
 ) -> str:
     """Evaluate Patch payload
 
@@ -343,6 +345,7 @@ def evaluate_patch(
     Returns:
         role (str): role required for patch type
     """
+    patch = patch_adapter.dump_python(patch)
 
     for role, validator in PATCH_VALIDATORS.items():
         if validator.is_valid(patch):
