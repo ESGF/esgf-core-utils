@@ -6,19 +6,19 @@ DEFAULT_EXTENSIONS = {
     "CMIP6": {
         "CMIP6": {
             "regex": [
-                r"https://esgf\.github\.io/stac-transaction-api/cmip6/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://esgf\.github\.io/stac-transaction-api/cmip6/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://esgf.github.io/stac-transaction-api/cmip6/v2.0.0/schema.json",
         },
         "alternate_assets": {
             "regex": [
-                r"https://stac-extensions\.github\.io/alternate-assets/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://stac-extensions\.github\.io/alternate-assets/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://stac-extensions.github.io/alternate-assets/v1.2.0/schema.json",
         },
         "file": {
             "regex": [
-                r"https://stac-extensions\.github\.io/file/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://stac-extensions\.github\.io/file/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://stac-extensions.github.io/file/v2.1.0/schema.json",
         },
@@ -26,19 +26,19 @@ DEFAULT_EXTENSIONS = {
     "CMIP6Plus": {
         "CMIP6Plus": {
             "regex": [
-                r"https://esgf\.github\.io/stac-transaction-api/cmip6plus/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://esgf\.github\.io/stac-transaction-api/cmip6plus/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://esgf.github.io/stac-transaction-api/cmip6plus/v2.0.1/schema.json",
         },
         "alternate_assets": {
             "regex": [
-                r"https://stac-extensions\.github\.io/alternate-assets/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://stac-extensions\.github\.io/alternate-assets/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://stac-extensions.github.io/alternate-assets/v1.2.0/schema.json",
         },
         "file": {
             "regex": [
-                r"https://stac-extensions\.github\.io/file/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://stac-extensions\.github\.io/file/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://stac-extensions.github.io/file/v2.1.0/schema.json",
         },
@@ -46,19 +46,19 @@ DEFAULT_EXTENSIONS = {
     "CMIP7": {
         "CMIP7": {
             "regex": [
-                r"https://esgf\.github\.io/stac-transaction-api/cmip7/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://esgf\.github\.io/stac-transaction-api/cmip7/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://esgf.github.io/stac-transaction-api/cmip7/v1.2.9/schema.json",
         },
         "alternate_assets": {
             "regex": [
-                r"https://stac-extensions\.github\.io/alternate-assets/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://stac-extensions\.github\.io/alternate-assets/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://stac-extensions.github.io/alternate-assets/v1.2.0/schema.json",
         },
         "file": {
             "regex": [
-                r"https://stac-extensions\.github\.io/file/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://stac-extensions\.github\.io/file/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://stac-extensions.github.io/file/v2.1.0/schema.json",
         },
@@ -66,19 +66,19 @@ DEFAULT_EXTENSIONS = {
     "INPUT4MIP": {
         "INPUT4MIP": {
             "regex": [
-                r"https://esgf\.github\.io/stac-transaction-api/input4mips/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://esgf\.github\.io/stac-transaction-api/input4mips/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://esgf.github.io/stac-transaction-api/input4mips/v1.2.9/schema.json",
         },
         "alternate_assets": {
             "regex": [
-                r"https://stac-extensions\.github\.io/alternate-assets/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://stac-extensions\.github\.io/alternate-assets/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://stac-extensions.github.io/alternate-assets/v1.2.0/schema.json",
         },
         "file": {
             "regex": [
-                r"https://stac-extensions\.github\.io/file/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://stac-extensions\.github\.io/file/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://stac-extensions.github.io/file/v3.0.0/schema.json",
         },
@@ -86,19 +86,19 @@ DEFAULT_EXTENSIONS = {
     "CORDEX-CMIP6": {
         "CORDEX-CMIP6": {
             "regex": [
-                r"https://esgf\.github\.io/stac-transaction-api/cordex-cmip6/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://esgf\.github\.io/stac-transaction-api/cordex-cmip6/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://esgf.github.io/stac-transaction-api/cordex-cmip6/v1.2.1/schema.json",
         },
         "alternate_assets": {
             "regex": [
-                r"https://stac-extensions\.github\.io/alternate-assets/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://stac-extensions\.github\.io/alternate-assets/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://stac-extensions.github.io/alternate-assets/v1.2.0/schema.json",
         },
         "file": {
             "regex": [
-                r"https://stac-extensions\.github\.io/file/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://stac-extensions\.github\.io/file/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://stac-extensions.github.io/file/v2.1.0/schema.json",
         },
@@ -106,19 +106,19 @@ DEFAULT_EXTENSIONS = {
     "obs4MIPs": {
         "obs4MIPs": {
             "regex": [
-                r"https://esgf\.github\.io/stac-transaction-api/obs4mips/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://esgf\.github\.io/stac-transaction-api/obs4mips/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://esgf.github.io/stac-transaction-api/obs4mips/v1.0.0/schema.json",
         },
         "alternate_assets": {
             "regex": [
-                r"https://stac-extensions\.github\.io/alternate-assets/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://stac-extensions\.github\.io/alternate-assets/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://stac-extensions.github.io/alternate-assets/v1.2.0/schema.json",
         },
         "file": {
             "regex": [
-                r"https://stac-extensions\.github\.io/file/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://stac-extensions\.github\.io/file/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://stac-extensions.github.io/file/v2.1.0/schema.json",
         },
@@ -126,19 +126,19 @@ DEFAULT_EXTENSIONS = {
     "OBS4REF": {
         "OBS4REF": {
             "regex": [
-                r"https://esgf\.github\.io/stac-transaction-api/obs4ref/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://esgf\.github\.io/stac-transaction-api/obs4ref/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://esgf.github.io/stac-transaction-api/obs4ref/v1.0.1/schema.json",
         },
         "alternate_assets": {
             "regex": [
-                r"https://stac-extensions\.github\.io/alternate-assets/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://stac-extensions\.github\.io/alternate-assets/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://stac-extensions.github.io/alternate-assets/v1.2.0/schema.json",
         },
         "file": {
             "regex": [
-                r"https://stac-extensions\.github\.io/file/v[0-9]\.[0-9]\.[0-9]/schema\.json"
+                r"https://stac-extensions\.github\.io/file/v\d+\.\d+\.\d+/schema\.json"
             ],
             "default": "https://stac-extensions.github.io/file/v2.1.0/schema.json",
         },
