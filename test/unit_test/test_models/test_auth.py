@@ -5,8 +5,7 @@ from unittest.mock import Mock
 
 from esgf_core_utils.models.auth import (
     Authorizer,
-    Node,
-    Project,
+    Permission,
 )
 from esgf_core_utils.models.exceptions import AuthorizationException
 from esgf_core_utils.models.kafka.events import RequesterData
@@ -38,7 +37,7 @@ class TestAuthorizer(unittest.TestCase):
 
         self.assertIn(
             "cmip6",
-            authorizer.projects.projects,
+            authorizer.projects.permissions,
         )
 
     def test_add_node_entitlement(self) -> None:
@@ -56,7 +55,7 @@ class TestAuthorizer(unittest.TestCase):
 
         self.assertIn(
             "example.com",
-            authorizer.nodes.nodes,
+            authorizer.nodes.permissions,
         )
 
     def test_add_ignores_unmatched_entitlement(self) -> None:
@@ -69,11 +68,11 @@ class TestAuthorizer(unittest.TestCase):
         authorizer.add(["invalid"])
 
         self.assertEqual(
-            authorizer.projects.projects,
+            authorizer.projects.permissions,
             {},
         )
         self.assertEqual(
-            authorizer.nodes.nodes,
+            authorizer.nodes.permissions,
             {},
         )
 
@@ -91,7 +90,7 @@ class TestAuthorizer(unittest.TestCase):
         )
 
         self.assertEqual(
-            authorizer.projects.projects,
+            authorizer.projects.permissions,
             {},
         )
 
@@ -109,8 +108,8 @@ class TestAuthorizer(unittest.TestCase):
             ]
         )
 
-        self.assertEqual(authorizer.projects.projects, {})
-        self.assertEqual(authorizer.nodes.nodes, {})
+        self.assertEqual(authorizer.projects.permissions, {})
+        self.assertEqual(authorizer.nodes.permissions, {})
 
     def test_add_mixed_valid_and_invalid_entitlements(self) -> None:
         """Ensure processing continues after invalid entitlements."""
@@ -129,7 +128,7 @@ class TestAuthorizer(unittest.TestCase):
 
         self.assertIn(
             "cmip7",
-            authorizer.projects.projects,
+            authorizer.projects.permissions,
         )
 
     def test_authorize_success(self) -> None:
@@ -140,14 +139,14 @@ class TestAuthorizer(unittest.TestCase):
         )
 
         authorizer.projects.add(
-            Project(
+            Permission(
                 id="cmip6",
                 roles={"CREATE"},
             )
         )
 
         authorizer.nodes.add(
-            Node(
+            Permission(
                 id="example.com",
                 roles={"CREATE"},
             )
@@ -187,3 +186,108 @@ class TestAuthorizer(unittest.TestCase):
                 request_id="request-id",
                 event_id="event-id",
             )
+
+    def test_add_citation_entitlement(self) -> None:
+        """Ensure citation entitlements are parsed."""
+        authorizer = Authorizer(
+            requester_data=self.requester_data,
+            regex=r"(?P<type>project|node|citation|errata):(?P<id>[^:]+):(?P<role>[A-Z]+)",
+        )
+
+        authorizer.add(
+            [
+                "project:*:CITATION",
+            ]
+        )
+
+        self.assertIn(
+            "CITATION",
+            authorizer.projects.permissions["*"].roles,
+        )
+
+    def test_add_errata_entitlement(self) -> None:
+        """Ensure errata entitlements are parsed."""
+        authorizer = Authorizer(
+            requester_data=self.requester_data,
+            regex=r"(?P<type>project|node|citation|errata):(?P<id>[^:]+):(?P<role>[A-Z]+)",
+        )
+
+        authorizer.add(
+            [
+                "project:*:ERRATA",
+            ]
+        )
+
+        self.assertIn(
+            "ERRATA",
+            authorizer.projects.permissions["*"].roles,
+        )
+
+    def test_authorize_citation_service_success(self) -> None:
+        """Ensure citation authorisation."""
+        authorizer = Authorizer(
+            requester_data=self.requester_data,
+            regex=self.regex,
+        )
+
+        authorizer.projects.add(
+            Permission(
+                id="*",
+                roles={"CITATION"},
+            )
+        )
+
+        item = Mock()
+        item.assets = {}
+
+        authorizer.authorize(
+            collection_id="cmip6",
+            item=item,
+            role="CITATION",
+            request_id="request-id",
+            event_id="event-id",
+        )
+
+    def test_authorize_citation_service_failure(self) -> None:
+        """Ensure service permission failures are wrapped."""
+        authorizer = Authorizer(
+            requester_data=self.requester_data,
+            regex=self.regex,
+        )
+
+        item = Mock()
+        item.assets = {}
+
+        with self.assertRaises(AuthorizationException):
+            authorizer.authorize(
+                collection_id="cmip6",
+                item=item,
+                role="CITATION",
+                request_id="request-id",
+                event_id="event-id",
+            )
+
+    def test_authorize_errata_service_success(self) -> None:
+        """Ensure errata authorisation."""
+        authorizer = Authorizer(
+            requester_data=self.requester_data,
+            regex=self.regex,
+        )
+
+        authorizer.projects.add(
+            Permission(
+                id="*",
+                roles={"ERRATA"},
+            )
+        )
+
+        item = Mock()
+        item.assets = {}
+
+        authorizer.authorize(
+            collection_id="cmip6",
+            item=item,
+            role="ERRATA",
+            request_id="request-id",
+            event_id="event-id",
+        )

@@ -37,7 +37,7 @@ class KafkaConsumer:
                     ((message.value() or b"None").decode("utf8") if message else None),
                 )
                 if message is None:
-                    time.sleep(0.1)
+                    time.sleep(self.settings.sleep)
                     continue
 
                 self.message_processor.ingest(message)

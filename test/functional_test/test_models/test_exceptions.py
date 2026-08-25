@@ -17,10 +17,23 @@ from esgf_core_utils.models.exceptions import (
     ItemDoesNotExistException,
     MissingPermissionException,
     OperationNotPermittedException,
+    RFC9457Exception,
     STACValidationException,
     UnexpectedExtensionException,
     UnknownException,
 )
+
+
+class DummyRFC9457Exception(RFC9457Exception):
+    """Concrete RFC9457Exception for functional testing."""
+
+    status_code = 418
+    type = "dummy-type"
+    title = "dummy-title"
+
+    @property
+    def detail(self) -> str:
+        return "dummy-detail"
 
 
 class TestExceptionFunctional(unittest.TestCase):
@@ -75,14 +88,14 @@ class TestExceptionFunctional(unittest.TestCase):
     def test_raise_authorization_exception(self) -> None:
         """Confirm AuthorizationException stores the instance field correctly."""
         with self.assertRaises(AuthorizationException) as ctx:
-            raise AuthorizationException("instA")
+            raise AuthorizationException(instance="instA")
 
         self.assertEqual(ctx.exception.instance, "instA")
 
     def test_raise_item_already_exists_exception(self) -> None:
         """Verify ItemAlreadyExistsException sets item and instance when raised."""
         with self.assertRaises(ItemAlreadyExistsException) as ctx:
-            raise ItemAlreadyExistsException("colA", "itemX", "inst1")
+            raise ItemAlreadyExistsException("colA", "itemX", instance="inst1")
 
         exc = ctx.exception
         self.assertEqual(exc.item, "itemX")
@@ -91,7 +104,7 @@ class TestExceptionFunctional(unittest.TestCase):
     def test_raise_item_does_not_exist_exception(self) -> None:
         """Test that ItemDoesNotExistException captures missing item metadata."""
         with self.assertRaises(ItemDoesNotExistException) as ctx:
-            raise ItemDoesNotExistException("colZ", "itemY", "instB")
+            raise ItemDoesNotExistException("colZ", "itemY", instance="instB")
 
         exc = ctx.exception
         self.assertEqual(exc.item, "itemY")
@@ -100,8 +113,37 @@ class TestExceptionFunctional(unittest.TestCase):
     def test_raise_unknown_exception(self) -> None:
         """Ensure UnknownException raises and contains instance and detail fields."""
         with self.assertRaises(UnknownException) as ctx:
-            raise UnknownException("foo")
+            raise UnknownException(instance="foo")
 
         exc = ctx.exception
         self.assertEqual(exc.status_code, 500)
         self.assertEqual(exc.instance, "foo")
+
+    def test_rfc9457_response_generation(self) -> None:
+        """Ensure RFC9457 responses are generated correctly."""
+        exc = DummyRFC9457Exception(
+            instance="instance-id",
+        )
+
+        response = exc.rfc945response()
+
+        self.assertEqual(response["type"], "dummy-type")
+        self.assertEqual(response["title"], "dummy-title")
+        self.assertEqual(response["status"], 418)
+        self.assertEqual(response["detail"], "dummy-detail")
+        self.assertEqual(response["instance"], "instance-id")
+
+    def test_rfc9457_str_conversion(self) -> None:
+        """Ensure string conversion delegates to detail."""
+        exc = DummyRFC9457Exception()
+
+        self.assertEqual(
+            str(exc),
+            "dummy-detail",
+        )
+
+    def test_rfc9457_status_property(self) -> None:
+        """Ensure status property exposes status_code."""
+        exc = DummyRFC9457Exception()
+
+        self.assertEqual(exc.status, 418)
