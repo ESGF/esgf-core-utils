@@ -18,7 +18,7 @@ PATCH_SCHEMAS = {
                     "properties": {
                         "href": {"type": "string", "format": "uri"},
                         "type": {"const": "application/json"},
-                        "rel": {"const": "citeas"},
+                        "rel": {"const": "cite-as"},
                     },
                     "additionalProperties": False,
                 },
