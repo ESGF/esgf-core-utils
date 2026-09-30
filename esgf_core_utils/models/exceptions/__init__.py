@@ -198,6 +198,24 @@ class InvalidTokenAudienceException(RFC9457Exception):
 
 
 @dataclass(slots=True)
+class InvalidTokenException(RFC9457Exception):
+    """
+    Raised when issue found with the OAuth token.
+    """
+
+    status_code: ClassVar[int] = 401
+    type: ClassVar[str] = "https://esgf.io/publication/errors/invalid-token"
+    title: ClassVar[str] = "Invalid token"
+
+    @property
+    def detail(self) -> str:
+        return (
+            "An issue was found with your token. -- please "
+            "check with your auth provider and try again."
+        )
+
+
+@dataclass(slots=True)
 class STACValidationException(RFC9457Exception):
     """
     Raised when a STAC document fails validation.
