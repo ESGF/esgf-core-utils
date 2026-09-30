@@ -23,6 +23,7 @@ class ConsumerSettings(BaseSettings):
     config: KafkaConsumerConfig
     topics: Annotated[list[str], NoDecode]
     timeout: float = 5.0
+    sleep: float = 0.1
 
     debug: bool = False
 

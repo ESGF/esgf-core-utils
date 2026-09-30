@@ -21,6 +21,27 @@ Removed
 Fixed
 ^^^^^
 
+`1.2.0 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.2.0>`_  - 2026-07-29
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+- models for validation of STAC payloads
+- patch schemas for fine grain permissions of PATCH payloads
+- CITATION, ERRATA, & RETRACT roles
+
+Changed
+^^^^^^^
+- Merged Project and Node permission classes
+- Converted Exceptions to dataclasses
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
+
 `1.1.0 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.1.0>`_  - 2026-06-24
 -----------------------------------------------------------------------------------------
 

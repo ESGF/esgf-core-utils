@@ -21,70 +21,79 @@ from esgf_core_utils.models.kafka.events import RequesterData
 logger = logging.getLogger("uvicorn.error")
 
 Role = Literal[
+    "CITATION",
     "CREATE",
-    "UPDATE",
     "DELETE",
+    "ERRATA",
+    "UPDATE",
     "REPLICATE",
+    "RETRACT",
     "REVOKE",
 ]
 
 
-class Node(BaseModel):
+class Permission(BaseModel):
     """
-    Model describing Node auth info of a ESGF publisher.
-    """
-
-    id: str
-    roles: set[Role]
-
-
-class Project(BaseModel):
-    """
-    Model describing Project auth info of a ESGF publisher.
+    Model describing Permission auth info of a ESGF publisher.
     """
 
     id: str
     roles: set[Role]
 
 
-class Nodes(BaseModel):
+class PermissionStore(BaseModel):
     """
-    Model describing Project auth info of a ESGF publisher.
+    Model describing Permission store of a ESGF publisher.
     """
 
-    nodes: dict[str, Node] = {}
+    permissions: dict[str, Permission] = {}
 
-    def add(self, node: Node | dict[str, Any]) -> None:
+    def add(self, permission: Permission | dict[str, Any]) -> None:
         """
         Add a new project or update roles if project already exists.
 
         Args:
-            node (Node | dict): node to be added
+            project (Permission | dict): project to be added
         """
-        if isinstance(node, dict):
-            node = Node(**node)
+        if isinstance(permission, dict):
+            permission = Permission(**permission)
 
-        if existing_node := self.nodes.get(node.id):
-            existing_node.roles.update(node.roles)
+        if existing_permission := self.permissions.get(permission.id):
+            existing_permission.roles.update(permission.roles)
 
         else:
-            self.nodes[node.id] = node
+            self.permissions[permission.id] = permission
+
+
+class Nodes(PermissionStore):
+    """
+    Model describing Nodes auth info of a ESGF publisher.
+    """
 
     def authorize_href(self, asset_href: str, role: Role) -> None:
-        asset_url = urlparse(asset_href)
-        node_permission = self.nodes.get(asset_url.hostname or "") or self.nodes.get(
-            "*"
-        )
+        """Authorize an assets href
 
-        if not node_permission:
+        Args:
+            asset_href (str): href of asset to authorized
+            role (Role): role to be checked
+
+        Raises:
+            MissingPermissionException: Permissions is missing
+        """
+        asset_url = urlparse(asset_href)
+        permission = self.permissions.get(
+            asset_url.hostname or ""
+        ) or self.permissions.get("*")
+
+        if not permission:
             raise MissingPermissionException(
-                permission_type="node",
+                type="node",
                 target=asset_href,
             )
 
-        if role not in node_permission.roles:
+        if role not in permission.roles:
             raise MissingPermissionException(
-                permission_type="node",
+                type="node",
                 role=role,
                 target=asset_href,
             )
@@ -110,28 +119,10 @@ class Nodes(BaseModel):
                 self.authorize(alternates, role)
 
 
-class Projects(BaseModel):
+class Projects(PermissionStore):
     """
     Model describing Project auth info of a ESGF publisher.
     """
-
-    projects: dict[str, Project] = {}
-
-    def add(self, project: Project | dict[str, Any]) -> None:
-        """
-        Add a new project or update roles if project already exists.
-
-        Args:
-            project (Project | dict): project to be added
-        """
-        if isinstance(project, dict):
-            project = Project(**project)
-
-        if existing_project := self.projects.get(project.id):
-            existing_project.roles.update(project.roles)
-
-        else:
-            self.projects[project.id] = project
 
     def authorize(self, project: str, role: Role) -> None:
         """Check for appropriate authorisation.
@@ -143,17 +134,17 @@ class Projects(BaseModel):
         Raises:
             MissingPermissionException: Raised if either node or role permission is missing
         """
-        project_permission = self.projects.get(project) or self.projects.get("*")
+        permission = self.permissions.get(project) or self.permissions.get("*")
 
-        if not project_permission:
+        if not permission:
             raise MissingPermissionException(
-                permission_type="project",
+                type="project",
                 target=project,
             )
 
-        if role not in project_permission.roles:
+        if role not in permission.roles:
             raise MissingPermissionException(
-                permission_type="project",
+                type="project",
                 role=role,
                 target=project,
             )
@@ -210,7 +201,7 @@ class Authorizer(BaseModel):
             try:
                 if match.group("type") == "project":
                     self.projects.add(
-                        Project(
+                        Permission(
                             id=match.group("id"),
                             roles=[match.group("role")],
                         )
@@ -218,7 +209,7 @@ class Authorizer(BaseModel):
 
                 elif match.group("type") == "node":
                     self.nodes.add(
-                        Node(
+                        Permission(
                             id=match.group("id"),
                             roles=[match.group("role")],
                         )

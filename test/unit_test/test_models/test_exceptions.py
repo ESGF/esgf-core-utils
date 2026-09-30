@@ -16,10 +16,24 @@ from esgf_core_utils.models.exceptions import (
     ItemDoesNotExistException,
     MissingPermissionException,
     OperationNotPermittedException,
+    RFC9457Exception,
     STACValidationException,
     UnexpectedExtensionException,
     UnknownException,
 )
+
+
+class DummyRFC9457Exception(RFC9457Exception):
+    """Concrete RFC9457Exception for base-class testing."""
+
+    status_code = 418
+    type = "dummy-type"
+    title = "dummy-title"
+
+    @property
+    def detail(self) -> str:
+        """Return test detail."""
+        return "dummy-detail"
 
 
 class TestExceptionUnit(unittest.TestCase):
@@ -89,7 +103,7 @@ class TestExceptionUnit(unittest.TestCase):
         )
         self.assertEqual(
             exc.title,
-            "There is an extension in your request below the mimimum allowed version",
+            "There is an extension in your request below the minimum allowed version",
         )
         self.assertIn("old-ext", exc.detail)
         self.assertIn("v1.0.0", exc.detail)
@@ -119,12 +133,12 @@ class TestExceptionUnit(unittest.TestCase):
             exc.type,
             "https://esgf.io/publication/errors/stac-validation",
         )
-        self.assertEqual(exc.title, "Your request in invalid")
+        self.assertEqual(exc.title, "Your request is invalid")
         self.assertIn("invalid", exc.detail)
 
     def test_authorization_exception(self) -> None:
         """Ensure AuthorizationException includes instance and permission metadata."""
-        exc = AuthorizationException("instance-123")
+        exc = AuthorizationException(instance="instance-123")
 
         self.assertEqual(exc.status_code, 403)
         self.assertEqual(
@@ -133,10 +147,11 @@ class TestExceptionUnit(unittest.TestCase):
         )
         self.assertEqual(exc.title, "You do not have permission")
         self.assertEqual(exc.instance, "instance-123")
+        self.assertIn("required permission", exc.detail)
 
     def test_item_already_exists_exception(self) -> None:
         """Validate ItemAlreadyExistsException stores item, collection, and instance."""
-        exc = ItemAlreadyExistsException("colA", "itemX", "inst99")
+        exc = ItemAlreadyExistsException("colA", "itemX", instance="inst99")
 
         self.assertEqual(exc.status_code, 409)
         self.assertEqual(
@@ -154,7 +169,7 @@ class TestExceptionUnit(unittest.TestCase):
 
     def test_item_does_not_exist_exception(self) -> None:
         """Validate ItemDoesNotExistException fields and instance metadata."""
-        exc = ItemDoesNotExistException("colA", "itemX", "inst55")
+        exc = ItemDoesNotExistException("colA", "itemX", instance="inst55")
 
         self.assertEqual(exc.status_code, 404)
         self.assertEqual(
@@ -167,10 +182,11 @@ class TestExceptionUnit(unittest.TestCase):
         )
         self.assertEqual(exc.item, "itemX")
         self.assertEqual(exc.instance, "inst55")
+        self.assertIn("itemX", exc.detail)
 
     def test_unknown_exception(self) -> None:
         """Verify UnknownException includes correct status, title, and instance."""
-        exc = UnknownException("instXYZ")
+        exc = UnknownException(instance="instXYZ")
 
         self.assertEqual(exc.status_code, 500)
         self.assertEqual(
@@ -183,3 +199,56 @@ class TestExceptionUnit(unittest.TestCase):
         )
         self.assertEqual(exc.instance, "instXYZ")
         self.assertIn("help@esgf.io", exc.detail)
+
+    def test_missing_permission_exception_str(self) -> None:
+        """Ensure MissingPermissionException string formatting."""
+        exc = MissingPermissionException(
+            "project",
+            "cmip6",
+            "CREATE",
+        )
+
+        self.assertEqual(
+            str(exc),
+            "Missing permission 'project' for 'cmip6'.",
+        )
+
+    def test_rfc9457_status_property(self) -> None:
+        """Ensure status property returns status_code."""
+        exc = DummyRFC9457Exception()
+
+        self.assertEqual(exc.status, 418)
+
+    def test_rfc9457_str_returns_detail(self) -> None:
+        """Ensure string conversion returns detail."""
+        exc = DummyRFC9457Exception()
+
+        self.assertEqual(str(exc), "dummy-detail")
+
+    def test_rfc945response(self) -> None:
+        """Ensure RFC9457 response payload is generated."""
+        exc = DummyRFC9457Exception(
+            instance="test-instance",
+        )
+
+        self.assertEqual(
+            exc.rfc945response(),
+            {
+                "type": "dummy-type",
+                "title": "dummy-title",
+                "status": 418,
+                "detail": "dummy-detail",
+                "instance": "test-instance",
+            },
+        )
+
+    def test_rfc9457_base_detail_not_implemented(self) -> None:
+        """Ensure base detail property raises NotImplementedError."""
+
+        class BaseTestException(RFC9457Exception):
+            status_code = 500
+            type = "test"
+            title = "test"
+
+        with self.assertRaises(NotImplementedError):
+            BaseTestException().detail
