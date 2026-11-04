@@ -1,3 +1,20 @@
+"""
+Example when put together: (yaml for simplicity)
+
+assets:
+  kerchunk:
+    href: <URL>
+    type: application/vnd.zarr+kerchunk
+    roles: [virtual]
+    protocol: https
+    description: <DESCRIPTION BELOW>
+    alternate:name: <SITE>
+    created: <DATETIME>
+    updated: <DATETIME>
+    file:size: <INT>
+"""
+
+
 AGGREGATED_ASSETS = [
     'kerchunk',
     'CFA',
