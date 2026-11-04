@@ -1,8 +1,53 @@
 from typing import Any
+from esgf_core_utils.models.aggregation_assets import \
+    ASSET_AGG_DESCRIPTIONS,
+    ASSET_AGG_TYPES,
+    ASSET_AGG_PATHS
 
 from jsonschema import Draft202012Validator
 
 PATCH_SCHEMAS: dict[str, list[dict[str, Any]]] = {
+    "VIRTUAL_AGGREGATIONS": [
+        {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Virtual Aggregated Assets",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "required": ["op", "path", "value"],
+                "properties": {
+                    "op": {"const": "add"},
+                    "path": { "type": "string"},
+                    "value":{}
+                },
+                "allOf":[
+                {
+                    "if":{"properties":{"path":{"const":ASSET_AGG_PATHS[atype]}}},
+                    "then":{"properties":{
+                        "value": {
+                            "type": "object",
+                            "required": ["href", "type", "roles", "protocol", "description"],
+                            "properties": {
+                                "href": {"type": "string", "format": "uri"},
+                                "type": {"const": ASSET_AGG_MIMETYPES[atype]},
+                                "roles": {"const": "virtual"},
+                                "protocol":{"enum": ASSET_AGG_PROTOCOLS},
+                                "description":{"const":ASSET_AGG_DESCRIPTIONS[atype]},
+                                # Optional to include
+                                "alternate:name":{"type":"string"},
+                                "created": {"type": "string","format":"date-time"},
+                                "updated": {"type": "string","format":"date-time"}
+                                "file:size": {"type":"integer"}
+
+                            },
+                            "additionalProperties": False,
+                        }}}
+                } for atype in AGGREGATED_ASSETS],
+                "additionalProperties": False,
+            },
+        }
+    ],
     "CITATION": [
         {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
