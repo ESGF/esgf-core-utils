@@ -170,6 +170,22 @@ class ItemDoesNotExistException(RFC9457Exception):
         self.instance = instance
 
 
+class PayloadTooLargeException(RFC9457Exception):
+    """
+    Payload too large Exception
+    """
+
+    def __init__(self, instance: str = "") -> None:
+        self.status_code = 413
+        self.type = "https://esgf.io/publication/errors/payload-too-large"
+        self.title = "Your request is too large"
+        self.detail = (
+            "Your request exceeds the maximum message size that can be published "
+            "-- please reduce the size of your request and try again."
+        )
+        self.instance = instance
+
+
 class UnknownException(RFC9457Exception):
     """
     Unknown Exception
