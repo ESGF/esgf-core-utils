@@ -28,7 +28,7 @@ Added
 ^^^^^
 - models for validation of STAC payloads
 - patch schemas for fine grain permissions of PATCH payloads
-- CITATION, ERRATA, & RETRACT roles
+- VIRTUAL_AGGREGATIONS, CITATION, ERRATA, & RETRACT roles
 
 Changed
 ^^^^^^^
