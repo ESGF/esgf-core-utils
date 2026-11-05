@@ -13,12 +13,12 @@ from __future__ import annotations
 
 import os
 import unittest
-from typing import Any, Dict
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 from esgf_core_utils.models.kafka.consumer import KafkaConsumer
 
-MOCK_ENV: Dict[str, str] = {
+MOCK_ENV: dict[str, str] = {
     "KAFKA_CONSUMER_TOPICS": "local",
     "KAFKA_CONSUMER_CONFIG__BOOTSTRAP_SERVERS": "boots",
     "KAFKA_CONSUMER_CONFIG__SASL_USERNAME": "hello",
@@ -52,7 +52,7 @@ class TestKafkaConsumerFunctional(unittest.TestCase):
 
         # Assert
         mock_consumer_cls.assert_called_once()
-        passed_config: Dict[str, Any] = mock_consumer_cls.call_args.args[0]
+        passed_config: dict[str, Any] = mock_consumer_cls.call_args.args[0]
 
         # Key expectations from env -> settings -> config dump
         self.assertEqual(passed_config["bootstrap.servers"], "boots")
