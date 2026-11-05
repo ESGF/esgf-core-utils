@@ -143,7 +143,7 @@ class TestExceptionFunctional(unittest.TestCase):
             exc.detail,
         )
 
-    def test_raise_invalid_token_exception(self):
+    def test_raise_invalid_token_exception(self) -> None:
         with self.assertRaises(InvalidTokenException) as ctx:
             raise InvalidTokenException()
 
