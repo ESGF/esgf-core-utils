@@ -269,4 +269,4 @@ class TestExceptionUnit(unittest.TestCase):
             title = "test"
 
         with self.assertRaises(NotImplementedError):
-            BaseTestException().detail
+            _ = BaseTestException().detail

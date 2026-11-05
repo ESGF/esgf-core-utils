@@ -3,7 +3,7 @@ Models relating to Kakfa payloads for the ESGF Core architecture.
 """
 
 from datetime import datetime
-from typing import Literal, Optional, Union
+from typing import Literal
 
 from pydantic import BaseModel
 from stac_fastapi.extensions.transaction.request import (
@@ -80,7 +80,7 @@ class Data(BaseModel):
     """
 
     type: Literal["STAC"]
-    payload: Union[CreatePayload, UpdatePayload, PatchPayload]
+    payload: CreatePayload | UpdatePayload | PatchPayload
 
 
 class ResultData(BaseModel):
@@ -120,7 +120,7 @@ class Auth(BaseModel):
       It is simply an indication of the institute providing the message.
     """
 
-    auth_policy_id: Optional[str] = None
+    auth_policy_id: str | None = None
     requester_data: RequesterData
 
 
