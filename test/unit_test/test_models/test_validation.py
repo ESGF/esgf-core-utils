@@ -3,6 +3,7 @@
 import unittest
 from unittest.mock import Mock, patch
 
+from jsonschema.validators import Draft202012Validator
 from stac_fastapi.extensions.transaction.request import PartialItem
 
 from esgf_core_utils.models.exceptions import (
@@ -18,6 +19,10 @@ from esgf_core_utils.models.validation import (
     get_patch_validator,
     validate_bbox,
     validate_extension_version,
+)
+from esgf_core_utils.models.validation.patch_validators import (
+    PATCH_SCHEMAS,
+    PATCH_VALIDATORS,
 )
 
 
@@ -135,6 +140,27 @@ class TestGetNullKeys(unittest.TestCase):
             "a",
             updated_item.model_dump()["properties"],
         )
+
+
+class TestPatchValidators(unittest.TestCase):
+    """Tests for patch validator definitions."""
+
+    def test_patch_validators_created(self) -> None:
+        """Ensure validators are created for all patch schemas."""
+
+        self.assertEqual(
+            set(PATCH_VALIDATORS.keys()),
+            {schema_name.upper() for schema_name in PATCH_SCHEMAS},
+        )
+
+        for validators in PATCH_VALIDATORS.values():
+            self.assertTrue(validators)
+
+            for validator in validators:
+                self.assertIsInstance(
+                    validator,
+                    Draft202012Validator,
+                )
 
 
 class TestEvaluatePatch(unittest.TestCase):

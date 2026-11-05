@@ -13,6 +13,7 @@ from esgf_core_utils.models.exceptions import (
     ExpectedExtensionsMissingException,
     ExtensionBelowMinimumException,
     InvalidTokenAudienceException,
+    InvalidTokenException,
     ItemAlreadyExistsException,
     ItemDoesNotExistException,
     MissingPermissionException,
@@ -82,8 +83,13 @@ class TestExceptionFunctional(unittest.TestCase):
 
     def test_raise_stac_validation_exception(self) -> None:
         """Ensure STACValidationException raises without extra parameters."""
-        with self.assertRaises(STACValidationException):
+        with self.assertRaises(STACValidationException) as ctx:
             raise STACValidationException()
+
+        self.assertIn(
+            "Your request is invalid",
+            ctx.exception.detail,
+        )
 
     def test_raise_authorization_exception(self) -> None:
         """Confirm AuthorizationException stores the instance field correctly."""
@@ -91,6 +97,10 @@ class TestExceptionFunctional(unittest.TestCase):
             raise AuthorizationException(instance="instA")
 
         self.assertEqual(ctx.exception.instance, "instA")
+        self.assertIn(
+            "required permission",
+            ctx.exception.detail,
+        )
 
     def test_raise_item_already_exists_exception(self) -> None:
         """Verify ItemAlreadyExistsException sets item and instance when raised."""
@@ -101,6 +111,11 @@ class TestExceptionFunctional(unittest.TestCase):
         self.assertEqual(exc.item, "itemX")
         self.assertEqual(exc.instance, "inst1")
 
+        self.assertIn(
+            "/collections/colA/items/itemX",
+            exc.detail,
+        )
+
     def test_raise_item_does_not_exist_exception(self) -> None:
         """Test that ItemDoesNotExistException captures missing item metadata."""
         with self.assertRaises(ItemDoesNotExistException) as ctx:
@@ -110,6 +125,11 @@ class TestExceptionFunctional(unittest.TestCase):
         self.assertEqual(exc.item, "itemY")
         self.assertEqual(exc.instance, "instB")
 
+        self.assertIn(
+            "/collections/colZ/items/itemY",
+            exc.detail,
+        )
+
     def test_raise_unknown_exception(self) -> None:
         """Ensure UnknownException raises and contains instance and detail fields."""
         with self.assertRaises(UnknownException) as ctx:
@@ -118,6 +138,19 @@ class TestExceptionFunctional(unittest.TestCase):
         exc = ctx.exception
         self.assertEqual(exc.status_code, 500)
         self.assertEqual(exc.instance, "foo")
+        self.assertIn(
+            "help@esgf.io",
+            exc.detail,
+        )
+
+    def test_raise_invalid_token_exception(self):
+        with self.assertRaises(InvalidTokenException) as ctx:
+            raise InvalidTokenException()
+
+        self.assertIn(
+            "An issue was found with your token",
+            ctx.exception.detail,
+        )
 
     def test_rfc9457_response_generation(self) -> None:
         """Ensure RFC9457 responses are generated correctly."""

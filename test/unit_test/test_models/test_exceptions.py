@@ -12,6 +12,7 @@ from esgf_core_utils.models.exceptions import (
     ExpectedExtensionsMissingException,
     ExtensionBelowMinimumException,
     InvalidTokenAudienceException,
+    InvalidTokenException,
     ItemAlreadyExistsException,
     ItemDoesNotExistException,
     MissingPermissionException,
@@ -91,6 +92,23 @@ class TestExceptionUnit(unittest.TestCase):
             "A required extension is missing from your request",
         )
         self.assertIn("[extA,extB]", exc.detail.replace(" ", ""))
+
+    def test_invalid_token_exception(self) -> None:
+        exc = InvalidTokenException()
+
+        self.assertEqual(exc.status_code, 401)
+        self.assertEqual(
+            exc.type,
+            "https://esgf.io/publication/errors/invalid-token",
+        )
+        self.assertEqual(
+            exc.title,
+            "Invalid token",
+        )
+        self.assertIn(
+            "issue was found with your token",
+            exc.detail,
+        )
 
     def test_extension_below_minimum_exception(self) -> None:
         """Validate ExtensionBelowMinimumException fields and detail message."""
