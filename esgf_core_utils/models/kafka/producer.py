@@ -68,22 +68,26 @@ class KafkaProducer(BaseProducer):
                 )
             delivery_reports.append((err, msg))
 
-        try:
-            self.producer.produce(
-                topic=topic, key=key, value=value, callback=delivery_report
-            )
-        except KafkaException as e:
-            # Raised locally when the message exceeds the client's message.max.bytes
-            if e.args[0].code() == KafkaError.MSG_SIZE_TOO_LARGE:
-                logger.error("Message %s is too large: %s", repr(key), e)
-                raise PayloadTooLargeException() from e
-            raise
-        self.producer.flush()
+        if topic:
+            try:
+                self.producer.produce(
+                    topic=topic, key=key, value=value, callback=delivery_report
+                )
+            except KafkaException as e:
+                # Raised locally when the message exceeds the client's
+                # message.max.bytes
+                if e.args[0].code() == KafkaError.MSG_SIZE_TOO_LARGE:
+                    logger.error("Message %s is too large: %s", repr(key), e)
+                    raise PayloadTooLargeException() from e
+                raise
+            self.producer.flush()
 
-        # Reported by the delivery callback when the broker/topic rejects the message
-        for err, _ in delivery_reports:
-            if err is not None and err.code() == KafkaError.MSG_SIZE_TOO_LARGE:
-                raise PayloadTooLargeException()
+            # Reported by the delivery callback when the broker/topic rejects
+            # the message
+            for err, _ in delivery_reports:
+                if err is not None and err.code() == KafkaError.MSG_SIZE_TOO_LARGE:
+                    raise PayloadTooLargeException()
+
         return delivery_reports
 
     def error(

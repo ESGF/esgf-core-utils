@@ -100,6 +100,15 @@ class TestKafkaProducerProduce(unittest.TestCase):
 
         self.assertEqual(producer.produce("topic", "key", "value"), [(err, msg)])
 
+    @patch("esgf_core_utils.models.kafka.producer.Producer")
+    def test_empty_topic_not_published(self, mock_cls: MagicMock) -> None:
+        """Nothing should be produced when the topic is empty"""
+        with patch.dict("os.environ", ENV):
+            producer = KafkaProducer()
+
+        self.assertEqual(producer.error("key", "value"), [])
+        mock_cls.return_value.produce.assert_not_called()
+
     def test_dummy_producer(self) -> None:
         """DummyProducer should just log the message"""
         with self.assertLogs(
