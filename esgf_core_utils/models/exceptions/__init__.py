@@ -297,6 +297,24 @@ class ItemDoesNotExistException(RFC9457Exception):
 
 
 @dataclass(slots=True)
+class PayloadTooLargeException(RFC9457Exception):
+    """
+    Raised when a request exceeds the maximum message size that can be published.
+    """
+
+    status_code: ClassVar[int] = 413
+    type: ClassVar[str] = "https://esgf.io/publication/errors/payload-too-large"
+    title: ClassVar[str] = "Your request is too large"
+
+    @property
+    def detail(self) -> str:
+        return (
+            "Your request exceeds the maximum message size that can be published "
+            "-- please reduce the size of your request and try again."
+        )
+
+
+@dataclass(slots=True)
 class UnknownException(RFC9457Exception):
     """
     Raised when an unexpected internal server error occurs.

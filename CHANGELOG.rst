@@ -21,6 +21,26 @@ Removed
 Fixed
 ^^^^^
 
+`1.3.0 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.3.0>`_  - 2026-11-06
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+- ``KafkaProducerConfig`` with optional ``message.max.bytes`` setting, used by ``ProducerSettings``
+- ``PayloadTooLargeException`` exception added (HTTP 413)
+
+Changed
+^^^^^^^
+
+- ``KafkaProducer.produce`` raises ``PayloadTooLargeException`` when a message is too large, whether rejected by the client or by the broker
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
 `1.2.0 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.2.0>`_  - 2026-07-29
 -----------------------------------------------------------------------------------------
 

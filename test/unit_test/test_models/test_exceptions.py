@@ -17,6 +17,7 @@ from esgf_core_utils.models.exceptions import (
     ItemDoesNotExistException,
     MissingPermissionException,
     OperationNotPermittedException,
+    PayloadTooLargeException,
     RFC9457Exception,
     STACValidationException,
     UnexpectedExtensionException,
@@ -217,6 +218,19 @@ class TestExceptionUnit(unittest.TestCase):
         )
         self.assertEqual(exc.instance, "instXYZ")
         self.assertIn("help@esgf.io", exc.detail)
+
+    def test_payload_too_large_exception(self) -> None:
+        """Verify PayloadTooLargeException includes correct status, title, and instance."""
+        exc = PayloadTooLargeException(instance="instBIG")
+
+        self.assertEqual(exc.status_code, 413)
+        self.assertEqual(
+            exc.type,
+            "https://esgf.io/publication/errors/payload-too-large",
+        )
+        self.assertEqual(exc.title, "Your request is too large")
+        self.assertEqual(exc.instance, "instBIG")
+        self.assertIn("maximum message size", exc.detail)
 
     def test_missing_permission_exception_str(self) -> None:
         """Ensure MissingPermissionException string formatting."""
