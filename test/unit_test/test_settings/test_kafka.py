@@ -34,6 +34,36 @@ class TestProducerSettings(unittest.TestCase):
         # not to raise an Exception
         self.assertIsInstance(settings, ProducerSettings)
 
+    def test_message_max_bytes(self) -> None:
+        """message.max.bytes should only be in the client config when set"""
+
+        base = {
+            "bootstrap_servers": "boots",
+            "sasl_username": "hello",
+            "sasl_password": "world",
+        }  # nosec CWE-259
+
+        default = ProducerSettings.model_validate(
+            {"success_topic": "success", "config": base}
+        )
+        self.assertNotIn(
+            "message.max.bytes",
+            default.config.model_dump(by_alias=True, exclude_none=True),
+        )
+
+        custom = ProducerSettings.model_validate(
+            {
+                "success_topic": "success",
+                "config": {**base, "message_max_bytes": 5_000_000},
+            }
+        )
+        self.assertEqual(
+            custom.config.model_dump(by_alias=True, exclude_none=True)[
+                "message.max.bytes"
+            ],
+            5_000_000,
+        )
+
 
 class TestConsumerSettings(unittest.TestCase):
     """Test the functionality of the kafka ConsumerSettings class"""

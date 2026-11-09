@@ -3,8 +3,9 @@ from abc import ABC, abstractmethod
 from typing import Any, AnyStr
 
 import attr
-from confluent_kafka import KafkaError, Message, Producer
+from confluent_kafka import KafkaError, KafkaException, Message, Producer
 
+from esgf_core_utils.models.exceptions import PayloadTooLargeException
 from esgf_core_utils.settings.kafka.producer import ProducerSettings
 
 # Setup logger
@@ -68,10 +69,24 @@ class KafkaProducer(BaseProducer):
             delivery_reports.append((err, msg))
 
         if topic:
-            self.producer.produce(
-                topic=topic, key=key, value=value, callback=delivery_report
-            )
+            try:
+                self.producer.produce(
+                    topic=topic, key=key, value=value, callback=delivery_report
+                )
+            except KafkaException as e:
+                # Raised locally when the message exceeds the client's
+                # message.max.bytes
+                if e.args[0].code() == KafkaError.MSG_SIZE_TOO_LARGE:
+                    logger.error("Message %s is too large: %s", repr(key), e)
+                    raise PayloadTooLargeException() from e
+                raise
             self.producer.flush()
+
+            # Reported by the delivery callback when the broker/topic rejects
+            # the message
+            for err, _ in delivery_reports:
+                if err is not None and err.code() == KafkaError.MSG_SIZE_TOO_LARGE:
+                    raise PayloadTooLargeException()
 
         return delivery_reports
 
