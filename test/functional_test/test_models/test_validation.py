@@ -18,13 +18,16 @@ from esgf_core_utils.models.exceptions import (
 )
 from esgf_core_utils.models.validation import (
     evaluate_patch,
-    get_extension_validator,
     get_null_keys,
     operation_to_partial_item,
     validate_extensions,
     validate_geometry,
     validate_patch,
     validate_post,
+)
+from esgf_core_utils.models.validation.registry import (
+    get_extension_validator,
+    retrieve_schema,
 )
 
 
@@ -501,21 +504,16 @@ class TestValidateExtensions(unittest.TestCase):
             ["ext"],
         )
 
-    @patch("esgf_core_utils.models.validation.requests.get")
+    @patch("esgf_core_utils.models.validation.registry.requests.get")
     def test_get_extension_validator_json_decode_error(
         self,
         mock_get: Mock,
     ) -> None:
         """Ensure invalid JSON raises."""
-        import json
-
+        retrieve_schema.cache_clear()  # type: ignore[attr-defined]
         response = Mock()
         response.raise_for_status.return_value = None
-        response.json.side_effect = json.JSONDecodeError(
-            "invalid",
-            "doc",
-            0,
-        )
+        response.text = "not json"
 
         mock_get.return_value = response
 

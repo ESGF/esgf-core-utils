@@ -3,10 +3,7 @@ import logging
 import re
 from typing import Any
 
-import jsonschema
-import requests
 from jsonschema.exceptions import relevance
-from jsonschema.protocols import Validator
 from packaging.version import Version
 from pydantic import TypeAdapter
 from shapely.geometry import shape
@@ -20,12 +17,15 @@ from stac_pydantic.item import Item
 from esgf_core_utils.models.exceptions import (
     ExpectedExtensionsMissingException,
     ExtensionBelowMinimumException,
-    ExtensionValidationException,
     OperationNotPermittedException,
     STACValidationException,
     UnexpectedExtensionException,
 )
 from esgf_core_utils.models.validation.patch_validators import PATCH_VALIDATORS
+from esgf_core_utils.models.validation.registry import (  # noqa: F401  (re-export)
+    get_extension_validator,
+    get_patch_validator,
+)
 from esgf_core_utils.settings.validation import settings
 
 # Setup logger
@@ -235,43 +235,6 @@ def get_null_keys(item: PartialItem) -> tuple[PartialItem, set[str]]:
     return item, null_keys
 
 
-def get_extension_validator(extension: str) -> Validator:
-    """Get JSON schema validator for an extension.
-
-    Args:
-        extension (str): Extension URI
-
-    Returns:
-        Validator: Validator for extension
-    """
-    try:
-        response = requests.get(extension, timeout=5.0)
-        response.raise_for_status()
-        schema = response.json()
-    except requests.exceptions.HTTPError as exc:
-        raise ExtensionValidationException(
-            extension=extension,
-            detail=f"Error {exc.response.status_code} while getting the extension schema {exc.request.url or extension}",
-        )
-    except requests.exceptions.RequestException as exc:
-        raise ExtensionValidationException(
-            extension=extension,
-            detail=(
-                f"An error occurred while getting the extension schema {exc.request.url if exc.request is not None else extension}"
-            ),
-        )
-    except json.JSONDecodeError as exc:
-        raise ExtensionValidationException(
-            extension=extension,
-            detail=f"Failed to decode the extension schema {extension}: {exc.msg}. Error occured at line: {exc.lineno}, column: {exc.colno}",
-        )
-    # This block is cribbed (w/ change in error handling) from
-    # jsonschema.validate
-    cls = jsonschema.validators.validator_for(schema)
-    cls.check_schema(schema)
-    return cls(schema)
-
-
 def validate_bbox(
     bbox: BBox2D | BBox3D | None,
 ) -> None:
@@ -315,23 +278,6 @@ def validate_geometry(geometry: Any | None) -> None:
 
     # Check geometry is WGS84
     validate_bbox(geometry_shape.bounds)
-
-
-def get_patch_validator(extension: str) -> Validator:
-    """Get JSON schema validator for an extension.
-
-    Args:
-        extension (str): Extension URI
-
-    Returns:
-        Validator: Validator for extension
-    """
-    schema = requests.get(extension, timeout=5.0).json()
-    # This block is cribbed (w/ change in error handling) from
-    # jsonschema.validate
-    cls = jsonschema.validators.validator_for(schema)
-    cls.check_schema(schema)
-    return cls(schema)
 
 
 def evaluate_patch(

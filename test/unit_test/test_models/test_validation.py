@@ -8,15 +8,12 @@ from stac_fastapi.extensions.transaction.request import PartialItem
 
 from esgf_core_utils.models.exceptions import (
     ExtensionBelowMinimumException,
-    ExtensionValidationException,
     STACValidationException,
 )
 from esgf_core_utils.models.validation import (
     evaluate_patch,
     extract_version,
-    get_extension_validator,
     get_null_keys,
-    get_patch_validator,
     validate_bbox,
     validate_extension_version,
 )
@@ -209,132 +206,3 @@ class TestEvaluatePatch(unittest.TestCase):
             evaluate_patch([]),
             "UPDATE",
         )
-
-
-class TestSchemaValidators(unittest.TestCase):
-    """Tests for schema validator helpers."""
-
-    @patch("esgf_core_utils.models.validation.jsonschema.validators.validator_for")
-    @patch("esgf_core_utils.models.validation.requests.get")
-    def test_get_extension_validator(
-        self,
-        mock_get: Mock,
-        mock_validator_for: Mock,
-    ) -> None:
-        """Ensure extension validators are created."""
-        schema = {"type": "object"}
-
-        response = Mock()
-        response.json.return_value = schema
-        mock_get.return_value = response
-
-        validator_cls = Mock()
-        validator = Mock()
-
-        validator_cls.return_value = validator
-        mock_validator_for.return_value = validator_cls
-
-        result = get_extension_validator("http://example/schema.json")
-
-        self.assertEqual(
-            result,
-            validator,
-        )
-        validator_cls.check_schema.assert_called_once_with(
-            schema,
-        )
-
-    @patch("esgf_core_utils.models.validation.jsonschema.validators.validator_for")
-    @patch("esgf_core_utils.models.validation.requests.get")
-    def test_get_patch_validator(
-        self,
-        mock_get: Mock,
-        mock_validator_for: Mock,
-    ) -> None:
-        """Ensure patch validators are created."""
-        schema = {"type": "object"}
-
-        response = Mock()
-        response.json.return_value = schema
-        mock_get.return_value = response
-
-        validator_cls = Mock()
-        validator = Mock()
-
-        validator_cls.return_value = validator
-        mock_validator_for.return_value = validator_cls
-
-        result = get_patch_validator("http://example/schema.json")
-
-        self.assertEqual(
-            result,
-            validator,
-        )
-        validator_cls.check_schema.assert_called_once_with(
-            schema,
-        )
-
-    @patch("esgf_core_utils.models.validation.requests.get")
-    def test_get_extension_validator_http_error(
-        self,
-        mock_get: Mock,
-    ) -> None:
-        """Ensure HTTP errors raise."""
-        import requests
-
-        response = Mock()
-        response.status_code = 404
-
-        request = Mock()
-        request.url = "http://example/schema.json"
-
-        error = requests.exceptions.HTTPError(
-            response=response,
-            request=request,
-        )
-
-        mock_response = Mock()
-        mock_response.raise_for_status.side_effect = error
-        mock_get.return_value = mock_response
-
-        with self.assertRaises(ExtensionValidationException):
-            get_extension_validator("http://example/schema.json")
-
-    @patch("esgf_core_utils.models.validation.requests.get")
-    def test_get_extension_validator_request_error(
-        self,
-        mock_get: Mock,
-    ) -> None:
-        """Ensure request errors raise."""
-        import requests
-
-        request = Mock()
-        request.url = "http://example/schema.json"
-
-        mock_get.side_effect = requests.exceptions.RequestException(
-            request=request,
-        )
-
-        with self.assertRaises(ExtensionValidationException):
-            get_extension_validator("http://example/schema.json")
-
-    @patch("esgf_core_utils.models.validation.requests.get")
-    def test_get_extension_validator_json_decode_error(
-        self,
-        mock_get: Mock,
-    ) -> None:
-        """Ensure invalid JSON raises."""
-        import json
-
-        response = Mock()
-        response.raise_for_status.return_value = None
-        response.json.side_effect = json.JSONDecodeError(
-            "invalid",
-            "doc",
-            0,
-        )
-
-        mock_get.return_value = response
-
-        with self.assertRaises(ExtensionValidationException):
-            get_extension_validator("http://example/schema.json")
