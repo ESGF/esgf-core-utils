@@ -21,6 +21,27 @@ Removed
 Fixed
 ^^^^^
 
+`1.4.0 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.4.0>`_  - 2026-11-10
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+- ``esgf_core_utils.models.validation.registry`` module with ``SCHEMA_REGISTRY`` (a ``referencing.Registry``) and ``retrieve_schema``
+- ``referencing`` added as a direct dependency
+
+Changed
+^^^^^^^
+
+- Extension schemas and the schemas they reference are downloaded once per process instead of on every validation
+- ``get_patch_validator`` uses ``get_extension_validator``, so it raises ``ExtensionValidationException`` on retrieval errors
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
 `1.3.1 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.3.1>`_  - 2026-11-10
 -----------------------------------------------------------------------------------------
 
