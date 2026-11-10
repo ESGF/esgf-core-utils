@@ -7,6 +7,7 @@ from functools import partial
 
 import jsonschema
 import requests
+from cachetools.func import ttl_cache
 from jsonschema.protocols import Validator
 from referencing import Registry, Resource
 from referencing.exceptions import Unretrievable
@@ -15,15 +16,23 @@ from referencing.retrieval import to_cached_resource
 
 from esgf_core_utils.models.exceptions import ExtensionValidationException
 
+SCHEMA_CACHE_TTL = 3600
+"""Seconds a downloaded schema is cached for before it is downloaded again."""
+
+SCHEMA_CACHE_MAXSIZE = 256
+"""Maximum number of schemas cached at once."""
+
 
 @to_cached_resource(
-    from_contents=partial(Resource.from_contents, default_specification=DRAFT202012)
+    cache=ttl_cache(maxsize=SCHEMA_CACHE_MAXSIZE, ttl=SCHEMA_CACHE_TTL),
+    from_contents=partial(Resource.from_contents, default_specification=DRAFT202012),
 )
 def retrieve_schema(uri: str) -> str:
     """Download a JSON schema.
 
-    The result is cached per URI, so each schema (an extension schema or a schema
-    it references) is downloaded at most once per process.
+    The result is cached per URI for ``SCHEMA_CACHE_TTL`` seconds, so each schema
+    (an extension schema or a schema it references) is downloaded at most once per
+    TTL period. At most ``SCHEMA_CACHE_MAXSIZE`` schemas are cached.
 
     Args:
         uri (str): Schema URI
