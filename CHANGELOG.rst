@@ -21,6 +21,23 @@ Removed
 Fixed
 ^^^^^
 
+`1.3.1 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.3.1>`_  - 2026-11-10
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+Changed
+^^^^^^^
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
+- ``VIRTUAL_AGGREGATIONS`` patch ``path`` and ``roles`` fixed.
+
 `1.3.0 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.3.0>`_  - 2026-11-06
 -----------------------------------------------------------------------------------------
 
