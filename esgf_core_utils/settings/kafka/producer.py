@@ -1,6 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from esgf_core_utils.models.kafka.config import KafkaConfig
+from esgf_core_utils.models.kafka.config import KafkaProducerConfig
 
 
 class ProducerSettings(BaseSettings):
@@ -17,6 +17,6 @@ class ProducerSettings(BaseSettings):
         extra="ignore",
     )
 
-    config: KafkaConfig
+    config: KafkaProducerConfig
     error_topic: str = ""
     success_topic: str

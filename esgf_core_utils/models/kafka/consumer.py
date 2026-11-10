@@ -6,6 +6,8 @@ from confluent_kafka import Consumer, KafkaException
 from esgf_core_utils.models.kafka.message_processor import MessageProcessor
 from esgf_core_utils.settings.kafka.consumer import ConsumerSettings
 
+logger = logging.getLogger("consumer")
+
 
 class KafkaConsumer:
     """
@@ -24,7 +26,7 @@ class KafkaConsumer:
         self.consumer.subscribe(self.settings.topics)
 
         try:
-            logging.info(
+            logger.info(
                 "Kafka consumer started. Subscribed to topics: %s",
                 self.settings.topics,
             )
@@ -32,7 +34,7 @@ class KafkaConsumer:
             while True:
                 message = self.consumer.poll(timeout=self.settings.timeout)
 
-                logging.info(
+                logger.info(
                     "Kafka consuming message: %s",
                     ((message.value() or b"None").decode("utf8") if message else None),
                 )
@@ -45,11 +47,11 @@ class KafkaConsumer:
                 self.consumer.commit(message=message, asynchronous=False)
 
         except KeyboardInterrupt:
-            logging.info("Kafka consumer interrupted. Exiting")
+            logger.info("Kafka consumer interrupted. Exiting")
 
         except KafkaException as e:
-            logging.error("Kafka exception: %s", e)
+            logger.error("Kafka exception: %s", e)
 
         finally:
-            logging.info("Closing Kafka consumer")
+            logger.info("Closing Kafka consumer")
             self.consumer.close()

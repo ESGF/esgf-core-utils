@@ -12,10 +12,12 @@ from esgf_core_utils.models.exceptions import (
     ExpectedExtensionsMissingException,
     ExtensionBelowMinimumException,
     InvalidTokenAudienceException,
+    InvalidTokenException,
     ItemAlreadyExistsException,
     ItemDoesNotExistException,
     MissingPermissionException,
     OperationNotPermittedException,
+    PayloadTooLargeException,
     RFC9457Exception,
     STACValidationException,
     UnexpectedExtensionException,
@@ -91,6 +93,23 @@ class TestExceptionUnit(unittest.TestCase):
             "A required extension is missing from your request",
         )
         self.assertIn("[extA,extB]", exc.detail.replace(" ", ""))
+
+    def test_invalid_token_exception(self) -> None:
+        exc = InvalidTokenException()
+
+        self.assertEqual(exc.status_code, 401)
+        self.assertEqual(
+            exc.type,
+            "https://esgf.io/publication/errors/invalid-token",
+        )
+        self.assertEqual(
+            exc.title,
+            "Invalid token",
+        )
+        self.assertIn(
+            "issue was found with your token",
+            exc.detail,
+        )
 
     def test_extension_below_minimum_exception(self) -> None:
         """Validate ExtensionBelowMinimumException fields and detail message."""
@@ -200,6 +219,19 @@ class TestExceptionUnit(unittest.TestCase):
         self.assertEqual(exc.instance, "instXYZ")
         self.assertIn("help@esgf.io", exc.detail)
 
+    def test_payload_too_large_exception(self) -> None:
+        """Verify PayloadTooLargeException includes correct status, title, and instance."""
+        exc = PayloadTooLargeException(instance="instBIG")
+
+        self.assertEqual(exc.status_code, 413)
+        self.assertEqual(
+            exc.type,
+            "https://esgf.io/publication/errors/payload-too-large",
+        )
+        self.assertEqual(exc.title, "Your request is too large")
+        self.assertEqual(exc.instance, "instBIG")
+        self.assertIn("maximum message size", exc.detail)
+
     def test_missing_permission_exception_str(self) -> None:
         """Ensure MissingPermissionException string formatting."""
         exc = MissingPermissionException(
@@ -251,4 +283,4 @@ class TestExceptionUnit(unittest.TestCase):
             title = "test"
 
         with self.assertRaises(NotImplementedError):
-            BaseTestException().detail
+            _ = BaseTestException().detail

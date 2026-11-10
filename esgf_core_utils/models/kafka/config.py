@@ -22,6 +22,14 @@ class KafkaConfig(BaseModel):
     client_id: str = Field(default=socket.gethostname(), alias="client.id")
 
 
+class KafkaProducerConfig(KafkaConfig):
+    """
+    Kafka Producer Config
+    """
+
+    message_max_bytes: int | None = Field(default=None, alias="message.max.bytes")
+
+
 class KafkaConsumerConfig(KafkaConfig):
     """
     Kafka Consumer Config
