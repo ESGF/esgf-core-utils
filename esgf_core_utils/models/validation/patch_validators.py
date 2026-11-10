@@ -28,7 +28,8 @@ PATCH_SCHEMAS: dict[str, list[dict[str, Any]]] = {
                 "allOf": [
                     {
                         "if": {
-                            "properties": {"path": {"const": ASSET_AGG_PATHS[atype]}}
+                            "required": ["path"],
+                            "properties": {"path": {"const": ASSET_AGG_PATHS[atype]}},
                         },
                         "then": {
                             "properties": {
@@ -44,7 +45,10 @@ PATCH_SCHEMAS: dict[str, list[dict[str, Any]]] = {
                                     "properties": {
                                         "href": {"type": "string", "format": "uri"},
                                         "type": {"const": ASSET_AGG_MIMETYPES[atype]},
-                                        "roles": {"const": "virtual"},
+                                        "roles": {
+                                            "type": "array",
+                                            "contains": {"const": "virtual"},
+                                        },
                                         "protocol": {"enum": ASSET_AGG_PROTOCOLS},
                                         "description": {
                                             "const": ASSET_AGG_DESCRIPTIONS[atype]
