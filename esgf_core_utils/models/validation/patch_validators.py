@@ -44,7 +44,7 @@ PATCH_SCHEMAS: dict[str, list[dict[str, Any]]] = {
                                     "properties": {
                                         "href": {"type": "string", "format": "uri"},
                                         "type": {"const": ASSET_AGG_MIMETYPES[atype]},
-                                        "roles": {"type":"array":"contains":{"const": "virtual"}},
+                                        "roles": {"type":"array","contains":{"const": "virtual"}},
                                         "protocol": {"enum": ASSET_AGG_PROTOCOLS},
                                         "description": {
                                             "const": ASSET_AGG_DESCRIPTIONS[atype]
