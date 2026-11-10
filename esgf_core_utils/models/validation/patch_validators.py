@@ -1,8 +1,9 @@
 from typing import Any
-from esgf_core_utils.models.aggregation_assets import \
+from esgf_core_utils.models.aggregation_assets import (
     ASSET_AGG_DESCRIPTIONS,
-    ASSET_AGG_TYPES,
+    ASSET_AGG_MIMETYPES,
     ASSET_AGG_PATHS
+)
 
 from jsonschema import Draft202012Validator
 
@@ -31,13 +32,13 @@ PATCH_SCHEMAS: dict[str, list[dict[str, Any]]] = {
                             "properties": {
                                 "href": {"type": "string", "format": "uri"},
                                 "type": {"const": ASSET_AGG_MIMETYPES[atype]},
-                                "roles": {"const": "virtual"},
+                                "roles": {"type":"array", "contains":{"const": "virtual"}},
                                 "protocol":{"enum": ASSET_AGG_PROTOCOLS},
                                 "description":{"const":ASSET_AGG_DESCRIPTIONS[atype]},
                                 # Optional to include
                                 "alternate:name":{"type":"string"},
                                 "created": {"type": "string","format":"date-time"},
-                                "updated": {"type": "string","format":"date-time"}
+                                "updated": {"type": "string","format":"date-time"},
                                 "file:size": {"type":"integer"}
 
                             },

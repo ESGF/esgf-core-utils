@@ -3,5 +3,4 @@ from .assets import (
     ASSET_AGG_DESCRIPTIONS,
     ASSET_AGG_MIMETYPES,
     ASSET_AGG_PROTOCOLS,
-    ASSET_AGG_TYPES
 )
