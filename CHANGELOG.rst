@@ -36,7 +36,7 @@ Removed
 Fixed
 ^^^^^
 
-- ``VIRTUAL_AGGREGATIONS`` patch ``path`` and ``roles`` fixed.
+- ``VIRTUAL_AGGREGATIONS`` patch ``path`` and ``roles`` fixed and moved to ``CREATE`` permission.
 
 `1.3.0 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.3.0>`_  - 2026-11-06
 -----------------------------------------------------------------------------------------
