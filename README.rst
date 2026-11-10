@@ -1,8 +1,8 @@
-esgf-playground-utils
+esgf-core-utils
 ---------------------
 
-Common models, configuration and functionality for the ESGF-Playground.
+Common models, configuration and functionality for the ESGF core architecture.
 
-Please read this `documentation <https://esgf.github.io/esgf-playground-utils/>`__
+Please read this `documentation <https://esgf.github.io/esgf-core-utils/>`__
 in GitHub.
 

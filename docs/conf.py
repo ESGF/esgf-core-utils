@@ -10,10 +10,10 @@ import sys
 
 sys.path.insert(0, os.path.abspath("../.."))
 
-project = "ESGF Playground Utils"
+project = "ESGF Core Utils"
 copyright = "2024, David Poulter"
 author = "David Poulter"
-release = "0.3.4"
+release = "4"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -36,5 +36,5 @@ html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 
 # Autoapi Configuration
-autoapi_dirs = ["../esgf_playground_utils"]
+autoapi_dirs = ["../esgf_core_utils"]
 master_doc = "index"

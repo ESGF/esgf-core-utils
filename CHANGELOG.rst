@@ -6,8 +6,235 @@ All notable changes to this package are recorded in this document.
 This format is based on `Keep a ChangeLog <https://keepachangelog.com/>`_ and this project
 adheres to `Semantic Versioning <https://semver.org>`_.
 
-[Unreleased] - 2024-09-04
--------------------------
+[Unreleased]
+------------
+
+Added
+^^^^^
+
+Changed
+^^^^^^^
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
+`1.3.0 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.3.0>`_  - 2026-11-06
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+- ``KafkaProducerConfig`` with optional ``message.max.bytes`` setting, used by ``ProducerSettings``
+- ``PayloadTooLargeException`` exception added (HTTP 413)
+
+Changed
+^^^^^^^
+
+- ``KafkaProducer.produce`` raises ``PayloadTooLargeException`` when a message is too large, whether rejected by the client or by the broker
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
+`1.2.0 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.2.0>`_  - 2026-07-29
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+- models for validation of STAC payloads
+- patch schemas for fine grain permissions of PATCH payloads
+- VIRTUAL_AGGREGATIONS, CITATION, ERRATA, & RETRACT roles
+
+Changed
+^^^^^^^
+- Merged Project and Node permission classes
+- Converted Exceptions to dataclasses
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
+
+`1.1.0 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.1.0>`_  - 2026-06-24
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+- Wildcard entitlement support
+- ExtensionBelowMinimumException exception added
+- InvalidTokenAudienceException exception added
+- KafkaSuccessEvent & KafkaErrorEvent and subclasses (OriginalEvent, ResultData & OriginalEvent) classes
+- Testing for ``Authorizer`` & additional exceptions
+
+Changed
+^^^^^^^
+
+- **Breaking:** ``EGIAuth`` was renamed to ``Authorizer``
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
+`1.0.8 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.8>`_  - 2026-05-20
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+- Added success Kafka event model.
+
+Changed
+^^^^^^^
+
+- Updated error kafka event model.
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
+`1.0.7 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.7>`_  - 2026-04-29
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+- Added RFC9457 Exceptions.
+- EGI auth class.
+- Added message processor abstract base class.
+- Added Kafka consumer and producer classes and pydantic settings.
+
+Changed
+^^^^^^^
+
+- Gitlab workflows CI to use uv.
+- Bumped pre-commit depenedecies.
+
+Fixed
+^^^^^
+
+`1.0.6 <https://github.com/ESGF/esgf-core-utils/releases/tag/1.0.6>`_  - 2026-03-25
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+Changed
+^^^^^^^
+
+- Rename project.
+
+Removed
+^^^^^^^
+
+
+`1.0.5 <https://github.com/ESGF/esgf-playground-utils/releases/tag/1.0.5>`_  - 2025-07-11
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+Changed
+^^^^^^^
+
+Removed
+^^^^^^^
+- Removed custom Item model.
+
+Fixed
+^^^^^
+
+`1.0.4 <https://github.com/ESGF/esgf-playground-utils/releases/tag/1.0.4>`_  - 2025-06-24
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+Changed
+^^^^^^^
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+- Fixed stac-pydantic requirement.
+
+`1.0.3 <https://github.com/ESGF/esgf-playground-utils/releases/tag/1.0.3>`_  - 2025-06-20
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+Changed
+^^^^^^^
+- Updated to stac-fastapi v6.0.0.
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
+`1.0.2 <https://github.com/ESGF/esgf-playground-utils/releases/tag/1.0.2>`_  - 2025-06-18
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+Changed
+^^^^^^^
+- Updated PatchPayload to use PatialItem and PatchOperation.
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
+`1.0.1 <https://github.com/ESGF/esgf-playground-utils/releases/tag/1.0.1>`_  - 2025-03-05
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+Changed
+^^^^^^^
+- Updated ESGFItemProperties citation_url made optional.
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
+
+`1.0.0 <https://github.com/ESGF/esgf-playground-utils/releases/tag/1.0.0>`_  - 2025-02-14
+-----------------------------------------------------------------------------------------
+
+Added
+^^^^^
+
+Changed
+^^^^^^^
+- Updated ESGFItemProperties to more accurate typing.
+- Updated Kafka Models in particular authorisation section.
+
+Removed
+^^^^^^^
+
+Fixed
+^^^^^
 
 `0.3.8 <https://github.com/ESGF/esgf-playground-utils/releases/tag/0.3.8>`_  - 2024-11-19
 -----------------------------------------------------------------------------------------
@@ -23,6 +250,7 @@ Removed
 ^^^^^^^
 
 Fixed
+^^^^^
 
 `0.3.7 <https://github.com/ESGF/esgf-playground-utils/releases/tag/0.3.7>`_  - 2024-11-19
 -----------------------------------------------------------------------------------------
@@ -49,7 +277,7 @@ Added
 Changed
 ^^^^^^^
 
-- Changed AuthData model (:py:class:`esgf_playground_utils.models.kafka.AuthData`) to match event schema
+- Changed AuthData model (:py:class:`esgf_core_utils.models.kafka.AuthData`) to match event schema
 
 Removed
 ^^^^^^^
@@ -62,7 +290,7 @@ Fixed
 
 Added
 ^^^^^
-- Added AuthData model (:py:class:`esgf_playground_utils.models.kafka.AuthData`) for adding 
+- Added AuthData model (:py:class:`esgf_core_utils.models.kafka.AuthData`) for adding 
   more detailed auth data to a publish event
 
 Changed
@@ -102,7 +330,7 @@ Fixed
 Added
 ^^^^^
 
-- Payload model (:py:class:`esgf_playground_utils.models.kafka.PartialUpdatePayload`) for "soft delete` of an
+- Payload model (:py:class:`esgf_core_utils.models.kafka.PartialUpdatePayload`) for "soft delete` of an
   :py:class:`stac_pydantic.item.Item`.
 
 Changed
@@ -137,7 +365,7 @@ Added
 Changed
 ^^^^^^^
 
-- :py:attr:`esgf_playground_utils.models.kafka.UpdatePayload.item_id` added to enable canonical id of resource
+- :py:attr:`esgf_core_utils.models.kafka.UpdatePayload.item_id` added to enable canonical id of resource
   to be changed.
 
 Removed
