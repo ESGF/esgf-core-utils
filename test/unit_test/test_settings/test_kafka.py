@@ -4,7 +4,7 @@ Test the functions in kafka.config module
 
 import unittest
 
-from esgf_core_utils.models.kafka.config import KafkaConsumerConfig
+from esgf_core_models.kafka.config import KafkaConsumerConfig
 from esgf_core_utils.settings.kafka.consumer import ConsumerSettings
 from esgf_core_utils.settings.kafka.producer import ProducerSettings
 

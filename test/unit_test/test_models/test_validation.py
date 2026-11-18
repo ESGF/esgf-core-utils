@@ -6,7 +6,7 @@ from unittest.mock import Mock, patch
 from jsonschema.validators import Draft202012Validator
 from stac_fastapi.extensions.transaction.request import PartialItem
 
-from esgf_core_utils.models.exceptions import (
+from esgf_core_models.exceptions import (
     ExtensionBelowMinimumException,
     ExtensionValidationException,
     STACValidationException,

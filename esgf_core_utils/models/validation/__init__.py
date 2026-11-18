@@ -17,7 +17,7 @@ from stac_fastapi.extensions.transaction.request import (
 )
 from stac_pydantic.item import Item
 
-from esgf_core_utils.models.exceptions import (
+from esgf_core_models.exceptions import (
     ExpectedExtensionsMissingException,
     ExtensionBelowMinimumException,
     ExtensionValidationException,

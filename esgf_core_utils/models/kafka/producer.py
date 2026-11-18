@@ -5,7 +5,7 @@ from typing import Any, AnyStr
 import attr
 from confluent_kafka import KafkaError, KafkaException, Message, Producer
 
-from esgf_core_utils.models.exceptions import PayloadTooLargeException
+from esgf_core_models.exceptions import PayloadTooLargeException
 from esgf_core_utils.settings.kafka.producer import ProducerSettings
 
 # Setup logger

@@ -12,11 +12,22 @@ adheres to `Semantic Versioning <https://semver.org>`_.
 Added
 ^^^^^
 
+- ``esgf-core-models`` (``esgf_core_models``) dependency, which now provides the auth, exceptions,
+  aggregation asset, Kafka config and Kafka event models.
+
 Changed
 ^^^^^^^
 
-Removed
-^^^^^^^
+- Internal imports of the above models now come from ``esgf_core_models``.
+
+Deprecated
+^^^^^^^^^^
+
+- ``esgf_core_utils.models.auth``, ``esgf_core_utils.models.exceptions``,
+  ``esgf_core_utils.models.aggregation_assets``, ``esgf_core_utils.models.kafka.config`` and
+  ``esgf_core_utils.models.kafka.events`` are now thin aliases of the matching ``esgf_core_models``
+  modules and emit a ``DeprecationWarning`` on import. **They will be removed in a future release**;
+  import from ``esgf_core_models`` instead.
 
 Fixed
 ^^^^^

@@ -11,7 +11,7 @@ import os
 import unittest
 from unittest.mock import patch
 
-from esgf_core_utils.models.kafka.config import KafkaConsumerConfig
+from esgf_core_models.kafka.config import KafkaConsumerConfig
 from esgf_core_utils.settings.kafka.consumer import ConsumerSettings
 
 

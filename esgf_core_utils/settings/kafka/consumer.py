@@ -3,7 +3,7 @@ from typing import Annotated, Any, Self
 from pydantic import TypeAdapter, field_validator, model_validator
 from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
-from esgf_core_utils.models.kafka.config import KafkaConsumerConfig
+from esgf_core_models.kafka.config import KafkaConsumerConfig
 
 
 class ConsumerSettings(BaseSettings):

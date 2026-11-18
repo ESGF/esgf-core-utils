@@ -7,7 +7,7 @@ from unittest.mock import MagicMock, patch
 
 from confluent_kafka import KafkaError, KafkaException
 
-from esgf_core_utils.models.exceptions import PayloadTooLargeException
+from esgf_core_models.exceptions import PayloadTooLargeException
 from esgf_core_utils.models.kafka.producer import DummyProducer, KafkaProducer
 
 ENV = {

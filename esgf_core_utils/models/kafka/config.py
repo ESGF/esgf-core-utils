@@ -1,46 +1,18 @@
-import socket
+"""
+Deprecated alias of :py:mod:`esgf_core_models.kafka.config`.
 
-from pydantic import BaseModel, ConfigDict, Field
+.. deprecated:: 1.4.0
+    Import from :py:mod:`esgf_core_models.kafka.config` instead. This module will be removed in a
+    future release.
+"""
 
+import warnings
 
-class KafkaConfig(BaseModel):
-    """
-    Kafka Config
-    """
+from esgf_core_models.kafka.config import *  # noqa: F403
 
-    model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
-        extra="ignore",
-    )
-
-    bootstrap_servers: str = Field(alias="bootstrap.servers")
-    sasl_mechanism: str = Field(default="PLAIN", alias="sasl.mechanism")
-    sasl_username: str = Field(alias="sasl.username")
-    sasl_password: str = Field(alias="sasl.password")
-    security_protocol: str = Field(default="SASL_SSL", alias="security.protocol")
-    client_id: str = Field(default=socket.gethostname(), alias="client.id")
-
-
-class KafkaProducerConfig(KafkaConfig):
-    """
-    Kafka Producer Config
-    """
-
-    message_max_bytes: int | None = Field(default=None, alias="message.max.bytes")
-
-
-class KafkaConsumerConfig(KafkaConfig):
-    """
-    Kafka Consumer Config
-    """
-
-    auto_offset_reset: str = Field(default="earliest", alias="auto.offset.reset")
-    enable_auto_commit: bool = Field(default=False, alias="enable.auto.commit")
-    enable_auto_offset_store: bool = Field(
-        default=False, alias="enable.auto.offset.store"
-    )
-    group_id: str = Field(alias="group.id")
-    session_timeout_ms: int = Field(default=45000, alias="session.timeout.ms")
-    debug: str | None = None
-    log_level: int | None = None
+warnings.warn(
+    "esgf_core_utils.models.kafka.config is deprecated and will be removed in a future release, "
+    "use esgf_core_models.kafka.config instead.",
+    DeprecationWarning,
+    stacklevel=2,
+)

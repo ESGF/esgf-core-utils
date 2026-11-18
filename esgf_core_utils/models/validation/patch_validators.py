@@ -2,7 +2,7 @@ from typing import Any
 
 from jsonschema import Draft202012Validator
 
-from esgf_core_utils.models.aggregation_assets import (
+from esgf_core_models.aggregation_assets import (
     AGGREGATED_ASSETS,
     ASSET_AGG_DESCRIPTIONS,
     ASSET_AGG_MIMETYPES,

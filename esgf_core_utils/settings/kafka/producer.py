@@ -1,6 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from esgf_core_utils.models.kafka.config import KafkaProducerConfig
+from esgf_core_models.kafka.config import KafkaProducerConfig
 
 
 class ProducerSettings(BaseSettings):

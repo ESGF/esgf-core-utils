@@ -9,7 +9,7 @@ from stac_fastapi.extensions.transaction.request import (
     PatchAddReplaceTest,
 )
 
-from esgf_core_utils.models.exceptions import (
+from esgf_core_models.exceptions import (
     ExpectedExtensionsMissingException,
     ExtensionValidationException,
     OperationNotPermittedException,
