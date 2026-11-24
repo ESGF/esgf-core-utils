@@ -143,45 +143,62 @@ PATCH_SCHEMAS: dict[str, list[dict[str, Any]]] = {
             "type": "array",
             "minItems": 1,
             "items": {
-                "type": "object",
-                "required": ["op", "path", "value"],
-                "properties": {
-                    "op": {"const": "add"},
-                    "path": {"type": "string", "pattern": "^/assets/[^/]+$"},
-                    "value": {
-                        "allOf": [
-                            {"$ref": "#/definitions/require_asset_fields"},
-                            {"$ref": "#/definitions/asset_fields"},
-                        ]
-                    },
-                },
-                "allOf": [
+                "oneOf": [
                     {
-                        "if": {
-                            "properties": {
-                                "path": {"not": {"const": "/assets/CFA"}},
-                                "value": {
+                        "type": "object",
+                        "required": ["op", "path", "value"],
+                        "properties": {
+                            "op": {"const": "add"},
+                            "path": {"type": "string", "pattern": "^/assets/[^/]+$"},
+                            "value": {
+                                "allOf": [
+                                    {"$ref": "#/definitions/require_asset_fields"},
+                                    {"$ref": "#/definitions/asset_fields"},
+                                ]
+                            },
+                        },
+                        "allOf": [
+                            {
+                                "if": {
                                     "properties": {
-                                        "type": {"const": "application/netcdf"}
-                                    },
-                                    "required": ["type"],
+                                        "path": {"not": {"const": "/assets/CFA"}},
+                                        "value": {
+                                            "properties": {
+                                                "type": {"const": "application/netcdf"}
+                                            },
+                                            "required": ["type"],
+                                        },
+                                    }
+                                },
+                                "then": {
+                                    "properties": {
+                                        "value": {
+                                            "required": [
+                                                "file:size",
+                                                "file:checksum",
+                                                "file:local_path",
+                                            ]
+                                        }
+                                    }
                                 },
                             }
+                        ],
+                        "additionalProperties": False,
+                    },
+                    {
+                        "type": "object",
+                        "required": ["op", "path", "value"],
+                        "properties": {
+                            "op": {"const": "add"},
+                            "path": {"const": "/stac_extensions/-"},
+                            "value": {
+                                "type": "string",
+                                "pattern": "^https://esgf\\.github\\.io/stac-transaction-api/aggregated_assets/v[0-9]+\\.[0-9]+\\.[0-9]+/schema\\.json$",
+                            },
                         },
-                        "then": {
-                            "properties": {
-                                "value": {
-                                    "required": [
-                                        "file:size",
-                                        "file:checksum",
-                                        "file:local_path",
-                                    ]
-                                }
-                            }
-                        },
-                    }
-                ],
-                "additionalProperties": False,
+                        "additionalProperties": False,
+                    },
+                ]
             },
             "definitions": {
                 "require_asset_fields": {
