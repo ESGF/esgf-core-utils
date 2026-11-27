@@ -147,6 +147,66 @@ DEFAULT_EXTENSIONS = {
 }
 
 
+OPTIONAL_EXTENSIONS = {
+    "CMIP6": {
+        "alternate_assets": {
+            "regex": [
+                r"https://esgf\.github\.io/stac-transaction-api/aggregated_assets/v\d+\.\d+\.\d+/schema\.json"
+            ],
+            "default": "https://esgf.github.io/stac-transaction-api/aggregated_assets/v1.0.0/schema.json",
+        },
+    },
+    "CMIP6Plus": {
+        "alternate_assets": {
+            "regex": [
+                r"https://esgf\.github\.io/stac-transaction-api/aggregated_assets/v\d+\.\d+\.\d+/schema\.json"
+            ],
+            "default": "https://esgf.github.io/stac-transaction-api/aggregated_assets/v1.0.0/schema.json",
+        },
+    },
+    "CMIP7": {
+        "alternate_assets": {
+            "regex": [
+                r"https://esgf\.github\.io/stac-transaction-api/aggregated_assets/v\d+\.\d+\.\d+/schema\.json"
+            ],
+            "default": "https://esgf.github.io/stac-transaction-api/aggregated_assets/v1.0.0/schema.json",
+        },
+    },
+    "INPUT4MIP": {
+        "alternate_assets": {
+            "regex": [
+                r"https://esgf\.github\.io/stac-transaction-api/aggregated_assets/v\d+\.\d+\.\d+/schema\.json"
+            ],
+            "default": "https://esgf.github.io/stac-transaction-api/aggregated_assets/v1.0.0/schema.json",
+        },
+    },
+    "CORDEX-CMIP6": {
+        "alternate_assets": {
+            "regex": [
+                r"https://esgf\.github\.io/stac-transaction-api/aggregated_assets/v\d+\.\d+\.\d+/schema\.json"
+            ],
+            "default": "https://esgf.github.io/stac-transaction-api/aggregated_assets/v1.0.0/schema.json",
+        },
+    },
+    "obs4MIPs": {
+        "alternate_assets": {
+            "regex": [
+                r"https://esgf\.github\.io/stac-transaction-api/aggregated_assets/v\d+\.\d+\.\d+/schema\.json"
+            ],
+            "default": "https://esgf.github.io/stac-transaction-api/aggregated_assets/v1.0.0/schema.json",
+        },
+    },
+    "OBS4REF": {
+        "alternate_assets": {
+            "regex": [
+                r"https://esgf\.github\.io/stac-transaction-api/aggregated_assets/v\d+\.\d+\.\d+/schema\.json"
+            ],
+            "default": "https://esgf.github.io/stac-transaction-api/aggregated_assets/v1.0.0/schema.json",
+        },
+    },
+}
+
+
 class Settings(BaseSettings):
     """
     Event Stream Settings
@@ -165,6 +225,7 @@ class Settings(BaseSettings):
     )
 
     default_extensions: dict[str, Any] = DEFAULT_EXTENSIONS
+    optional_extensions: dict[str, Any] = OPTIONAL_EXTENSIONS
 
 
 settings = Settings()
