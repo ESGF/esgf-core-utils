@@ -170,6 +170,7 @@ def validate_extensions(
     """
 
     expected_extensions = settings.default_extensions.get(collection_id, {}).copy()
+    optional_extensions = settings.optional_extensions.get(collection_id, {}).copy()
 
     for item_extension in item_extensions:
         expected = False
@@ -186,6 +187,21 @@ def validate_extensions(
 
                 validate_extension_version(
                     minimum=expected_extension["default"], extension=str(item_extension)
+                )
+
+        for (
+            optional_extension_key,
+            optional_extension,
+        ) in optional_extensions.copy().items():
+            if any(
+                re.compile(regex).match(str(item_extension))
+                for regex in optional_extension["regex"]
+            ):
+                optional_extensions.pop(optional_extension_key)
+                expected = True
+
+                validate_extension_version(
+                    minimum=optional_extension["default"], extension=str(item_extension)
                 )
 
         if not expected:
